@@ -1,0 +1,51 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = "Index";
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage"/>
+<div class="row">
+    <form id="profile-form" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div class="row">
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.Name" class="form-control"/>
+                <label asp-for="Profile.Name" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.Surname" class="form-control"/>
+                <label asp-for="Profile.Surname" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.Patronymic" class="form-control"/>
+                <label asp-for="Profile.Patronymic" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.BirthDate" class="form-control"/>
+                <label asp-for="Profile.BirthDate" class="form-label"></label>
+            </div>
+
+
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.Username" class="form-control" placeholder="Please choose your username." disabled/>
+                <label asp-for="Profile.Username" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3  col-6">
+                <input asp-for="Profile.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                <label asp-for="Profile.PhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Profile.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <button id="update-profile-form" type="submit" class="btn btn-lg btn-primary col-3">Save</button>
+            <button class="btn btn-lg btn-dark col-3 btn-cancel" type="reset">Cancel</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

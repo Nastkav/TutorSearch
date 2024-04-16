@@ -1,0 +1,44 @@
+@model Web.Models.TutorProfile.DetailsViewModel
+
+<div class="card bg-light mb-3" id="subjects">
+    <div class="card-body">
+        <form asp-action="Edit">
+            <h5 class="card-title mt-3">Subjects</h5>
+            <div class="row ps-3">
+                @foreach (var subject in Model.Subjects)
+                {
+                    <div class="form-check form-switch col-lg-2 col-md-4 py-2">
+                        <input class="form-check-input" asp-for="@subject.IsChecked" type="checkbox">
+                        <label class="form-check-label" asp-for="@subject.IsChecked">@subject.LabelName</label>
+                        <input type="hidden" asp-for="@subject.Id"/>
+                    </div>
+                }
+            </div>
+            <h5 class="card-title mt-3">Places</h5>
+            <div class="row ps-3">
+                <div class="col form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="@Model.OnlineAccess">
+                    <label class="form-check-label">Online</label>
+                </div>
+                <div class="col form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="@Model.OffsiteAccess">
+                    <label class="form-check-label">At student</label>
+                </div>
+                <div class="col form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="@Model.AtHomeAccess">
+                    <label class="form-check-label">At tutor</label>
+                </div>
+            </div>
+            <h5 class="card-title mt-3">Address</h5>
+
+            <textarea class="form-control" rows="1" asp-for="@Model.Address" id="address-text"></textarea>
+            <h5 class="card-title m-2">Descriptions</h5>
+            <textarea class="form-control" rows="2" asp-for="@Model.TutorCard.Descriptions"></textarea>
+            <h5 class="card-title m-2">About</h5>
+            <textarea class="form-control" rows="10" asp-for="@Model.About"></textarea>
+            <div class="row justify-content-end mt-3 end-50">
+                <button type="submit" class="w-25 btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
