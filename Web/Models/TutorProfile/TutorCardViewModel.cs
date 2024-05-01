@@ -4,17 +4,19 @@ public class TutorCardViewModel
 {
     public int Id { get; set; }
     public bool Enabled { get; set; } = false;
-    public string ImgPath { get; set; } //TODO:ImgPath
-    public decimal HourRate { get; set; } //TODO:HourRate
-    public string Experience { get; set; } //TODO:Experience
-    public string Descriptions { get; set; }
-    public string City { get; set; } //TODO:City
+    public string ImgPath { get; set; } = string.Empty;
+    public string GetImgPath() => ImgPath != string.Empty ? ImgPath : "/img/example_face.jpg";
+    public decimal HourRate { get; set; }
+
+    //TODO: public string Experience { get; set; } = string.Empty;
+    public string Descriptions { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
 
     public List<string> Subjects { get; set; } = new();
 
-    public string ReviewString { get; set; }
     public float ReviewValue { get; set; }
     public int ReviewCount { get; set; }
-    public string Name { get; set; }
-    public string Surname { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
+    public string Patronymic { get; set; } = string.Empty;
 }

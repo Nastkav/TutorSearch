@@ -1,5 +1,5 @@
 using System.Reflection;
-using Domain.DrivingPort;
+using Domain;
 using Domain.Port.Driving;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +13,6 @@ public static class ServiceExtensions
             cfg.RegisterServicesFromAssembly(
                 typeof(BaseMediatrHandler<,>)
                     .Assembly));
-
         return services;
     }
 }

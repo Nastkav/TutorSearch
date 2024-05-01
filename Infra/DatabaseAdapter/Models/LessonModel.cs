@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Infra.DatabaseAdapter.Helpers;
 
 namespace Infra.DatabaseAdapter.Models;
@@ -6,8 +7,16 @@ public class LessonModel : ITrackable
 {
     public int Id { get; set; }
     public int TutorProfileId { get; set; }
-    public TutorProfile TutorProfile { get; set; } = null!;
+    public TutorProfileModel TutorProfile { get; set; } = null!;
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
+    [MaxLength(200)] public string Comment { get; set; } = string.Empty;
+
+    public Guid CourseId { get; set; }
     public CourseModel Course { get; set; } = null!;
+    public int SubjectId { get; set; }
+    public SubjectModel Subject { get; set; } = null!;
+
     public virtual List<UserModel> Students { get; set; } = [];
     public virtual List<Attendance> Attendances { get; set; } = [];
 

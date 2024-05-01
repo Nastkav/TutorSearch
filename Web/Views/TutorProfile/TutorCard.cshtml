@@ -1,0 +1,36 @@
+﻿@model Web.Models.TutorProfile.TutorCardViewModel
+
+<div class="card card-flex align-items-center bg-light mb-3">
+    <div class="row g-0">
+        <div class="col-4">
+            <img class="img-fluid rounded-start"
+                 src="@Model.GetImgPath()"
+                 alt="..." />
+        </div>
+    </div>
+    <div class="col">
+        <div class="card-body">
+            <div class="row card-title">
+                <div class="col lead">
+                    <a class="stretched-link" asp-controller="TutorProfile" asp-action="Details" asp-route-id="@Model.Id">
+                        @Model.Name @Model.Patronymic @Model.Surname
+                    </a>
+                    <i class="fa fa-star"></i> @Model.ReviewValue (@Model.ReviewCount reviews)
+                </div>
+                <div class="col text-end">
+                    <span class="text-light bg-primary rounded-5 p-lg-2">@Model.HourRate грн/година</span>
+                </div>
+            </div>
+            <p class="card-text">@Model.Descriptions</p>
+            <small class="text-muted">
+                <i class="fa-solid fa-location-dot"></i> @Model.City
+            </small>
+            <div class="card-footer">
+                @foreach (var sub in Model.Subjects)
+                {
+                    <span class="badge bg-info">sub</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

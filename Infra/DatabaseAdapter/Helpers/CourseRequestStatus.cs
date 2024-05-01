@@ -3,7 +3,8 @@ namespace Domain.Entities;
 public enum CourseRequestStatus
 {
     New,
-    OnApproval,
+
+    // OnApproval,
     Approved,
     Rejected
 }

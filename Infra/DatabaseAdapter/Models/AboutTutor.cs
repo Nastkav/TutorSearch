@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class AboutTutor
+public class AboutTutorModel
 {
-    public int Id { get; set; }
-    public int ProfileId { get; set; }
-    public TutorProfile Profile { get; set; } = null!;
+    [Required] public int Id { get; set; }
     [MaxLength(5000)] public string Content { get; set; } = string.Empty;
 }

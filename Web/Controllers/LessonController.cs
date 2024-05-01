@@ -1,11 +1,12 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
 using AutoMapper;
-using Domain.DrivingPort.Commands;
-using Domain.DrivingPort.Models;
-using Domain.DrivingPort.Queries;
+using Domain.Commands;
+using Domain.Models;
+using Domain.Queries;
 using Domain.Exceptions;
 using Domain.Port.Driving;
+using Domain.Queries;
 using Humanizer;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,16 +50,22 @@ public class LessonController : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> Edit(int id, LessonDto userEvent)
+    public async Task<ActionResult> Create(CreateLessonTimeCommand command)
+    {
+        if (command.CreatedBy != UserId)
+            throw new IncorrectUserId($"command.CreatedBy={command.CreatedBy},app.UserId={UserId}");
+        await _mediator.Send(command);
+        return RedirectToAction(nameof(Edit));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Edit(int id, UpdateLessonTimeCommand command)
     {
         try
         {
-            await _mediator.Send(new UpdateLessonTimeCommand
-            {
-                UpdatedBy = UserId,
-                EventId = id,
-                UserEvent = userEvent
-            });
+            command.UpdatedBy = UserId;
+            command.EventId = id;
+            await _mediator.Send(command);
             return RedirectToAction(nameof(Edit));
         }
         catch (Exception e)

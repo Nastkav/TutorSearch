@@ -5,9 +5,11 @@ namespace Infra.DatabaseAdapter.Models;
 public class AvailableTime : ITrackable
 {
     public int Id { get; set; }
-    public TutorProfile Profile { get; set; } = null!;
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public int DayOfWeek { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
+    public int ProfileId { get; set; }
+    public TutorProfileModel Profile { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }

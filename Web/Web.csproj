@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="Views\LessonRequest\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="MediatR" Version="12.2.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
@@ -34,6 +38,10 @@
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
         <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="Views\LessonRequest\Index.cshtml" />
     </ItemGroup>
 
 </Project>

@@ -19,13 +19,13 @@ public interface ITrackable
                 {
                     case EntityState.Modified:
                         trackable.UpdatedAt = now;
-                        trackable.UpdatedBy = userId;
+                        // trackable.UpdatedBy = userId;
                         entry.Property("CreatedAt").IsModified = false;
                         entry.Property("CreatedBy").IsModified = false;
                         break;
                     case EntityState.Added:
                         trackable.CreatedAt = now;
-                        trackable.CreatedBy = userId;
+                        // trackable.CreatedBy = userId;
                         trackable.UpdatedAt = now;
                         trackable.UpdatedBy = userId;
                         break;

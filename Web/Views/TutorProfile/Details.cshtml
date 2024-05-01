@@ -7,133 +7,216 @@
 <div class="row">
     <div class="row mb-2"></div>
     <h1 class="text-center">@ViewData["Title"]</h1>
+    @if (@Model.CurrentUserId == Model.TutorCard.Id)
+    {
+        <div class="m-2">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <form>
+                    <button type="submit" class="btn btn-info" asp-action="Edit">
+                        Оновити свою анкету
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
 </div>
 
-<div class="card card-flex align-items-center bg-light mb-3">
-    <div class="row g-0">
-        <div class="col-4">
-            <img class="img-fluid rounded-start"
-                 src="@Model.TutorCard.ImgPath"
-                 alt="..."/>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card-body">
-            <div class="row card-title">
-                <div class="col lead">
-                    <a>@Model.TutorCard.Name @Model.TutorCard.Surname</a>
-                    @if (Model.TutorCard.ReviewString.Length != 0)
-                    {
-                        <i class="fa fa-star"></i>
-                        @Model.TutorCard.ReviewString
-                    }
-                </div>
-                <div class="col text-end">
-                    <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorCard.HourRate РіСЂРЅ/С‡Р°СЃ</span>
-                </div>
+@if (!@Model.TutorCard.Enabled)
+{
+    <h2>Цей профіль вимкнено</h2>
+}
+else
+{
+    <div class="card card-flex align-items-center bg-light mb-3">
+        <div class="row g-0">
+            <div class="col-4">
+                <img class="img-fluid rounded-start"
+                     src="@Model.TutorCard.GetImgPath()"
+                     alt="..." />
             </div>
-            <p class="card-text">@Model.TutorCard.Descriptions</p>
-            @if (Model.TutorCard.City.Length != 0)
-            {
-                <small class="text-muted">
-                    <i class="fa-solid fa-location-dot"></i> @Model.TutorCard.City
-                </small>
-            }
-            <div class="card-footer">
-                @for (var i = 0; i < Model.TutorCard.Subjects.Count; i++)
+        </div>
+        <div class="col">
+            <div class="card-body">
+                <div class="row card-title">
+                    <div class="col lead">
+                        <a>@Model.TutorCard.Name @Model.TutorCard.Surname</a>
+
+                        @if (Model.TutorCard.ReviewCount > 0)
+                        {
+                            <i class="fa fa-star"></i>
+                            @Model.TutorCard.ReviewValue
+                            //TODO: ReviewValue + Count
+                        }
+                    </div>
+                    <div class="col text-end">
+                        <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorCard.HourRate грн/час</span>
+                    </div>
+                </div>
+                <p class="card-text">@Model.TutorCard.Descriptions</p>
+                @if (Model.TutorCard.City.Length != 0)
                 {
-                    if (i == 5)
-                    {
-                        <span class="badge bg-light">...</span>
-                        break;
-                    }
-                    else
-                    {
-                        <span class="badge bg-info"> @Model.TutorCard.Subjects[i] </span>
-                    }
+                    <small class="text-muted">
+                        <i class="fa-solid fa-location-dot"></i> @Model.TutorCard.City
+                    </small>
                 }
             </div>
         </div>
     </div>
-</div>
-<div class="row justify-content-center mb-3">
-    <div class="btn-group col-8" role="group" aria-label="Select Tutor Part">
-        <input type="radio" class="btn-check" name="select_part" id="select_part1" autocomplete="off" checked="">
-        <label class="btn btn-outline-primary" for="select_part1" onclick="window.location='#subjects';">Subjects</label>
-        <input type="radio" class="btn-check" name="select_part" id="select_part2" autocomplete="off" checked="">
-        <label class="btn btn-outline-primary" for="select_part2" onclick="window.location='#about_tutor';">About_tutor</label>
-        <input type="radio" class="btn-check" name="select_part" id="select_part3" autocomplete="off" checked="">
-        <label class="btn btn-outline-primary" for="select_part3" onclick="window.location='#schedule';">Schedule</label>
-        <input type="radio" class="btn-check" name="select_part" id="select_part4" autocomplete="off" checked="">
-        <label class="btn btn-outline-primary" for="select_part4" onclick="window.location='#reviews';">Reviews</label>
+    <div class="row justify-content-center mb-3">
+        <div class="btn-group col-md-8 col-sm" role="group" aria-label="Select Tutor Part">
+            <input type="radio" class="btn-check" name="select_part" id="select_part1" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part1" onclick="window.location='#subjects';">Subjects</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part2" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part2" onclick="window.location='#about_tutor';">About_tutor</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part3" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part3" onclick="window.location='#schedule';">Schedule</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part4" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part4" onclick="window.location='#reviews';">Reviews</label>
+        </div>
     </div>
-</div>
-<!-- subjects -->
-<div class="card bg-light mb-3" id="subjects">
-    <div class="card-body">
-        <h5 class="card-title mt-3">Subjects</h5>
-        <div class="row ps-3">
-            @foreach (var subject in Model.Subjects)
+    <!-- subjects -->
+    <div class="card bg-light mb-3" id="subjects">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Subjects</h5>
+            @for (var i = 0; i < Model.TutorCard.Subjects.Count; i++)
             {
-                <div class="form-check form-switch col-lg-2 col-md-4 py-2">
-                    <input class="form-check-input" asp-for="@subject.IsChecked" type="checkbox">
-                    <label class="form-check-label" asp-for="@subject.IsChecked">@subject.LabelName</label>
-                    <input type="hidden" asp-for="@subject.Id"/>
-                </div>
+                if (i == 5)
+                {
+                    <span class="badge bg-light">...</span>
+                    break;
+                }
+                else
+                {
+                    <span class="badge bg-info"> @Model.TutorCard.Subjects[i] </span>
+                }
             }
         </div>
     </div>
-</div>
 
-<div class="card bg-light mb-3">
-    <div class="card-body">
-        <h5 class="card-title mt-3">Places</h5>
-        <div class="row ps-3">
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.OnlineAccess">
-                <label class="form-check-label">Online</label>
-            </div>
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.OffsiteAccess">
-                <label class="form-check-label">At student</label>
-            </div>
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.AtHomeAccess">
-                <label class="form-check-label">At tutor</label>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- about_tutor -->
-<div class="card bg-light mb-3" id="about_tutor">
-    <div class="card-body">
-        <h5 class="card-title mt-3">Address</h5>
-        <textarea class="form-control" rows="1" asp-for="@Model.Address" id="address-text"></textarea>
-        <h5 class="card-title mt-3">Descriptions</h5>
-        <textarea class="form-control" rows="2" asp-for="@Model.TutorCard.Descriptions"></textarea>
-        <h5 class="card-title mt-3">About</h5>
-        <textarea class="form-control" rows="all" asp-for="@Model.About"></textarea>
-        <div class="row justify-content-end mt-3 end-50">
-            <button type="submit" class="w-25 btn btn-primary">Update</button>
-        </div>
-    </div>
-</div>
-
-<!-- Calendar -->
-<div class="card bg-light mt-3" id="schedule">
-    <div class="card-body">
-        <h5 class="card-title text-center">Available tutor schedule</h5>
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div><i class="fa fa-info "></i> Р—РѕР±СЂР°Р¶РµРЅС– РіРѕРґРёРЅРё, Сѓ СЏРєС– С” РјРѕР¶Р»РёРІС–СЃС‚СЊ Р·Р°Р№РјР°С‚РёСЃСЏ Р· РЅРѕРІРёРјРё СѓС‡РЅСЏРјРё</div>
-                <div id="calendar"></div>
-                <script src="~/js/tutor-profile/calendar.js"></script>
-                <div class="row mt-3">
-                    <button id="calendar-reload" type="submit" class="col col-3 btn btn-dark">Cancel</button>
-                    <div class="col col-6"></div>
-                    <button id="calendar-submit" type="submit" class="col col-3 btn btn-primary">Update</button>
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Places</h5>
+            <div class="row px-3">
+                <div class="col-md col-sm-12 mb-sm-2">
+                    Online
+                    @if (Model.OnlineAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
+                </div>
+                <div class="col-md col-sm-12 mb-sm-2">
+                    At Student
+                    @if (Model.StudentHomeAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
+                </div>
+                <div class="col-md col-sm-12 mb-sm-2">
+                    At Tutor
+                    @if (Model.TutorHomeAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- about_tutor -->
+    <div class="card bg-light mb-3" id="about_tutor">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Address</h5>
+            <p class="form-control" id="address-text">@Model.Address</p>
+            <h5 class="card-title mt-3">Descriptions</h5>
+            <p class="form-control">@Model.TutorCard.Descriptions</p>
+            <h5 class="card-title mt-3">About</h5>
+            <p class="form-control">@Model.About</p>
+        </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="card bg-light mt-3" id="schedule">
+        <div class="card-body">
+            <h5 class="card-title text-center">Available tutor schedule</h5>
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
+                    <div id="calendar"></div>
+                    <script src="~/js/tutor-profile/details/calendar.js"></script>
+                    <script src="~/js/tutor-profile/details/modal.js"></script>
+                    @* <div class="row mt-3">
+                <button id="calendar-reload" type="submit" class="col col-3 btn btn-dark">Відміна</button>
+                <div class="col col-6"></div>
+                <button id="calendar-submit" type="submit" class="col col-3 btn btn-primary">Оновити</button>
+                </div> *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="request-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Запис до репетитора</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Предмет</label>
+                        <select class="form-select" aria-label="Оберіть предмет" id="subject">
+                            <option value="">Оберіть предмет</option>
+                            @foreach (var subject in Model.TutorCard.Subjects)
+                            {
+                                <option value="@subject">@subject</option>
+                            }
+                        </select>
+
+                    </div>
+                    <input type="number" class="d-none" id="tutorId" value="@Model.TutorCard.Id" readonly>
+
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Початок</label>
+                        <input type="datetime-local" class="form-control" id="startDate" value="" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">Кінець</label>
+                        <input type="datetime-local" class="form-control" id="endDate" value="" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Коментарій</label>
+                        <textarea id="comment" class="form-control" maxlength="250"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.reload()">Відміна</button>
+                    <button type="button" class="btn btn-primary" onclick="submitForm()">Підтвердити</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

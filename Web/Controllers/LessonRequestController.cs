@@ -3,8 +3,8 @@ using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Web.Controllers;
-using Domain.DrivingPort.Queries;
-using Domain.DrivingPort.Commands;
+using Domain.Queries;
+using Domain.Commands;
 using Domain.Exceptions;
 
 namespace Web.Controllers;
@@ -23,13 +23,12 @@ public class LessonRequestController : Controller
     }
 
     [HttpGet, Route("/[controller]")]
-    public async Task<ActionResult> Read(bool onlyActive = true)
+    public async Task<IActionResult> Index(bool onlyActive = false)
     {
         var query = new GetUserRequestsQuery { UserId = UserId, OnlyActive = onlyActive };
         var result = await _mediator.Send(query);
         return View(result);
     }
-
 
     [HttpPost]
     public async Task<ActionResult> Create(CreateRequestCommand command)

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Infra.DatabaseAdapter.Helpers;
 
@@ -6,11 +7,18 @@ namespace Infra.DatabaseAdapter.Models;
 public class CityModel : ITrackable
 {
     public int Id { get; set; }
-    [MaxLength(100)] public string Name { get; set; } = string.Empty;
+
+    [DisplayName("Назва"), MaxLength(100)] public string Name { get; set; } = string.Empty;
+
+    [MaxLength(140), DisplayName("Область")]
+    public string Region { get; set; } = string.Empty;
 
     //ITrackable
-    public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    [DisplayName("Додано")] public DateTime CreatedAt { get; set; }
+    [DisplayName("Створив")] public int CreatedBy { get; set; }
+    [DisplayName("Оновлено в")] public DateTime? UpdatedAt { get; set; }
+    [DisplayName("Хто оновив")] public int? UpdatedBy { get; set; }
+
+
+    public string FullName() => $"{Name},{Region}";
 }

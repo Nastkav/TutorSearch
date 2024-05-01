@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities;
 using Infra.DatabaseAdapter.Helpers;
@@ -8,10 +9,17 @@ public class RequestModel : ITrackable
 {
     public int Id { get; set; }
     public int TutorId { get; set; }
-    public TutorProfile Tutor { get; set; } = null!;
-    public CourseModel Course { get; set; } = null!;
+    public TutorProfileModel Tutor { get; set; } = null!;
+    public CourseModel? Course { get; set; }
     public CourseRequestStatus Status { get; set; }
-    [ForeignKey("CreatedBy")] public UserModel Owner { get; set; } = null!;
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
+    [MaxLength(300)] public string Comment { get; set; } = string.Empty;
+    [MaxLength(300)] public string TutorComment { get; set; } = string.Empty;
+
+    [ForeignKey(nameof(CreatedBy))] public UserModel Owner { get; set; } = null!;
+
+    public SubjectModel Subject { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
