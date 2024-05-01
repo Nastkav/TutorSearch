@@ -1,17 +1,17 @@
-const url = new URL(window.location.href);
-const id = url.searchParams.get("id");
 const baseUrl = window.location.origin;
+let calendarEl = document.getElementById('calendar');
+const tutorId = calendarEl.dataset.tutorid;
 
-console.log("id", id);
-if (id) {
-    createCalendar();
+console.log("Tutor Id", tutorId);
+if (tutorId) {
+    createCalendar(calendarEl);
 }
 
-async function createCalendar() {
+async function createCalendar(calendarEl) {
     const dates = await getDates();
     const calendarEvents = prepareCalendarEvents(dates);
+    console.log("Calendar events", calendarEvents);
 
-    var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialDate: Date.now(),
         initialView: 'timeGridWeek',
@@ -118,14 +118,14 @@ async function createCalendar() {
 
 async function getDates() {
     try {
-        //const response = await fetch(baseUrl + '/Lesson/List?UserId=' + id); // -- main
-        const response = await fetch(baseUrl + '/Lesson/List?UserId=1'); // temporary
+        const response = await fetch(baseUrl + '/Lesson/List?UserId=' + tutorId); // -- main
+        //const response = await fetch(baseUrl + '/Lesson/List?UserId=5'); // temporary
         const dates = await response.json();
         console.log(dates);
         return dates
     } catch (error) {
         console.error('Error get dates:', error);
-        return null
+        return []
     }
 }
 
