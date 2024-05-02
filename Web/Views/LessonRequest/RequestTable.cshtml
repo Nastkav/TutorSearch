@@ -1,0 +1,82 @@
+@model IEnumerable<Domain.Models.LessonRequestDto>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TutorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.From)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.To)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Answer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TutorComment)
+                </th>
+                <th>
+                    Доступні дії
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TutorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.From)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.To)
+                </td>
+                <td>
+                    @switch (item.Answer)
+                {
+                    case true:
+                    <label>Схвалено</label>
+                        break;
+                    case false:
+                    <label>Відхилено</label>
+                        break;
+                    case null:
+                    <label>---</label>
+                        break;
+                }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TutorComment)
+                </td>
+                <td>
+                    @if (item.IsTutor && item.Answer == null)
+                {
+                    <a asp-action="Update">Відповісти </a>
+                }
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>

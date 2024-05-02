@@ -15,9 +15,9 @@ public class CityModel : ITrackable
 
     //ITrackable
     [DisplayName("Додано")] public DateTime CreatedAt { get; set; }
-    [DisplayName("Створив")] public int CreatedBy { get; set; }
+    [DisplayName("Створив")] public int CreatedId { get; set; }
     [DisplayName("Оновлено в")] public DateTime? UpdatedAt { get; set; }
-    [DisplayName("Хто оновив")] public int? UpdatedBy { get; set; }
+    [DisplayName("Хто оновив")] public int? UpdatedId { get; set; }
 
 
     public string FullName() => $"{Name},{Region}";

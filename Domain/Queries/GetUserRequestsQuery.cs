@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Domain.Entities;
+using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
@@ -13,20 +14,25 @@ namespace Domain.Queries;
 public class GetUserRequestsQuery : IRequest<List<LessonRequestDto>>
 {
     public int? UserId { get; set; }
-    public bool OnlyActive { get; set; }
+
+    public bool IsTutor { get; set; }
 
     public class GetUserRequestsQueryHandler : BaseMediatrHandler<GetUserRequestsQuery, List<LessonRequestDto>>
     {
         public override async Task<List<LessonRequestDto>> Handle(GetUserRequestsQuery r, CancellationToken token)
         {
             List<LessonRequestDto> listRequest = new();
-            var dbRequests = await ApplicationDb.Requests
-                .Include(x => x.Tutor.Owner)
+            var q = ApplicationDb.Requests
+                .Include(x => x.Tutor.Created)
                 .Include(x => x.Subject)
-                .Where(x => x.CreatedBy == r.UserId)
-                .ToListAsync();
+                .Include(x => x.Created).AsQueryable();
 
-            foreach (var dbRequest in dbRequests)
+            if (r.IsTutor)
+                q = q.Where(x => x.TutorId == r.UserId);
+            else
+                q = q.Where(x => x.CreatedId == r.UserId);
+
+            foreach (var dbRequest in await q.ToArrayAsync())
             {
                 var req = Mapper.Map<LessonRequestDto>(dbRequest);
                 switch (dbRequest.Status)
@@ -44,8 +50,10 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequestDto>>
                         throw new ArgumentOutOfRangeException();
                 }
 
-                req.TutorName = dbRequest.Tutor.Owner.FullName();
+                req.TutorName = dbRequest.Tutor.Created.FullName();
                 req.Subject = dbRequest.Subject.Name;
+                req.IsTutor = r.IsTutor;
+                req.UserName = dbRequest.Created.FullName();
                 listRequest.Add(req);
             }
 

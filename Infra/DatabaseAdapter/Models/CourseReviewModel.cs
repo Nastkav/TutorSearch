@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infra.DatabaseAdapter.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class CourseReviewModel
+public class CourseReviewModel : ITrackable
 {
     public int Id { get; set; }
     public Guid CourseId { get; set; }
@@ -12,11 +13,11 @@ public class CourseReviewModel
     [Range(0, 5)] public int Rating { get; set; }
     [MaxLength(300)] public string Description { get; set; } = string.Empty;
 
-    [ForeignKey(nameof(CreatedBy))] public UserModel Owner { get; set; } = null!;
+    public UserModel Created { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

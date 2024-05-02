@@ -14,8 +14,8 @@ public class CreateRequestCommand : IRequest<int>
     public string Subject { get; set; } = null!;
     public int CreatedBy { get; set; }
     public int TutorProfileId { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
     [MaxLength(300)] public string Comment { get; set; } = string.Empty;
 
     public class CreateRequestCommandHandler : BaseMediatrHandler<CreateRequestCommand, int>
@@ -36,7 +36,7 @@ public class CreateRequestCommand : IRequest<int>
                 throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
 
             var exist = ApplicationDb.Requests.Any(x =>
-                x.CreatedBy == req.CreatedBy
+                x.CreatedId == req.CreatedId
                 && x.Status == CourseRequestStatus.New
                 && x.TutorId == req.TutorId
                 && x.Subject.Id == req.Subject.Id);
@@ -45,7 +45,7 @@ public class CreateRequestCommand : IRequest<int>
 
             //Перевірка перетинання часу    
             var lessonOnRange = ApplicationDb.Lessons //TODO: Check this
-                .Where(x => x.End > request.Start || request.End > x.Start).ToList();
+                .Where(x => x.To > request.From || request.To > x.From).ToList();
             if (lessonOnRange.Count > 0)
                 throw new Exception("Додавання неможливе, час перетинається");
 

@@ -6,6 +6,7 @@ using Web.Controllers;
 using Domain.Queries;
 using Domain.Commands;
 using Domain.Exceptions;
+using Web.Models.LessonRequest;
 
 namespace Web.Controllers;
 
@@ -25,9 +26,10 @@ public class LessonRequestController : Controller
     [HttpGet, Route("/[controller]")]
     public async Task<IActionResult> Index(bool onlyActive = false)
     {
-        var query = new GetUserRequestsQuery { UserId = UserId, OnlyActive = onlyActive };
-        var result = await _mediator.Send(query);
-        return View(result);
+        var vm = new LessonRequestViewModel();
+        vm.MyRequests = await _mediator.Send(new GetUserRequestsQuery { UserId = UserId, IsTutor = false });
+        vm.RequestsForMe = await _mediator.Send(new GetUserRequestsQuery { UserId = UserId, IsTutor = true });
+        return View(vm);
     }
 
     [HttpPost]

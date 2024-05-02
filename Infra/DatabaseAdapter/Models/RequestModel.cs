@@ -17,13 +17,13 @@ public class RequestModel : ITrackable
     [MaxLength(300)] public string Comment { get; set; } = string.Empty;
     [MaxLength(300)] public string TutorComment { get; set; } = string.Empty;
 
-    [ForeignKey(nameof(CreatedBy))] public UserModel Owner { get; set; } = null!;
+    public UserModel Created { get; set; } = null!;
 
     public SubjectModel Subject { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

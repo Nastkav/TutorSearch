@@ -6,9 +6,9 @@ namespace Infra.DatabaseAdapter.Helpers;
 public interface ITrackable
 {
     DateTime CreatedAt { get; set; }
-    int CreatedBy { get; set; }
+    int CreatedId { get; set; }
     DateTime? UpdatedAt { get; set; }
-    int? UpdatedBy { get; set; }
+    int? UpdatedId { get; set; }
 
     static void BeforeSaving(IEnumerable<EntityEntry> entries, int userId)
     {
@@ -27,7 +27,7 @@ public interface ITrackable
                         trackable.CreatedAt = now;
                         // trackable.CreatedBy = userId;
                         trackable.UpdatedAt = now;
-                        trackable.UpdatedBy = userId;
+                        trackable.UpdatedId = userId;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -13,7 +13,7 @@ public class SolutionModel : ITrackable
 
     public virtual List<FileModel> Files { get; set; } = [];
 
-    [ForeignKey(nameof(CreatedBy))] public UserModel Owner { get; set; } = null!;
+    public UserModel Created { get; set; } = null!;
 
     public int TaskId { get; set; }
 
@@ -21,7 +21,7 @@ public class SolutionModel : ITrackable
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

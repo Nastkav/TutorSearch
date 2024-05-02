@@ -30,7 +30,7 @@ public class GetTutorProfileQuery : IRequest<TutorDto>
                     throw new Exception("Користувача не знайдено");
                 dbProfile = new TutorProfileModel()
                 {
-                    CreatedBy = r.ProfileId,
+                    CreatedId = r.ProfileId,
                     Id = r.ProfileId
                 };
                 await ApplicationDb.AddAsync(dbProfile);

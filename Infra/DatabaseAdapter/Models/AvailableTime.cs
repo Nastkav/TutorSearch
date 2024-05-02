@@ -13,7 +13,7 @@ public class AvailableTime : ITrackable
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

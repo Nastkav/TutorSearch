@@ -21,12 +21,12 @@ public class WebMappingProfile : Profile
             ;
 
 
-        CreateMap<TutorDto, DetailsViewModel>()
+        CreateMap<TutorDto, OLD_DetailsViewModel>()
             .ForMember(d => d.Subjects,
                 o => o.Ignore())
             .AfterMap((dto, vm, context) => vm.TutorCard = context.Mapper.Map<TutorCardViewModel>(dto));
 
-        CreateMap<DetailsViewModel, TutorEditDto>();
+        CreateMap<OLD_DetailsViewModel, TutorEditDto>();
         CreateMap<TutorCardViewModel, TutorEditDto>();
     }
 }

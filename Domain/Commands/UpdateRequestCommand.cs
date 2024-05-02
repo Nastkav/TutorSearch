@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 using Infra.DatabaseAdapter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Commands;
 
@@ -27,30 +28,54 @@ public class UpdateRequestCommand : IRequest<int>
         {
         }
 
-        public override async Task<int> Handle(UpdateRequestCommand request,
-            CancellationToken cancellationToken)
+        public override async Task<int> Handle(UpdateRequestCommand r, CancellationToken token)
         {
-            if (request.UpdatedBy == request.TutorProfileId)
+            if (r.UpdatedBy == r.TutorProfileId)
                 throw new IncorrectUserId("A user can only send an invitation to another tutor");
 
-            var dbRequest = ApplicationDb.Requests.First(x =>
-                                x.CreatedBy == request.UpdatedBy
-                                && x.TutorId == request.TutorProfileId
-                                && x.Id == request.Id)
+            var dbRequest = ApplicationDb.Requests
+                                .Include(x => x.Tutor.Created)
+                                .Include(x => x.Subject)
+                                .First(x =>
+                                    x.CreatedId == r.UpdatedBy
+                                    && x.TutorId == r.TutorProfileId
+                                    && x.Id == r.Id)
                             ?? throw new Exception("The required query was not found");
 
             if (dbRequest.Status != CourseRequestStatus.New)
                 throw new Exception("The request is already closed");
 
-            Mapper.Map(request, dbRequest);
-            if (request.Subject != null)
-                dbRequest.Subject = ApplicationDb.Subjects.First(x => x.Name == request.Subject);
+            Mapper.Map(r, dbRequest);
+            if (r.Subject != null)
+                dbRequest.Subject = ApplicationDb.Subjects
+                    .First(x => x.Name == r.Subject);
             ApplicationDb.Requests.Update(dbRequest);
-            await ApplicationDb.SaveChangesAsync();
 
             if (dbRequest.Status == CourseRequestStatus.Approved)
-                Log.LogInformation("Create Course"); //TODO: Create Course
+            {
+                var student = ApplicationDb.Users.First(x => x.Id == dbRequest.CreatedId);
+                //Course
+                var newCourse = new CourseModel
+                {
+                    Title = dbRequest.Tutor.Created.FullName(),
+                    SubjectId = dbRequest.Subject.Id,
+                    RequestId = r.Id,
+                    TutorId = r.TutorProfileId
+                };
+                newCourse.Students.Add(student);
 
+                //Lesson
+                var firstLesson = Mapper.Map<RequestModel, LessonModel>(dbRequest);
+                firstLesson.CreatedId = r.UpdatedBy;
+                firstLesson.Students.Add(student);
+                firstLesson.TutorProfileId = dbRequest.TutorId;
+
+                newCourse.Lessons.Add(firstLesson);
+                await ApplicationDb.Courses.AddAsync(newCourse);
+                // await ApplicationDb.Lessons.AddAsync(firstLesson);
+            }
+
+            await ApplicationDb.SaveChangesAsync();
             return dbRequest.Id;
         }
     }

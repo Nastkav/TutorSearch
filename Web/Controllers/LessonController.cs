@@ -40,7 +40,7 @@ public class LessonController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult> Index(int id)
+    public async Task<ActionResult> Details(int id)
     {
         LessonViewModel model = new();
         model.Cities = await _mediator.Send(new GetAllCitiesQuery());
@@ -52,7 +52,9 @@ public class LessonController : Controller
     [HttpPost]
     public async Task<ActionResult> Create(CreateLessonTimeCommand command)
     {
-        if (command.CreatedBy != UserId)
+        if (command.CreatedBy == 0)
+            command.CreatedBy = UserId;
+        else if (command.CreatedBy != UserId)
             throw new IncorrectUserId($"command.CreatedBy={command.CreatedBy},app.UserId={UserId}");
         await _mediator.Send(command);
         return RedirectToAction(nameof(Edit));
@@ -122,18 +124,16 @@ public class LessonController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Clone(int id)
-    {
-        try
-        {
-            await _mediator.Send(new LessonCloneCommand { CreatedBy = UserId, LessonId = id });
-            //TODO: Redirect to lesson page
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            return StatusCode(500);
-        }
-    }
+    public async Task<IActionResult> Clone(int id) =>
+        // try
+        // {
+        //     await _mediator.Send(new LessonCloneCommand { CreatedBy = UserId, LessonId = id });
+        //     //TODO: Redirect to lesson page
+        //     return RedirectToAction(nameof(Index));
+        // }
+        // catch (Exception e)
+        // {
+        //     _logger.LogError(e.Message);
+        StatusCode(500);
+    // }
 }

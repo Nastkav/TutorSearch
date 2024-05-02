@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Security.Claims;
 using AutoMapper;
+using Azure;
 using Domain.Commands;
 using Domain.Commands;
 using Domain.Entities;
@@ -10,14 +11,17 @@ using Domain.Exceptions;
 using Domain.Queries;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Web.Models.Shared;
 using Web.Models.TutorProfile;
 
 namespace Web.Controllers;
 
 [Route("[controller]/[action]")]
+[Authorize]
 public class TutorProfileController : Controller
 {
     private readonly ILogger<TutorProfileController> _logger;
@@ -50,8 +54,10 @@ public class TutorProfileController : Controller
         return subjects;
     }
 
-    [HttpGet, Route("/[controller]")]
-    public async Task<ActionResult> SearchTutor(SearchViewModel model) //+
+    [HttpGet]
+    [Route("/[controller]")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SearchTutor(SearchViewModel model)
     {
         //Main Lists
         model.Subjects = await GetSelectList(new GetAllSubjectsQuery());
@@ -71,13 +77,17 @@ public class TutorProfileController : Controller
         return View(model);
     }
 
-    [HttpGet, Route("/[controller]/[action]/{id?}")]
-    public async Task<ActionResult> Details(int id = 0)
+    [HttpGet]
+    [Route("/[controller]/[action]/{id?}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Details(int id = 0)
     {
         if (id == 0)
             id = UserId;
+        if (id == 0)
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
 
-        DetailsViewModel model = new() { CurrentUserId = UserId };
+        OLD_DetailsViewModel model = new() { CurrentUserId = UserId };
         model.Subjects = await GetListCheckbox(new GetAllSubjectsQuery());
         var tutor = await _mediator.Send(new GetTutorProfileQuery { ProfileId = id });
 
@@ -91,37 +101,28 @@ public class TutorProfileController : Controller
     }
 
 
-    [HttpGet]
-    public async Task<ActionResult> Edit()
+    public async Task<IActionResult> Edit()
     {
-        DetailsViewModel model = new();
-        model.Subjects = await GetListCheckbox(new GetAllSubjectsQuery());
-        var tutor = await _mediator.Send(new GetTutorProfileQuery { ProfileId = UserId });
-        if (tutor.Enabled)
-        {
-            model.TutorCard.Enabled = true;
-            _mapper.Map(tutor, model);
-            foreach (var subject in tutor.Subjects)
-                model.Subjects[subject.Key].IsChecked = true;
-        }
+        ProfileVm model = new();
+        model.Cities = await GetSelectList(new GetAllSubjectsQuery());
+        model.TutorVm = new TutorVm();
+        if (model.TutorVm != null)
+            model.Subjects = await GetSelectList(new GetAllCitiesQuery());
 
+        var tutor = await _mediator.Send(new GetTutorProfileQuery { ProfileId = UserId });
+        //     _mapper.Map(tutor, model);
         return View(model);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> Edit(DetailsViewModel model)
-    {
-        var tutorEdit = _mapper.Map<TutorEditDto>(model);
-        _mapper.Map(model.TutorCard, tutorEdit);
-        foreach (var checkbox in model.Subjects)
-            if (checkbox.IsChecked)
-                tutorEdit.Subjects[checkbox.Id] = checkbox.LabelName;
-        await _mediator.Send(new EditTutorProfileCommand { TutorEdit = tutorEdit, RequestBy = UserId });
-        return RedirectToAction(nameof(Edit));
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> Edit(ProfileVm model)
+    // {
+    //
+
+    // }
 
     [HttpPost]
-    public async Task<ActionResult> CheckFavorite(CheckFavoriteCommand command)
+    public async Task<IActionResult> CheckFavorite(CheckFavoriteCommand command)
     {
         try
         {
@@ -135,5 +136,27 @@ public class TutorProfileController : Controller
             _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(ProfileVm model)
+    {
+        model.Cities = await GetSelectList(new GetAllSubjectsQuery());
+        model.Subjects = await GetSelectList(new GetAllCitiesQuery());
+        if (ModelState["TutorVm"] != null) // ‗ךשמ םו גקטעוכü
+            ModelState["TutorVm"].Errors.Clear();
+
+        if (ModelState.IsValid)
+        {
+            Console.WriteLine("VALID");
+            Console.WriteLine("VALID");
+            var tutorEdit = _mapper.Map<TutorEditDto>(model);
+            _mapper.Map(model.TutorCard, tutorEdit);
+            foreach (var checkbox in model.Subjects)
+                if (checkbox.IsChecked)
+                    tutorEdit.Subjects[checkbox.Id] = checkbox.LabelName;
+            await _mediator.Send(new EditTutorProfileCommand { TutorEdit = tutorEdit, RequestBy = UserId });
+        }
+        return View(model);
     }
 }

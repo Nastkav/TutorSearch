@@ -43,10 +43,10 @@ public class EditTutorProfileCommand : IRequest<bool>
                 .Where(x => request.TutorEdit.Subjects.Keys.Contains(x.Id)).ToListAsync();
             u.TutorProfile.Address = ""; //Fix empty mapping string 
             //CreateOrUpdate
-            if (u.TutorProfile.CreatedBy == 0)
-                u.TutorProfile.CreatedBy = request.RequestBy;
+            if (u.TutorProfile.CreatedId == 0)
+                u.TutorProfile.CreatedId = request.RequestBy;
             else
-                u.TutorProfile.UpdatedBy = request.RequestBy;
+                u.TutorProfile.UpdatedId = request.RequestBy;
 
             u.TutorProfile.Enabled = true;
             ApplicationDb.TutorProfiles.Update(u.TutorProfile);

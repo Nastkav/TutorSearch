@@ -50,7 +50,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
 
         builder.Entity<UserModel>(entity =>
         {
-            entity.HasOne(x => x.TutorProfile).WithOne(x => x.Owner)
+            entity.HasOne(x => x.TutorProfile).WithOne(x => x.Created)
                 .HasForeignKey<TutorProfileModel>(x => x.Id);
             entity.Navigation(x => x.TutorProfile).IsRequired();
         });
@@ -87,29 +87,29 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
 
         #region Owner
 
-        // builder.Entity<RequestModel>()
-        //     .HasOne(x => x.Owner)
-        //     .WithMany(x => x.Requests)
-        //     .HasForeignKey(x => x.CreatedBy)
-        //     .IsRequired();
+        builder.Entity<RequestModel>()
+            .HasOne(x => x.Created)
+            .WithMany(x => x.Requests)
+            .HasForeignKey(x => x.CreatedId)
+            .IsRequired();
 
-        // builder.Entity<SolutionModel>()
-        //     .HasOne(x => x.Owner)
-        //     .WithMany(x => x.Solutions)
-        //     .HasForeignKey(x => x.CreatedBy)
-        //     .IsRequired();
+        builder.Entity<SolutionModel>()
+            .HasOne(x => x.Created)
+            .WithMany(x => x.Solutions)
+            .HasForeignKey(x => x.CreatedId)
+            .IsRequired();
 
-        // builder.Entity<CourseReviewModel>()
-        //     .HasOne(x => x.Owner)
-        //     .WithMany(x => x.Reviews)
-        //     .HasForeignKey(x => x.CreatedBy)
-        //     .IsRequired();
-        //
-        // builder.Entity<FileModel>()
-        //     .HasOne(x => x.Owner)
-        //     .WithMany(x => x.Files)
-        //     .HasForeignKey(x => x.CreatedBy)
-        //     .IsRequired();
+        builder.Entity<CourseReviewModel>()
+            .HasOne(x => x.Created)
+            .WithMany(x => x.Reviews)
+            .HasForeignKey(x => x.CreatedId)
+            .IsRequired();
+
+        builder.Entity<FileModel>()
+            .HasOne(x => x.Created)
+            .WithMany(x => x.Files)
+            .HasForeignKey(x => x.CreatedId)
+            .IsRequired();
 
         #endregion
     }

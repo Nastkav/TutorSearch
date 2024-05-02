@@ -21,23 +21,14 @@ public class GetLessonDetailQuery : IRequest<LessonDetailsDto>
         }
 
 
-        public override async Task<LessonDetailsDto> Handle(GetLessonDetailQuery request,
-            CancellationToken cancellationToken)
+        public override async Task<LessonDetailsDto> Handle(GetLessonDetailQuery r, CancellationToken token)
         {
-            //TODO: GetLessonDetailQueryHandler
-            List<LessonDto> events = new();
-            var dtMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            return new LessonDetailsDto()
-            {
-                Type = TimeType.Busy,
-                Title = "Maths -- Petrov",
-                StartTime = dtMonday.AddHours(10),
-                EndTime = dtMonday.AddHours(12),
-                Subject = "Maths",
-                Comment = "https://link.to/AAAAAAAAAAAAAAA",
-                CourseId = Guid.NewGuid().ToString(),
-                CourseName = "German Pre-intermediate"
-            };
+            var dbLesson = ApplicationDb.Lessons.FirstOrDefault(x => x.Id == r.LessonId && x.CreatedId == r.UserId);
+            if (dbLesson == null)
+                throw new Exception("Обраний урок не знайдено");
+            var lessonDto = Mapper.Map<LessonDetailsDto>(dbLesson);
+            lessonDto.Type = TimeType.Busy;
+            return lessonDto;
         }
     }
 }

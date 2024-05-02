@@ -13,8 +13,8 @@ public class UpdateLessonTimeCommand : IRequest<int>
 {
     public int UpdatedBy { get; set; }
     public int EventId { get; set; }
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
     public string? Comment { get; set; }
     public string? Subject { get; set; }
 
@@ -23,11 +23,11 @@ public class UpdateLessonTimeCommand : IRequest<int>
         public override async Task<int> Handle(UpdateLessonTimeCommand request, CancellationToken token)
         {
             //On day event
-            if (request.StartTime.Date != request.EndTime.Date)
+            if (request.From.Date != request.To.Date)
                 throw new Exception("Подія має бути протягом дня.");
-            var weekday = (int)request.StartTime.DayOfWeek;
-            var start = TimeOnly.FromDateTime(request.StartTime);
-            var end = TimeOnly.FromDateTime(request.EndTime);
+            var weekday = (int)request.From.DayOfWeek;
+            var start = TimeOnly.FromDateTime(request.From);
+            var end = TimeOnly.FromDateTime(request.To);
 
             var dbLesson = ApplicationDb.Lessons.FirstOrDefault(x => x.Id == request.EventId);
             if (dbLesson == null)
@@ -43,13 +43,13 @@ public class UpdateLessonTimeCommand : IRequest<int>
             //Перевірка перетинання часу
             //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
             var lessonOnRange = ApplicationDb.Lessons
-                .Where(x => x.End > request.StartTime || request.EndTime > x.Start).ToList();
+                .Where(x => x.To > request.From || request.To > x.From).ToList();
             if (lessonOnRange.Count > 0)
                 throw new Exception("Оновлення неможливе, час перетинається");
 
             //Time params
-            dbLesson.Start = request.StartTime;
-            dbLesson.End = request.EndTime;
+            dbLesson.From = request.From;
+            dbLesson.To = request.To;
             //Subject
             if (request.Subject != null)
             {
@@ -62,7 +62,7 @@ public class UpdateLessonTimeCommand : IRequest<int>
             //Comment
             if (request.Comment != null) dbLesson.Comment = request.Comment;
 
-            dbLesson.UpdatedBy = request.UpdatedBy;
+            dbLesson.UpdatedId = request.UpdatedBy;
             ApplicationDb.Lessons.Update(dbLesson);
             await ApplicationDb.SaveChangesAsync();
             return dbLesson.Id;

@@ -5,6 +5,8 @@ using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Infra.DatabaseAdapter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
 
@@ -18,54 +20,71 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
 
     public class GetLessonQueryHandler : BaseMediatrHandler<GetLessonQuery, List<LessonDto>>
     {
-        public override async Task<List<LessonDto>> Handle(GetLessonQuery request,
-            CancellationToken cancellationToken)
+        public override async Task<List<LessonDto>> Handle(GetLessonQuery r, CancellationToken token)
         {
-            //TODO: GetLessonQueryHandler
             List<LessonDto> events = new();
-            var dtMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-            for (var i = 1; i <= 7; i++)
-            {
+            var dbLessons = ApplicationDb.Lessons
+                .Include(x => x.Course)
+                .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorProfileId == r.UserId)
+                .ToList();
+
+            var dbAvailableTime = ApplicationDb.AvailableTimes
+                .Where(x => x.ProfileId == r.UserId)
+                .OrderBy(x => x.DayOfWeek)
+                .ThenBy(x => x.StartTime)
+                .ToList();
+
+            //Calc Busy Time
+            foreach (var lesson in dbLessons)
                 events.Add(new LessonDto
                 {
-                    Type = TimeType.Unavailable,
-                    Title = "Title-1-" + i,
-                    StartTime = dtMonday.AddDays(i - 1).AddHours(0),
-                    EndTime = dtMonday.AddDays(i - 1).AddHours(7)
-                });
-                events.Add(new LessonDto
-                {
-                    Type = TimeType.Available,
-                    Title = "Title-1-" + i,
-                    StartTime = dtMonday.AddDays(i - 1).AddHours(7),
-                    EndTime = dtMonday.AddDays(i - 1).AddHours(12)
-                });
-                events.Add(new LessonDto
-                {
+                    Id = lesson.Id,
                     Type = TimeType.Busy,
-                    Title = "Title-1-" + i,
-                    StartTime = dtMonday.AddDays(i - 1).AddHours(12),
-                    EndTime = dtMonday.AddDays(i - 1).AddHours(13)
+                    Title = lesson.Course.Title,
+                    From = lesson.From,
+                    To = lesson.To
                 });
-                events.Add(new LessonDto
-                {
-                    Type = TimeType.Available,
-                    Title = "Title-2-" + i,
-                    StartTime = dtMonday.AddDays(i - 1).AddHours(13),
-                    EndTime = dtMonday.AddDays(i - 1).AddHours(20)
-                });
-                events.Add(new LessonDto
-                {
-                    Type = TimeType.Unavailable,
-                    Title = "Title-1-" + i,
-                    StartTime = dtMonday.AddDays(i - 1).AddHours(20),
-                    EndTime = dtMonday.AddDays(i - 1).AddHours(24)
-                });
+
+            //Available Time
+            var prevSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+
+            var availableTimes = new List<LessonDto>();
+            for (var i = -2; i <= 2; i++) //+- 2 тижня
+            {
+                var offsetWeek = i * 7;
+                foreach (var dbRange in dbAvailableTime)
+                    availableTimes.Add(new LessonDto
+                    {
+                        Type = TimeType.Available,
+                        From = prevSunday.AddDays(offsetWeek + dbRange.DayOfWeek).AddTicks(dbRange.StartTime.Ticks),
+                        To = prevSunday.AddDays(offsetWeek + dbRange.DayOfWeek).AddTicks(dbRange.EndTime.Ticks)
+                    });
             }
 
+            events.AddRange(availableTimes);
+
+            //Unavailable Time
+            var unavailableTimes = new List<LessonDto>();
+            var prevEventEnd = DateTime.MinValue;
+            for (var i = 0; i < availableTimes.Count; i++)
+            {
+                if (i == 0 || availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
+                    prevEventEnd = availableTimes[i].From.Date; // Фиксування почутку дня
+
+                unavailableTimes.Add(new LessonDto
+                {
+                    Type = TimeType.Unavailable,
+                    From = prevEventEnd,
+                    To = availableTimes[i].From
+                });
+                prevEventEnd = unavailableTimes[i].To;
+            }
+
+            events.AddRange(unavailableTimes);
+
             //Type Filter
-            if (request.TimeTypes.Count > 0)
-                events = events.Where(x => request.TimeTypes.Contains(x.Type)).ToList();
+            if (r.TimeTypes.Count > 0)
+                events = events.Where(x => r.TimeTypes.Contains(x.Type)).ToList();
 
             return events;
         }

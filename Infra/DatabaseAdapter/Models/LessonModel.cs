@@ -8,8 +8,8 @@ public class LessonModel : ITrackable
     public int Id { get; set; }
     public int TutorProfileId { get; set; }
     public TutorProfileModel TutorProfile { get; set; } = null!;
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
     [MaxLength(200)] public string Comment { get; set; } = string.Empty;
 
     public Guid CourseId { get; set; }
@@ -23,7 +23,7 @@ public class LessonModel : ITrackable
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

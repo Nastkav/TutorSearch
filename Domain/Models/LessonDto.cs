@@ -4,10 +4,11 @@ namespace Domain.Models;
 
 public class LessonDto
 {
+    public int Id { get; set; }
     public TimeType Type { get; set; }
     public string Title { get; set; } = "";
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
 }
 
 public class LessonDetailsDto : LessonDto

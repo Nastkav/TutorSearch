@@ -10,11 +10,11 @@ public class FileModel : ITrackable
     public TaskModel? Task { get; set; }
     public int? SolutionId { get; set; }
     public SolutionModel? Solution { get; set; }
-    [ForeignKey(nameof(CreatedBy))] public UserModel Owner { get; set; } = null!;
+    public UserModel Created { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedBy { get; set; }
+    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

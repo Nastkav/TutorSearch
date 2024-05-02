@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Infra.DatabaseAdapter.Models;
+using Microsoft.AspNetCore.Authorization;
 using Web;
 
 namespace Web.Controllers;
 
+[Authorize]
 public class CourseController : Controller
 {
     private readonly TemplateDbContext _context;

@@ -2,8 +2,6 @@ namespace Web.Models.TutorProfile;
 
 public class TutorCardViewModel
 {
-    public int Id { get; set; }
-    public bool Enabled { get; set; } = false;
     public string ImgPath { get; set; } = string.Empty;
     public string GetImgPath() => ImgPath != string.Empty ? ImgPath : "/img/example_face.jpg";
     public decimal HourRate { get; set; }
@@ -19,4 +17,8 @@ public class TutorCardViewModel
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; } = string.Empty;
     public string Patronymic { get; set; } = string.Empty;
+
+    //-
+    public int Id { get; set; }
+    public bool Enabled { get; set; } = false;
 }

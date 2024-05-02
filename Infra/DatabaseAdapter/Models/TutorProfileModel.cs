@@ -40,12 +40,11 @@ public class TutorProfileModel : ITrackable
     public virtual List<LessonModel> TeachingLessons { get; set; } = [];
 
 
-    [ForeignKey(nameof(Id))]
-    public UserModel Owner { get; set; } = null!;
-
     //ITrackable
-    [Required] public DateTime CreatedAt { get; set; }
-    [Required] public int CreatedBy { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public int CreatedId { get; set; }
+    public UserModel Created { get; set; } = null!;
+
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedBy { get; set; }
+    public int? UpdatedId { get; set; }
 }

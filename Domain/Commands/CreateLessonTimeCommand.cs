@@ -14,8 +14,8 @@ public class CreateLessonTimeCommand : IRequest<int>
 
     public TimeType Type { get; set; }
     public string Title { get; set; } = "";
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public DateTime From { get; set; }
+    public DateTime To { get; set; }
     public Guid? CourseId { get; set; }
 
 
@@ -29,11 +29,11 @@ public class CreateLessonTimeCommand : IRequest<int>
         public override async Task<int> Handle(CreateLessonTimeCommand request, CancellationToken cancellationToken)
         {
             //On day event
-            if (request.StartTime.Date != request.EndTime.Date)
+            if (request.From.Date != request.To.Date)
                 throw new Exception("Подія має бути протягом дня.");
-            var weekday = (int)request.StartTime.DayOfWeek;
-            var start = TimeOnly.FromDateTime(request.StartTime);
-            var end = TimeOnly.FromDateTime(request.EndTime);
+            var weekday = (int)request.From.DayOfWeek;
+            var start = TimeOnly.FromDateTime(request.From);
+            var end = TimeOnly.FromDateTime(request.To);
 
 
             switch (request.Type)
@@ -48,16 +48,16 @@ public class CreateLessonTimeCommand : IRequest<int>
                     foreach (var timeRange in dbTimes)
                         if (timeRange.EndTime > start && timeRange.StartTime < end)
                             throw new Exception("Додавання неможливе, час перетинається");
-                    //TODO: timeRange проверить проверку пересечения дат
+                    
 
 
                     var availableTime = new AvailableTime()
                     {
                         DayOfWeek = weekday,
-                        StartTime = TimeOnly.FromDateTime(request.StartTime),
-                        EndTime = TimeOnly.FromDateTime(request.EndTime),
+                        StartTime = TimeOnly.FromDateTime(request.From),
+                        EndTime = TimeOnly.FromDateTime(request.To),
                         ProfileId = request.CreatedBy,
-                        CreatedBy = request.CreatedBy
+                        CreatedId = request.CreatedBy
                     };
                     ApplicationDb.AvailableTimes.Add(availableTime);
                     await ApplicationDb.SaveChangesAsync();
@@ -82,7 +82,7 @@ public class CreateLessonTimeCommand : IRequest<int>
                     //Перевірка перетинання часу
                     //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
                     var lessonOnRange = ApplicationDb.Lessons
-                        .Where(x => x.End > request.StartTime || request.EndTime > x.Start).ToList();
+                        .Where(x => x.To > request.From || request.To > x.From).ToList();
                     if (lessonOnRange.Count > 0)
                         throw new Exception("Додавання неможливе, час перетинається");
 
