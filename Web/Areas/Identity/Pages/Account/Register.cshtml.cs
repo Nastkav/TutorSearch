@@ -139,9 +139,12 @@ public class RegisterModel : PageModel
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [StringLength(254, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.",
+            MinimumLength = 6)]
         [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Пошта не є дійсною адресою електронної пошти.")]
+        [Display(Name = "Пошта")]
+
         public string Email { get; set; }
 
         /// <summary>
@@ -149,10 +152,10 @@ public class RegisterModel : PageModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+        [StringLength(100, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.",
             MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         /// <summary>
@@ -160,8 +163,8 @@ public class RegisterModel : PageModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Підтвердити пароль")]
+        [Compare("Password", ErrorMessage = "Пароль і пароль підтвердження не збігаються.")]
         public string ConfirmPassword { get; set; }
     }
 }

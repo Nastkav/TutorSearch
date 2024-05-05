@@ -24,8 +24,8 @@ public class Tutor
     [DisplayName("Онлайн")] public bool OnlineAccess { get; set; }
 
     [DisplayName("Коротний опис")]
-    [Required()]
-    [StringLength(300, ErrorMessage = "Введені дані не можуть бути довшими за 300 символів.")]
+    [StringLength(254, ErrorMessage = "Введені дані не можуть бути довшими за 300 символів.")]
+    [MinLength(0)]
     public string Descriptions { get; set; } = string.Empty;
 
     [MaxLength(400)] public string ImgPath { get; set; } = string.Empty;
