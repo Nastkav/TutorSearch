@@ -12,8 +12,8 @@ public class Tutor
     public string Descriptions { get; set; } = "";
     public decimal HourRate { get; set; }
     public bool OnlineAccess { get; set; } = false;
-    public bool AtHomeAccess { get; set; } = false;
-    public bool OffsiteAccess { get; set; } = false;
+    public bool TutorHomeAccess { get; set; } = false;
+    public bool StudentHomeAccess { get; set; } = false;
     public Dictionary<int, string> Subjects { get; set; } = new();
     public List<Review> ListReviews { get; set; } = new();
 }

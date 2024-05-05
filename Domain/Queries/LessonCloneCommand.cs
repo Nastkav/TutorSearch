@@ -6,6 +6,9 @@ using AutoMapper;
 
 namespace Domain.Queries;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class LessonCloneCommand : IRequest<int>
 {
     public int CreatedBy { get; set; }

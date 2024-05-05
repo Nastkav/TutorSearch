@@ -12,6 +12,9 @@ public class LessonCheckInCommand : IRequest<bool>
     public int UpdatedBy { get; set; }
     private readonly DateTime _createdAt;
 
+    /// <summary>
+    /// TODO
+    /// </summary>
     public LessonCheckInCommand() => _createdAt = DateTime.Now;
 
     public class LessonCheckInCommandHandler : BaseMediatrHandler<LessonCheckInCommand, bool>

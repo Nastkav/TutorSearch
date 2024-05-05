@@ -22,10 +22,14 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
     {
         public override async Task<List<LessonDto>> Handle(GetLessonQuery r, CancellationToken token)
         {
+            if (!r.From.HasValue) r.From = DateTime.MinValue;
+            if (!r.To.HasValue) r.To = DateTime.MaxValue;
+
             List<LessonDto> events = new();
             var dbLessons = ApplicationDb.Lessons
                 .Include(x => x.Course)
                 .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorProfileId == r.UserId)
+                .Where(x => r.From < x.From && x.To < r.To)
                 .ToList();
 
             var dbAvailableTime = ApplicationDb.AvailableTimes
@@ -46,30 +50,34 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
                 });
 
             //Available Time
-            var prevSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
+            var prevSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
             var availableTimes = new List<LessonDto>();
-            for (var i = -2; i <= 2; i++) //+- 2 �����
+            for (var i = -2; i <= 2; i++) //+- 2 тижня
             {
                 var offsetWeek = i * 7;
                 foreach (var dbRange in dbAvailableTime)
                     availableTimes.Add(new LessonDto
                     {
+                        Id = dbRange.Id,
                         Type = TimeType.Available,
                         From = prevSunday.AddDays(offsetWeek + dbRange.DayOfWeek).AddTicks(dbRange.StartTime.Ticks),
                         To = prevSunday.AddDays(offsetWeek + dbRange.DayOfWeek).AddTicks(dbRange.EndTime.Ticks)
                     });
             }
 
-            events.AddRange(availableTimes);
+            events.AddRange(availableTimes.Where(x => r.From < x.From && x.To < r.To));
 
+            events = events.OrderBy(x => x.From).ToList();
             //Unavailable Time
             var unavailableTimes = new List<LessonDto>();
             var prevEventEnd = DateTime.MinValue;
             for (var i = 0; i < availableTimes.Count; i++)
             {
-                if (i == 0 || availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
-                    prevEventEnd = availableTimes[i].From.Date; // ���������� ������� ���
+                if (i == 0)
+                    prevEventEnd = availableTimes[i].From.Date; // Фиксування почутку дня
+                else if (availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
+                    prevEventEnd = availableTimes[i - 1].To; // Взяти останній час з минулого дня
 
                 unavailableTimes.Add(new LessonDto
                 {
@@ -77,7 +85,7 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
                     From = prevEventEnd,
                     To = availableTimes[i].From
                 });
-                prevEventEnd = unavailableTimes[i].To;
+                prevEventEnd = availableTimes[i].To;
             }
 
             events.AddRange(unavailableTimes);
@@ -86,7 +94,7 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
             if (r.TimeTypes.Count > 0)
                 events = events.Where(x => r.TimeTypes.Contains(x.Type)).ToList();
 
-            return events;
+            return events.ToList();
         }
 
         public GetLessonQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)

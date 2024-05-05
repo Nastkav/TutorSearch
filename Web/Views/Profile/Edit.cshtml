@@ -1,96 +1,36 @@
-@model Infra.DatabaseAdapter.Models.TutorProfileModel
+@model Web.Models.TutorProfile.ProfileVm
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit Tutor Profile";
+    Layout = "_Layout";
 }
-
-<h1>Edit</h1>
-
-<h4>TutorProfileModel</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="ImgPath" class="control-label"></label>
-                <input asp-for="ImgPath" class="form-control" />
-                <span asp-validation-for="ImgPath" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Enabled" /> @Html.DisplayNameFor(model => model.Enabled)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Experience" class="control-label"></label>
-                <input asp-for="Experience" class="form-control" />
-                <span asp-validation-for="Experience" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descriptions" class="control-label"></label>
-                <input asp-for="Descriptions" class="form-control" />
-                <span asp-validation-for="Descriptions" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HourRate" class="control-label"></label>
-                <input asp-for="HourRate" class="form-control" />
-                <span asp-validation-for="HourRate" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="OnlineAccess" /> @Html.DisplayNameFor(model => model.OnlineAccess)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TutorHomeAccess" /> @Html.DisplayNameFor(model => model.TutorHomeAccess)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="StudentHomeAccess" /> @Html.DisplayNameFor(model => model.StudentHomeAccess)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedId" class="control-label"></label>
-                <input asp-for="CreatedId" class="form-control" />
-                <span asp-validation-for="CreatedId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedId" class="control-label"></label>
-                <input asp-for="UpdatedId" class="form-control" />
-                <span asp-validation-for="UpdatedId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row m-3"></div>
+    <h1 class="text-center">@ViewData["Title"]</h1>
+</div>
+
+<div class="card bg-light mb-3" id="subjects">
+    <div class="card-body">
+        <partial name="EditUser"/>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (Model.UserVm.TutorProfileEnabled && Model.TutorVm != null)
+{
+    <!-- Calendar -->
+    <div class="card bg-light mt-3" id="schedule">
+        <div class="card-body">
+            <h5 class="card-title text-center">Графік робочого часу репетитора</h5>
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з учнями.</div>
+                    <div id="calendar" data-tutorid="@Model.TutorVm.Id"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts
+    {
+        <script type="text/javascript" src="~/js/tutor-profile/edit-calendar.js" asp-append-version="true"></script>
+    }
+}

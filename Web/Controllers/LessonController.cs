@@ -1,13 +1,8 @@
-using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
 using AutoMapper;
 using Domain.Commands;
-using Domain.Models;
 using Domain.Queries;
 using Domain.Exceptions;
-using Domain.Port.Driving;
-using Domain.Queries;
-using Humanizer;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models.Lesson;
@@ -52,12 +47,20 @@ public class LessonController : Controller
     [HttpPost]
     public async Task<ActionResult> Create(CreateLessonTimeCommand command)
     {
-        if (command.CreatedBy == 0)
-            command.CreatedBy = UserId;
-        else if (command.CreatedBy != UserId)
-            throw new IncorrectUserId($"command.CreatedBy={command.CreatedBy},app.UserId={UserId}");
-        await _mediator.Send(command);
-        return RedirectToAction(nameof(Edit));
+        try
+        {
+            if (command.CreatedBy == 0)
+                command.CreatedBy = UserId;
+            else if (command.CreatedBy != UserId)
+                throw new IncorrectUserId($"command.CreatedBy={command.CreatedBy},app.UserId={UserId}");
+            var id = await _mediator.Send(command);
+            return Json(id);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return StatusCode(500);
+        }
     }
 
     [HttpPost]
@@ -83,7 +86,7 @@ public class LessonController : Controller
         try
         {
             await _mediator.Send(new DeleteLessonTimeCommand { UpdatedBy = UserId, EventId = id });
-            return Ok();
+            return Json(1);
         }
         catch (Exception e)
         {
@@ -122,18 +125,4 @@ public class LessonController : Controller
             return StatusCode(500);
         }
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Clone(int id) =>
-        // try
-        // {
-        //     await _mediator.Send(new LessonCloneCommand { CreatedBy = UserId, LessonId = id });
-        //     //TODO: Redirect to lesson page
-        //     return RedirectToAction(nameof(Index));
-        // }
-        // catch (Exception e)
-        // {
-        //     _logger.LogError(e.Message);
-        StatusCode(500);
-    // }
 }

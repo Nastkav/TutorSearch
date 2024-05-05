@@ -1,103 +1,165 @@
-@model Infra.DatabaseAdapter.Models.TutorProfileModel
+@model Web.Models.TutorProfile.ProfileVm
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tutor Profile";
+    Layout = "_Layout";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>TutorProfileModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImgPath)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImgPath)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Enabled)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Enabled)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Experience)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Experience)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Descriptions)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Descriptions)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.City.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HourRate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HourRate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OnlineAccess)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OnlineAccess)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TutorHomeAccess)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TutorHomeAccess)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StudentHomeAccess)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StudentHomeAccess)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedId)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="row mb-2"></div>
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    @if (!@Model.UserVm.TutorProfileEnabled)
+    {
+        <h2>Цей профіль вимкнено</h2>
+    }
+    @if (@Model.IdentityId == Model.UserVm.Id)
+    {
+        <div class="m-2">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <form>
+                    <button type="submit" class="btn btn-info" asp-action="Edit">
+                        Оновити свою анкету
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@if (@Model.TutorVm != null)
+{
+    <div class="card card-flex align-items-center bg-light mb-3">
+        <div class="row g-0">
+            <div class="col-4">
+                <img class="img-fluid rounded-start"
+                     src="@Model.TutorVm.ImgPath"
+                     alt="..."/>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card-body">
+                <div class="row card-title">
+                    <div class="col lead">
+                        <a>@Model.UserVm.FullName()</a>
+
+                        @if (Model.TutorVm.ReviewCount > 0)
+                        {
+                            <i class="fa fa-star"></i>
+                            @Model.TutorVm.ReviewValue //TODO: ReviewValue + Count
+                        }
+                    </div>
+                    <div class="col text-end">
+                        <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorVm.HourRate грн/час</span>
+                    </div>
+                </div>
+                <p class="card-text">@Model.TutorVm.Descriptions</p>
+                @if (Model.UserVm.CitytId != "0")
+                {
+                    <small class="text-muted">
+                        <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CitytId)
+                    </small>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+        <div class="btn-group col-md-8 col-sm" role="group" aria-label="Select Tutor Part">
+            <input type="radio" class="btn-check" name="select_part" id="select_part1" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part1" onclick="window.location='#subjects';">Subjects</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part2" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part2" onclick="window.location='#about_tutor';">About_tutor</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part3" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part3" onclick="window.location='#schedule';">Schedule</label>
+            <input type="radio" class="btn-check" name="select_part" id="select_part4" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary" for="select_part4" onclick="window.location='#reviews';">Reviews</label>
+        </div>
+    </div>
+    <!-- subjects -->
+    <div class="card bg-light mb-3" id="subjects">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Subjects</h5>
+            @for (var i = 0; i < Model.TutorVm.Subjects.Count; i++)
+            {
+                if (i == 5)
+                {
+                    <span class="badge bg-light">...</span>
+                    break;
+                }
+                else
+                {
+                    <span class="badge bg-info"> @Model.TutorVm.Subjects[i] </span>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="card bg-light mb-3">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Places</h5>
+            <div class="row px-3">
+                <div class="col-md col-sm-12 mb-sm-2">
+                    Online
+                    @if (Model.TutorVm.OnlineAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
+                </div>
+                <div class="col-md col-sm-12 mb-sm-2">
+                    At Student
+                    @if (Model.TutorVm.StudentHomeAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
+                </div>
+                <div class="col-md col-sm-12 mb-sm-2">
+                    At Tutor
+                    @if (Model.TutorVm.TutorHomeAccess)
+                    {
+                        <span class="badge bg-primary rounded-pill ms-2">
+                            <i class="bi bi-check"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill ms-2">
+                            <i class="bi bi-x"></i>
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- about_tutor -->
+    <div class="card bg-light mb-3" id="about_tutor">
+        <div class="card-body">
+            <h5 class="card-title mt-3">Address</h5>
+            <p class="form-control" id="address-text">@Model.TutorVm.Address</p>
+            <h5 class="card-title mt-3">Descriptions</h5>
+            <p class="form-control">@Model.TutorVm.Descriptions</p>
+            <h5 class="card-title mt-3">About</h5>
+            <p class="form-control">@Model.TutorVm.About</p>
+        </div>
+    </div>
+
+    <partial name="RequestForm" model="@Model.CreateRequestCommand"/>
+    @section Scripts
+    {
+        <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
+    }
+}

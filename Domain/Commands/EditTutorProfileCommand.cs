@@ -1,56 +1,55 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using Domain.Models;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Commands;
 
-public class EditTutorProfileCommand : IRequest<bool>
+public class UpdateTutorCommand : IRequest<bool>
 {
-    public int RequestBy { get; set; }
-    public TutorEditDto TutorEdit { get; set; } = null!;
+    public required Tutor Profile { get; set; }
 
-
-    public class EditTutorProfileCommandHandler : BaseMediatrHandler<EditTutorProfileCommand, bool>
+    public class EditTutorProfileCommandHandler : BaseMediatrHandler<UpdateTutorCommand, bool>
     {
         public EditTutorProfileCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }
 
-        public override async Task<bool> Handle(EditTutorProfileCommand request, CancellationToken cancellationToken)
+        public override async Task<bool> Handle(UpdateTutorCommand r, CancellationToken token)
         {
-            var u = ApplicationDb.Users
-                .Include(x => x.TutorProfile.About)
-                .FirstOrDefault(x => x.Id == request.RequestBy);
-            if (u == null)
-                throw new Exception("Undefined User");
-            if (u.TutorProfile == null)
-                u.TutorProfile = new TutorProfileModel();
-            //Basic Mapping
-            Mapper.Map(request.TutorEdit, u.TutorProfile);
-            if (u.TutorProfile.CityId == 0)
-                u.TutorProfile.CityId = null;
-            //About
-            u.TutorProfile.About.Content = request.TutorEdit.About ?? "";
-            //Subjects
-            u.TutorProfile.Subjects = await ApplicationDb.Subjects
-                .Where(x => request.TutorEdit.Subjects.Keys.Contains(x.Id)).ToListAsync();
-            u.TutorProfile.Address = ""; //Fix empty mapping string 
-            //CreateOrUpdate
-            if (u.TutorProfile.CreatedId == 0)
-                u.TutorProfile.CreatedId = request.RequestBy;
-            else
-                u.TutorProfile.UpdatedId = request.RequestBy;
+            //Check exist
+            if (!ApplicationDb.Users.Any(x => x.Id == r.Profile.Id && x.TutorProfileEnabled))
+                throw new Exception("Ідентіфікатор вчителя не знайдено.");
 
-            u.TutorProfile.Enabled = true;
-            ApplicationDb.TutorProfiles.Update(u.TutorProfile);
-            await ApplicationDb.SaveChangesAsync();
+            //Select from database
+            var dbProfile = await ApplicationDb.TutorProfiles
+                                .Include(x => x.About)
+                                .Include(x => x.Subjects)
+                                .FirstOrDefaultAsync(x => x.Id == r.Profile.Id)
+                            ?? new TutorProfileModel();
+            var newObject = dbProfile.Id == 0;
+
+            //Mapping
+            Mapper.Map(r.Profile, dbProfile);
+
+            //Subjects
+            dbProfile.Subjects = await ApplicationDb.Subjects
+                .Where(x => r.Profile.Subjects.Keys.Contains(x.Id))
+                .ToListAsync();
+
+            if (newObject)
+                ApplicationDb.Add(dbProfile);
+            else
+                ApplicationDb.Update(dbProfile);
+
+            await ApplicationDb.SaveChangesAsync(token);
             return true;
         }
     }

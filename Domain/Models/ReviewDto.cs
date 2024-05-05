@@ -1,4 +1,4 @@
-namespace Domain.DrivingPort.Models;
+namespace Domain.Models;
 
 public class ReviewDto
 {

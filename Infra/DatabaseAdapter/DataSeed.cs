@@ -74,9 +74,9 @@ public static class DataSeed
                     Email = "tutor@example.com",
                     NormalizedEmail = "TUTOR@EXAMPLE.COM",
                     EmailConfirmed = true,
-                    Name = "Ірина",
-                    Surname = "Мельник",
-                    Patronymic = "Миколаївна",
+                    Name = "Р†СЂРёРЅР°",
+                    Surname = "РњРµР»СЊРЅРёРє",
+                    Patronymic = "РњРёРєРѕР»Р°С—РІРЅР°",
                     PasswordHash =
                         "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==",
                     SecurityStamp = "9cbd20e0-3497-4bbb-95f7-da2f2710e420"

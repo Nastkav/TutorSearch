@@ -25,7 +25,7 @@ public class GetLessonDetailQuery : IRequest<LessonDetailsDto>
         {
             var dbLesson = ApplicationDb.Lessons.FirstOrDefault(x => x.Id == r.LessonId && x.CreatedId == r.UserId);
             if (dbLesson == null)
-                throw new Exception("Обраний урок не знайдено");
+                throw new Exception("РћР±СЂР°РЅРёР№ СѓСЂРѕРє РЅРµ Р·РЅР°Р№РґРµРЅРѕ");
             var lessonDto = Mapper.Map<LessonDetailsDto>(dbLesson);
             lessonDto.Type = TimeType.Busy;
             return lessonDto;

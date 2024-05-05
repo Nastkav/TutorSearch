@@ -1,0 +1,51 @@
+@model Domain.Commands.CreateRequestCommand
+<div class="card bg-light mt-3" id="schedule">
+    <div class="card-body">
+        <h5 class="card-title text-center">Графік свободного часу репетитора</h5>
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
+                <div id="calendar" data-tutorid="@Model.TutorId"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="requestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="LessonRequest" asp-action="Create" onsubmit="send_request(this);return false;" name="requestForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Запис до репетитора</h5>
+                </div>
+                <div class="modal-body mb-3">
+                    <input asp-for="TutorId" id="tutorProfileId" class="form-control" type="hidden"/>
+
+                    <div class="list-group list-group-flush">
+                        <div class="input-group">
+                            <select asp-for="SubjectId" class="form-select" asp-items="@Model.Subjects" id="subject"></select>
+                            <span asp-validation-for="SubjectId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="From" class="form-label"></label>
+                            <input asp-for="From" id="timeFrom" class="form-control" readonly></input>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="To" class="form-label"></label>
+                            <input asp-for="To" id="timeTo" class="form-control" readonly></input>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Comment" class="form-label"></label>
+                            <textarea asp-for="Comment"  id="tutorComment" class="form-control"></textarea>
+                            <span asp-validation-for="Comment" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Скасувати</button>
+                    <button type="submit" class="btn btn-primary">Підтвердити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -6,24 +6,25 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Domain.Entities;
+using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
 
-public class GetUserRequestsQuery : IRequest<List<LessonRequestDto>>
+public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
 {
     public int? UserId { get; set; }
 
     public bool IsTutor { get; set; }
 
-    public class GetUserRequestsQueryHandler : BaseMediatrHandler<GetUserRequestsQuery, List<LessonRequestDto>>
+    public class GetUserRequestsQueryHandler : BaseMediatrHandler<GetUserRequestsQuery, List<LessonRequest>>
     {
-        public override async Task<List<LessonRequestDto>> Handle(GetUserRequestsQuery r, CancellationToken token)
+        public override async Task<List<LessonRequest>> Handle(GetUserRequestsQuery r, CancellationToken token)
         {
-            List<LessonRequestDto> listRequest = new();
+            List<LessonRequest> listRequest = new();
             var q = ApplicationDb.Requests
-                .Include(x => x.Tutor.Created)
+                .Include(x => x.Tutor.User)
                 .Include(x => x.Subject)
                 .Include(x => x.Created).AsQueryable();
 
@@ -34,26 +35,11 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequestDto>>
 
             foreach (var dbRequest in await q.ToArrayAsync())
             {
-                var req = Mapper.Map<LessonRequestDto>(dbRequest);
-                switch (dbRequest.Status)
-                {
-                    case CourseRequestStatus.New:
-                        req.Answer = null;
-                        break;
-                    case CourseRequestStatus.Approved:
-                        req.Answer = true;
-                        break;
-                    case CourseRequestStatus.Rejected:
-                        req.Answer = false;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                req.TutorName = dbRequest.Tutor.Created.FullName();
+                var req = Mapper.Map<LessonRequest>(dbRequest);
+                req.TutorName = dbRequest.Tutor.User.Name;
                 req.Subject = dbRequest.Subject.Name;
                 req.IsTutor = r.IsTutor;
-                req.UserName = dbRequest.Created.FullName();
+                req.UserName = dbRequest.Created.Name;
                 listRequest.Add(req);
             }
 

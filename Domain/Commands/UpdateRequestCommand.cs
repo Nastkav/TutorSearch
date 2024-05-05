@@ -1,10 +1,11 @@
+using System.ComponentModel;
 using Infra.DatabaseAdapter;
 using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions;
+using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +13,14 @@ namespace Domain.Commands;
 
 public class UpdateRequestCommand : IRequest<int>
 {
-    public int Id { get; set; }
+    [DisplayName("Запит №")] public int Id { get; set; }
     public string? Subject { get; set; }
-    public int TutorProfileId { get; set; }
-    public DateTime? From { get; set; }
-    public DateTime? To { get; set; }
-    public string? Comment { get; set; }
+    public int TutorId { get; set; }
+    [DisplayName("Початок")] public DateTime? From { get; set; }
+    [DisplayName("Кінець")] public DateTime? To { get; set; }
+    [DisplayName("Коментар вчителя")] public string TutorComment { get; set; } = string.Empty;
+    [DisplayName("Статус")] public CourseRequestStatus Status { get; set; } = CourseRequestStatus.New;
     public int UpdatedBy { get; set; }
-    public CourseRequestStatus Status { get; set; }
 
     public class UpdateRequestCommandHandler : BaseMediatrHandler<UpdateRequestCommand, int>
     {
@@ -30,22 +31,18 @@ public class UpdateRequestCommand : IRequest<int>
 
         public override async Task<int> Handle(UpdateRequestCommand r, CancellationToken token)
         {
-            if (r.UpdatedBy == r.TutorProfileId)
-                throw new IncorrectUserId("A user can only send an invitation to another tutor");
+            if (r.UpdatedBy != r.TutorId)
+                throw new IncorrectUserId("Тільки репетитор може оновлювати запити");
 
             var dbRequest = ApplicationDb.Requests
-                                .Include(x => x.Tutor.Created)
                                 .Include(x => x.Subject)
-                                .First(x =>
-                                    x.CreatedId == r.UpdatedBy
-                                    && x.TutorId == r.TutorProfileId
-                                    && x.Id == r.Id)
+                                .First(x => x.Id == r.Id && x.TutorId == r.TutorId)
                             ?? throw new Exception("The required query was not found");
 
             if (dbRequest.Status != CourseRequestStatus.New)
-                throw new Exception("The request is already closed");
+                throw new Exception("Заявка вже закрита");
 
-            Mapper.Map(r, dbRequest);
+            Mapper.Map<UpdateRequestCommand, RequestModel>(r, dbRequest);
             if (r.Subject != null)
                 dbRequest.Subject = ApplicationDb.Subjects
                     .First(x => x.Name == r.Subject);
@@ -57,10 +54,10 @@ public class UpdateRequestCommand : IRequest<int>
                 //Course
                 var newCourse = new CourseModel
                 {
-                    Title = dbRequest.Tutor.Created.FullName(),
+                    Title = "", //TODO: dbRequest.Tutor.Created.FullName(),
                     SubjectId = dbRequest.Subject.Id,
                     RequestId = r.Id,
-                    TutorId = r.TutorProfileId
+                    TutorId = r.TutorId
                 };
                 newCourse.Students.Add(student);
 

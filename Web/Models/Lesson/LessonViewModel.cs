@@ -1,10 +1,11 @@
 using Domain.Models;
-using Domain.Queries;
+using Web.Models.Shared;
 
-namespace Web.Models.LessonRequest;
+namespace Web.Models.Lesson;
 
-public class LessonRequestViewModel
+public class LessonViewModel
 {
-    public List<LessonRequestDto> MyRequests { get; set; } = null!;
-    public List<LessonRequestDto> RequestsForMe { get; set; } = null!;
+    public List<CheckboxViewModel> Subjects { get; set; } = [];
+    public Dictionary<int, string> Cities { get; set; } = [];
+    public LessonDetailsDto? LessonDetails { get; set; }
 }

@@ -1,164 +1,159 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using AutoMapper;
+using AutoMapper.Configuration.Annotations;
+using Domain.Commands;
+using Domain.Queries;
+using Domain.Exceptions;
 using Infra.DatabaseAdapter.Models;
-using Web;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Web.Models.Shared;
+using Web.Models.TutorProfile;
 
-namespace Web.Controllers
+namespace Web.Controllers;
+
+[Route("[controller]/[action]")]
+[Authorize]
+public class ProfileController : Controller
 {
-    public class ProfileController : Controller
+    private readonly ILogger<ProfileController> _logger;
+    private readonly IMapper _mapper;
+    private readonly IMediator _mediator;
+    public int IdentityId => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+    public ProfileController(ILogger<ProfileController> logger, IMapper mapper, IMediator mediator)
     {
-        private readonly TemplateDbContext _context;
+        _logger = logger;
+        _mapper = mapper;
+        _mediator = mediator;
+    }
 
-        public ProfileController(TemplateDbContext context)
+    [ApiExplorerSettings(IgnoreApi = true)]
+    private async Task<List<CheckboxViewModel>> GetListCheckbox(IRequest<Dictionary<int, string>> q)
+    {
+        var query = await _mediator.Send(q);
+        var list = query
+            .Select(o => new CheckboxViewModel { Id = o.Key, LabelName = o.Value, IsChecked = false })
+            .ToList();
+        return list;
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    private async Task<List<SelectListItem>> GetSelectList(string defaultText, IRequest<Dictionary<int, string>> q)
+    {
+        var query = await _mediator.Send(q);
+        var list = query
+            .Select(o => new SelectListItem { Value = o.Key.ToString(), Text = o.Value })
+            .ToList();
+        list.Insert(0, new SelectListItem(defaultText, "0"));
+        return list;
+    }
+
+    [HttpGet]
+    [Route("/[controller]")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SearchTutor(SearchVm model)
+    {
+        //Main Lists
+        model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
+        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        //Add Cards
+        model.TutorCards = [];
+        foreach (var dbTutor in await _mediator.Send(model.Filters))
         {
-            _context = context;
+            var tutorVm = _mapper.Map<TutorProfileModel, TutorCardVm>(dbTutor);
+            //TODO: tutorVm.City = dbTutor.City?.FullName() ?? "";
+            model.TutorCards.Add(tutorVm);
         }
 
-        // GET: Profile
-        public async Task<IActionResult> Index()
+        //Result
+        return View(model);
+    }
+
+    [HttpGet]
+    [Route("/[controller]/[action]/{id?}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Details(int id = 0)
+    {
+        if (id == 0)
+            id = IdentityId;
+        if (IdentityId == 0)
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
+
+        var model = await GetUserModel(id);
+        return View(model);
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ProfileVm> GetUserModel(int userId)
+    {
+        ProfileVm model = new() { IdentityId = IdentityId };
+        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        model.UserVm = await _mediator.Send(new GetUserProfileQuery { ProfileId = userId });
+        if (model.UserVm.TutorProfileEnabled)
         {
-            var templateDbContext = _context.TutorProfiles.Include(t => t.City);
-            return View(await templateDbContext.ToListAsync());
+            model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
+            model.TutorVm = await _mediator.Send(new GetTutorProfileQuery { ProfileId = userId });
+            model.CreateRequestCommand.Subjects = model.Subjects; //Необхідний для показу списку предметів
+            model.CreateRequestCommand.TutorId = userId;
         }
 
-        // GET: Profile/Details/5
-        public async Task<IActionResult> Details(int? id)
+        return model;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit()
+    {
+        var model = await GetUserModel(IdentityId);
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CheckFavorite(CheckFavoriteCommand command)
+    {
+        try
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (command.UserId != IdentityId)
+                throw new IncorrectUserId($"command.UserId={command.UserId},app.UserId={IdentityId}");
+            var result = await _mediator.Send(command);
+            return Json(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
+    }
 
-            var tutorProfileModel = await _context.TutorProfiles
-                .Include(t => t.City)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tutorProfileModel == null)
-            {
-                return NotFound();
-            }
+    [HttpPost]
+    public async Task<IActionResult> Edit(ProfileVm model)
+    {
+        // Ігнорувати помилки форми якщо не вчитель
+        if (!model.UserVm.TutorProfileEnabled)
+            foreach (var state in ModelState)
+                if (state.Key.StartsWith(nameof(model.TutorVm)))
+                    state.Value.ValidationState = ModelValidationState.Skipped;
 
-            return View(tutorProfileModel);
+        if (ModelState.IsValid)
+        {
+            await _mediator.Send(new UpdateUserCommand { Profile = model.UserVm });
+
+            if (model.UserVm.TutorProfileEnabled)
+            {
+                if (model.TutorVm == null)
+                    model.TutorVm = await _mediator.Send(new GetTutorProfileQuery { ProfileId = model.UserVm.Id });
+                if (model.TutorVm.Id == 0)
+                    model.TutorVm.Id = model.UserVm.Id;
+                await _mediator.Send(new UpdateTutorCommand { Profile = model.TutorVm });
+                model.Subjects = await GetSelectList("Оберіть предмет", new GetAllCitiesQuery());
+                var tt = 0; //TODO: Add subjects dict to save
+            }
         }
 
-        // GET: Profile/Create
-        public IActionResult Create()
-        {
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name");
-            return View();
-        }
-
-        // POST: Profile/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ImgPath,Enabled,Address,Experience,Descriptions,CityId,HourRate,OnlineAccess,TutorHomeAccess,StudentHomeAccess,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")] TutorProfileModel tutorProfileModel)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tutorProfileModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", tutorProfileModel.CityId);
-            return View(tutorProfileModel);
-        }
-
-        // GET: Profile/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tutorProfileModel = await _context.TutorProfiles.FindAsync(id);
-            if (tutorProfileModel == null)
-            {
-                return NotFound();
-            }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", tutorProfileModel.CityId);
-            return View(tutorProfileModel);
-        }
-
-        // POST: Profile/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPath,Enabled,Address,Experience,Descriptions,CityId,HourRate,OnlineAccess,TutorHomeAccess,StudentHomeAccess,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")] TutorProfileModel tutorProfileModel)
-        {
-            if (id != tutorProfileModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tutorProfileModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TutorProfileModelExists(tutorProfileModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", tutorProfileModel.CityId);
-            return View(tutorProfileModel);
-        }
-
-        // GET: Profile/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tutorProfileModel = await _context.TutorProfiles
-                .Include(t => t.City)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tutorProfileModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(tutorProfileModel);
-        }
-
-        // POST: Profile/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tutorProfileModel = await _context.TutorProfiles.FindAsync(id);
-            if (tutorProfileModel != null)
-            {
-                _context.TutorProfiles.Remove(tutorProfileModel);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool TutorProfileModelExists(int id)
-        {
-            return _context.TutorProfiles.Any(e => e.Id == id);
-        }
+        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        return View(model);
     }
 }

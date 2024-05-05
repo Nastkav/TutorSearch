@@ -4997,30 +4997,16 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CreatedId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Descriptions")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Experience")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("HourRate")
                         .HasColumnType("decimal(18,2)");
@@ -5042,12 +5028,7 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UpdatedId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("TutorProfiles");
                 });
@@ -5063,6 +5044,9 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -5082,6 +5066,7 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -5097,6 +5082,7 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Patronymic")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -5110,8 +5096,12 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("TutorProfileEnabled")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
@@ -5121,6 +5111,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -5136,8 +5128,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(2004, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "65b92c7b-08f9-4ee3-ae4d-1142be2dec33",
+                            BirthDate = new DateTime(2004, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "b0ae31a5-ae8a-4813-85f5-6c469d658b66",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5149,6 +5141,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "482ea3c3-a1c3-4c83-aced-72e0e5b8808c",
                             Surname = "None",
+                            TutorProfileEnabled = false,
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         },
@@ -5156,8 +5149,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1999, 4, 18, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "c2781c07-c591-4aaf-94bf-cfc4683fdc23",
+                            BirthDate = new DateTime(1999, 4, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "22db7cb4-0545-4f6a-a0b9-e410cc49020f",
                             Email = "tutor@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5169,6 +5162,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "9cbd20e0-3497-4bbb-95f7-da2f2710e420",
                             Surname = "Мельник",
+                            TutorProfileEnabled = false,
                             TwoFactorEnabled = false,
                             UserName = "tutor@example.com"
                         });
@@ -5596,19 +5590,22 @@ namespace Infra.DatabaseAdapter._Migrations
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.TutorProfileModel", b =>
                 {
-                    b.HasOne("Infra.DatabaseAdapter.Models.CityModel", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Created")
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "User")
                         .WithOne("TutorProfile")
                         .HasForeignKey("Infra.DatabaseAdapter.Models.TutorProfileModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("City");
+                    b.Navigation("User");
+                });
 
-                    b.Navigation("Created");
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserModel", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.CityModel", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

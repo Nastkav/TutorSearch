@@ -1,6 +1,6 @@
-using Domain.DrivingPort.Models;
+using Domain.Models;
 
-namespace Domain.DrivingPort.Models;
+namespace Domain.Models;
 
 public class TutorRatingDto
 {

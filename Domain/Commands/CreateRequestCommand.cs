@@ -1,22 +1,34 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using Domain.Entities;
 using Infra.DatabaseAdapter;
+using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
-using Infra.Ports;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Domain.Commands;
 
 public class CreateRequestCommand : IRequest<int>
 {
-    public string Subject { get; set; } = null!;
-    public int CreatedBy { get; set; }
-    public int TutorProfileId { get; set; }
-    public DateTime From { get; set; }
-    public DateTime To { get; set; }
-    [MaxLength(300)] public string Comment { get; set; } = string.Empty;
+    public int CreatedId { get; set; }
+    public int TutorId { get; set; }
+    [DisplayName("РџРѕС‡Р°С‚РѕРє")] public DateTime? From { get; set; }
+    [DisplayName("РљС–РЅРµС†СЊ")] public DateTime? To { get; set; }
+
+
+    [Range(1, int.MaxValue, ErrorMessage = "РћР±РµСЂС–С‚СЊ РїСЂРµРґРјРµС‚")]
+    public int? SubjectId { get; set; }
+
+    public List<SelectListItem> Subjects { get; set; } = [];
+
+    [MaxLength(300)]
+    [MinLength(0)]
+    [DisplayName("РљРѕРјРµРЅС‚Р°СЂ РІС‡РёС‚РµР»СЏ")]
+    public string Comment { get; set; } = string.Empty;
+
 
     public class CreateRequestCommandHandler : BaseMediatrHandler<CreateRequestCommand, int>
     {
@@ -25,34 +37,40 @@ public class CreateRequestCommand : IRequest<int>
         {
         }
 
-        public override async Task<int> Handle(CreateRequestCommand request,
-            CancellationToken cancellationToken)
+        public override async Task<int> Handle(CreateRequestCommand r, CancellationToken token)
         {
-            var req = Mapper.Map<RequestModel>(request);
-            req.Subject = ApplicationDb.Subjects.First(x => x.Name == request.Subject);
-            req.Status = CourseRequestStatus.New;
+            if (r.CreatedId == r.TutorId)
+                throw new Exception("РљРѕСЂРёСЃС‚СѓРІР°С‡ РјРѕР¶Рµ РЅР°РґС–СЃР»Р°С‚Рё Р·Р°РїСЂРѕС€РµРЅРЅСЏ Р»РёС€Рµ С–РЅС€РѕРјСѓ СЂРµРїРµС‚РёС‚РѕСЂСѓ");
+            if (!ApplicationDb.TutorProfiles.Any(x => x.Id == r.TutorId))
+                throw new Exception("Р РµРїРµС‚РёС‚РѕСЂ РІРєР°Р·Р°РЅ РЅРµРІС–СЂРЅРѕ");
+            if (!ApplicationDb.Users.Any(x => x.Id == r.CreatedId))
+                throw new Exception("РЈС‡РµРЅРёРє РІРєР°Р·Р°РЅ РЅРµРІС–СЂРЅРѕ");
 
-            if (request.CreatedBy == request.TutorProfileId)
-                throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
+            var dbSubject = await ApplicationDb.Subjects.FirstOrDefaultAsync(x => x.Id == r.SubjectId);
+            if (dbSubject == null)
+                throw new Exception($"РџСЂРµРґРјРµС‚Сѓ '{r.SubjectId}' РЅРµ Р·РЅР°Р№РґРµРЅРѕ.");
 
-            var exist = ApplicationDb.Requests.Any(x =>
-                x.CreatedId == req.CreatedId
-                && x.Status == CourseRequestStatus.New
-                && x.TutorId == req.TutorId
-                && x.Subject.Id == req.Subject.Id);
-            if (exist)
-                throw new Exception("Ви вже маєте активний запит на курс для цього викладача");
+            var newRequest = Mapper.Map<RequestModel>(r);
+            newRequest.Subject = dbSubject;
+            newRequest.Status = CourseRequestStatus.New;
 
-            //Перевірка перетинання часу    
-            var lessonOnRange = ApplicationDb.Lessons //TODO: Check this
-                .Where(x => x.To > request.From || request.To > x.From).ToList();
-            if (lessonOnRange.Count > 0)
-                throw new Exception("Додавання неможливе, час перетинається");
+            //РџРµСЂРµРІС–СЂРєР° С–СЃРЅСѓРІР°РЅРЅСЏ СЃС…РѕР¶РѕРіРѕ Р·Р°РїРёС‚Сѓ РґРѕ С†СЊРѕРіРѕ РІРёРєР»Р°РґР°С‡Р°    
+            var requestExist = ApplicationDb.Requests.Any(x =>
+                x.CreatedId == newRequest.CreatedId &&
+                x.Status == newRequest.Status &&
+                x.TutorId == newRequest.TutorId &&
+                x.Subject.Id == newRequest.Subject.Id
+            );
+            if (requestExist)
+                throw new Exception("Р’Рё РІР¶Рµ РјР°С”С‚Рµ Р°РєС‚РёРІРЅРёР№ Р·Р°РїРёС‚ РЅР° РєСѓСЂСЃ РґР»СЏ С†СЊРѕРіРѕ РІРёРєР»Р°РґР°С‡Р°");
 
+            //РџРµСЂРµРІС–СЂРєР° РїРµСЂРµС‚РёРЅР°РЅРЅСЏ С‡Р°СЃСѓ    
+            if (await ApplicationDb.Lessons.CountAsync(x => x.To > newRequest.From || newRequest.To > x.From) > 0)
+                throw new Exception("Р”РѕРґР°РІР°РЅРЅСЏ РЅРµРјРѕР¶Р»РёРІРµ, С‡Р°СЃ РїРµСЂРµС‚РёРЅР°С”С‚СЊСЃСЏ");
 
-            await ApplicationDb.Requests.AddAsync(req);
+            await ApplicationDb.Requests.AddAsync(newRequest);
             await ApplicationDb.SaveChangesAsync();
-            return req.Id;
+            return newRequest.Id;
         }
     }
 }

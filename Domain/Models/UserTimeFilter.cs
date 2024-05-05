@@ -1,6 +1,6 @@
 using Domain.Port.Driving;
 
-namespace Domain.DrivingPort.Models;
+namespace Domain.Models;
 
 public class UserTimeFilter
 {

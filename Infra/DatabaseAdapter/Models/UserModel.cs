@@ -5,10 +5,15 @@ namespace Infra.DatabaseAdapter.Models;
 
 public class UserModel : IdentityUser<int>
 {
-    [MaxLength(100)] public string? Name { get; set; }
+    [MaxLength(100)] public string Name { get; set; } = string.Empty;
 
-    [MaxLength(100)] public string? Surname { get; set; }
-    [MaxLength(100)] public string? Patronymic { get; set; }
+    [MaxLength(100)] public string Surname { get; set; } = string.Empty;
+    [MaxLength(100)] public string Patronymic { get; set; } = string.Empty;
+
+    public bool TutorProfileEnabled { get; set; }
+
+    public int? CityId { get; set; }
+    public CityModel? City { get; set; }
     public DateTime? BirthDate { get; set; }
     public virtual List<FavoriteTutorModel> FavoriteTutors { get; set; } = [];
     public virtual List<LessonModel> Lessons { get; set; } = [];
@@ -19,7 +24,5 @@ public class UserModel : IdentityUser<int>
 
     public virtual List<FileModel> Files { get; set; } = [];
 
-    public TutorProfileModel? TutorProfile { get; set; }
-
-    public string FullName() => $"{Name} {Patronymic} {Surname}";
+    public TutorProfileModel TutorProfile { get; set; } = null!;
 }

@@ -1,10 +1,29 @@
-﻿@model Web.Models.LessonRequest.LessonRequestViewModel;
+@using Domain.Exceptions
+@using Infra.DatabaseAdapter.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Web.Models.LessonRequest.LessonRequestVm;
 
 @{
     ViewData["Title"] = "Історія запитів";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h1 class="mt-5">Історія запитів користувача</h1>
-<partial name="RequestTable" model="@Model.MyRequests" />
+<partial name="RequestTable" model="@Model.MyRequests"/>
 <h1 class="mt-5">Запити користувачів на заняття</h1>
-<partial name="RequestTable" model="@Model.RequestsForMe" />
+<partial name="RequestTable" model="@Model.RequestsForMe"/>
+
+<partial name="RequestUpdate" model="@Model.RequestUpdate"/>
+
+@section Scripts
+{
+    <script type="text/javascript">
+    $('#updateStatus').on('show.bs.modal', function (event) {
+        // console.log("updateStatus")
+        var item = $(event.relatedTarget).data('item') // Extract info from data-* attributes
+        document.updateRequest.tutorProfileId.value = item.TutorId
+        document.updateRequest.rId.value = item.Id
+        document.updateRequest.timeFrom.value = item.From.replace(/.\d+Z$/g, "")
+        document.updateRequest.timeTo.value = item.To.replace(/.\d+Z$/g, "")
+    })
+    </script>
+}

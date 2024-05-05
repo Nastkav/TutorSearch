@@ -50,7 +50,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
 
         builder.Entity<UserModel>(entity =>
         {
-            entity.HasOne(x => x.TutorProfile).WithOne(x => x.Created)
+            entity.HasOne(x => x.TutorProfile).WithOne(x => x.User)
                 .HasForeignKey<TutorProfileModel>(x => x.Id);
             entity.Navigation(x => x.TutorProfile).IsRequired();
         });

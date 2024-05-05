@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities;
 using Infra.DatabaseAdapter.Helpers;
 
 namespace Infra.DatabaseAdapter.Models;

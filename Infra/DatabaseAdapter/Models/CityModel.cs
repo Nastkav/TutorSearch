@@ -8,16 +8,16 @@ public class CityModel : ITrackable
 {
     public int Id { get; set; }
 
-    [DisplayName("Íàçâà"), MaxLength(100)] public string Name { get; set; } = string.Empty;
+    [DisplayName("ÐÐ°Ð·Ð²Ð°"), MaxLength(100)] public string Name { get; set; } = string.Empty;
 
-    [MaxLength(140), DisplayName("Îáëàñòü")]
+    [MaxLength(140), DisplayName("ÐžÐ±Ð»Ð°ÑÑ‚ÑŒ")]
     public string Region { get; set; } = string.Empty;
 
     //ITrackable
-    [DisplayName("Äîäàíî")] public DateTime CreatedAt { get; set; }
-    [DisplayName("Ñòâîðèâ")] public int CreatedId { get; set; }
-    [DisplayName("Îíîâëåíî â")] public DateTime? UpdatedAt { get; set; }
-    [DisplayName("Õòî îíîâèâ")] public int? UpdatedId { get; set; }
+    [DisplayName("Ð”Ð¾Ð´Ð°Ð½Ð¾")] public DateTime CreatedAt { get; set; }
+    [DisplayName("Ð¡Ñ‚Ð²Ð¾Ñ€Ð¸Ð²")] public int CreatedId { get; set; }
+    [DisplayName("ÐžÐ½Ð¾Ð²Ð»ÐµÐ½Ð¾ Ð²")] public DateTime? UpdatedAt { get; set; }
+    [DisplayName("Ð¥Ñ‚Ð¾ Ð¾Ð½Ð¾Ð²Ð¸Ð²")] public int? UpdatedId { get; set; }
 
 
     public string FullName() => $"{Name},{Region}";

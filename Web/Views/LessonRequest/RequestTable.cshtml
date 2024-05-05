@@ -1,82 +1,73 @@
-@model IEnumerable<Domain.Models.LessonRequestDto>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Subject)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TutorName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.From)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.To)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Answer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TutorComment)
-                </th>
-                <th>
-                    Доступні дії
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+@using Infra.DatabaseAdapter.Helpers
+@using NuGet.Protocol
+@model IEnumerable<Domain.Models.LessonRequest>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TutorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.To)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TutorComment)
+        </th>
+        <th>
+            Р”РѕСЃС‚СѓРїРЅС– РґС–С—
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
     {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subject)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TutorName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.From)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.To)
-                </td>
-                <td>
-                    @switch (item.Answer)
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subject)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.From)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.To)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorComment)
+            </td>
+            <td>
+                @if (item.IsTutor && item.Status == CourseRequestStatus.New)
                 {
-                    case true:
-                    <label>Схвалено</label>
-                        break;
-                    case false:
-                    <label>Відхилено</label>
-                        break;
-                    case null:
-                    <label>---</label>
-                        break;
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateStatus" data-item="@item.ToJson()">Р’С–РґРїРѕРІС–СЃС‚Рё</button>
                 }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TutorComment)
-                </td>
-                <td>
-                    @if (item.IsTutor && item.Answer == null)
-                {
-                    <a asp-action="Update">Відповісти </a>
-                }
-                </td>
-            </tr>
+            </td>
+        </tr>
     }
-        </tbody>
-    </table>
+    </tbody>
+</table>

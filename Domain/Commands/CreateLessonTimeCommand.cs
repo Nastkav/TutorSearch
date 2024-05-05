@@ -14,8 +14,8 @@ public class CreateLessonTimeCommand : IRequest<int>
 
     public TimeType Type { get; set; }
     public string Title { get; set; } = "";
-    public DateTime From { get; set; }
-    public DateTime To { get; set; }
+    public DateTimeOffset From { get; set; }
+    public DateTimeOffset To { get; set; }
     public Guid? CourseId { get; set; }
 
 
@@ -30,63 +30,63 @@ public class CreateLessonTimeCommand : IRequest<int>
         {
             //On day event
             if (request.From.Date != request.To.Date)
-                throw new Exception("Подія має бути протягом дня.");
+                throw new Exception("РџРѕРґС–СЏ РјР°С” Р±СѓС‚Рё РїСЂРѕС‚СЏРіРѕРј РґРЅСЏ.");
             var weekday = (int)request.From.DayOfWeek;
-            var start = TimeOnly.FromDateTime(request.From);
-            var end = TimeOnly.FromDateTime(request.To);
+            var start = TimeOnly.FromDateTime(request.From.DateTime);
+            var end = TimeOnly.FromDateTime(request.To.DateTime);
 
 
             switch (request.Type)
             {
-                case TimeType.Available: //Встановлення робочого часу репетитора у кабінеті
+                case TimeType.Available: //Р’СЃС‚Р°РЅРѕРІР»РµРЅРЅСЏ СЂРѕР±РѕС‡РѕРіРѕ С‡Р°СЃСѓ СЂРµРїРµС‚РёС‚РѕСЂР° Сѓ РєР°Р±С–РЅРµС‚С–
                     var dbTimes = ApplicationDb.AvailableTimes
                         .Where(x => x.ProfileId == request.CreatedBy && x.DayOfWeek == weekday)
                         .OrderBy(x => x.StartTime)
                         .ToList();
 
-                    //Перевірка перетинання часу
+                    //РџРµСЂРµРІС–СЂРєР° РїРµСЂРµС‚РёРЅР°РЅРЅСЏ С‡Р°СЃСѓ
                     foreach (var timeRange in dbTimes)
                         if (timeRange.EndTime > start && timeRange.StartTime < end)
-                            throw new Exception("Додавання неможливе, час перетинається");
-                    
+                            throw new Exception("Р”РѕРґР°РІР°РЅРЅСЏ РЅРµРјРѕР¶Р»РёРІРµ, С‡Р°СЃ РїРµСЂРµС‚РёРЅР°С”С‚СЊСЃСЏ");
+                    //TODO: timeRange РїСЂРѕРІРµСЂРёС‚СЊ РїСЂРѕРІРµСЂРєСѓ РїРµСЂРµСЃРµС‡РµРЅРёСЏ РґР°С‚
 
 
                     var availableTime = new AvailableTime()
                     {
                         DayOfWeek = weekday,
-                        StartTime = TimeOnly.FromDateTime(request.From),
-                        EndTime = TimeOnly.FromDateTime(request.To),
+                        StartTime = TimeOnly.FromDateTime(request.From.DateTime),
+                        EndTime = TimeOnly.FromDateTime(request.To.DateTime),
                         ProfileId = request.CreatedBy,
                         CreatedId = request.CreatedBy
                     };
                     ApplicationDb.AvailableTimes.Add(availableTime);
                     await ApplicationDb.SaveChangesAsync();
                     return availableTime.Id;
-                case TimeType.Busy: //Додавання нового заняття
+                case TimeType.Busy: //Р”РѕРґР°РІР°РЅРЅСЏ РЅРѕРІРѕРіРѕ Р·Р°РЅСЏС‚С‚СЏ
                     if (request.CourseId == null)
-                        throw new Exception("Неправильний ідентифікатор курсу");
+                        throw new Exception("РќРµРїСЂР°РІРёР»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ РєСѓСЂСЃСѓ");
                     var students = ApplicationDb.Courses
                         .Where(x => x.Id == request.CourseId)
                         .Select(x => x.Students)
                         .FirstOrDefault();
                     if (students == null || students.Count == 0)
-                        throw new Exception("Помилка в ідентифікаторі курсу або відсутні учні");
+                        throw new Exception("РџРѕРјРёР»РєР° РІ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂС– РєСѓСЂСЃСѓ Р°Р±Рѕ РІС–РґСЃСѓС‚РЅС– СѓС‡РЅС–");
 
-                    //Перевірка що входить до одного з доступних діапазонів
+                    //РџРµСЂРµРІС–СЂРєР° С‰Рѕ РІС…РѕРґРёС‚СЊ РґРѕ РѕРґРЅРѕРіРѕ Р· РґРѕСЃС‚СѓРїРЅРёС… РґС–Р°РїР°Р·РѕРЅС–РІ
                     var availableRange = ApplicationDb.AvailableTimes
                         .Where(x => x.StartTime <= start && end <= x.EndTime && x.DayOfWeek == weekday)
                         .FirstOrDefault();
                     if (availableRange == null)
-                        throw new Exception("Вибрано поза робочий час");
+                        throw new Exception("Р’РёР±СЂР°РЅРѕ РїРѕР·Р° СЂРѕР±РѕС‡РёР№ С‡Р°СЃ");
 
-                    //Перевірка перетинання часу
+                    //РџРµСЂРµРІС–СЂРєР° РїРµСЂРµС‚РёРЅР°РЅРЅСЏ С‡Р°СЃСѓ
                     //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
                     var lessonOnRange = ApplicationDb.Lessons
                         .Where(x => x.To > request.From || request.To > x.From).ToList();
                     if (lessonOnRange.Count > 0)
-                        throw new Exception("Додавання неможливе, час перетинається");
+                        throw new Exception("Р”РѕРґР°РІР°РЅРЅСЏ РЅРµРјРѕР¶Р»РёРІРµ, С‡Р°СЃ РїРµСЂРµС‚РёРЅР°С”С‚СЊСЃСЏ");
 
-                    //Додання
+                    //Р”РѕРґР°РЅРЅСЏ
                     var newLesson = new LessonModel()
                     {
                         TutorProfileId = request.CreatedBy,
@@ -98,7 +98,7 @@ public class CreateLessonTimeCommand : IRequest<int>
                     await ApplicationDb.SaveChangesAsync();
                     return newLesson.Id;
                 default:
-                    throw new ArgumentOutOfRangeException("Неможливо додати подію типу: " + request.Type.ToString());
+                    throw new ArgumentOutOfRangeException("РќРµРјРѕР¶Р»РёРІРѕ РґРѕРґР°С‚Рё РїРѕРґС–СЋ С‚РёРїСѓ: " + request.Type.ToString());
             }
         }
     }

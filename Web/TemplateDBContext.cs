@@ -1,9 +1,10 @@
-﻿using Infra.DatabaseAdapter;
+using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Domain.Commands;
 
 namespace Web;
 
@@ -99,4 +100,6 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
         var entries = ChangeTracker.Entries();
         ITrackable.BeforeSaving(entries, userId);
     }
+
+public DbSet<Domain.Commands.UpdateRequestCommand> UpdateRequestCommand { get; set; } = default!;
 }

@@ -1,10 +1,10 @@
-namespace Domain.Entities;
+using System.ComponentModel.DataAnnotations;
+
+namespace Infra.DatabaseAdapter.Helpers;
 
 public enum CourseRequestStatus
 {
-    New,
-
-    // OnApproval,
-    Approved,
-    Rejected
+    [Display(Name = "Новий")] New,
+    [Display(Name = "Схвалено")] Approved,
+    [Display(Name = "Відхилено")] Rejected
 }

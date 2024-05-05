@@ -1,0 +1,83 @@
+@model Web.Models.TutorProfile.ProfileVm
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="UserVm.Id"/>
+    <label asp-for="UserVm.Name" class="form-check-label mt-2"></label>
+    <textarea class="form-control" rows="1" asp-for="UserVm.Name"></textarea>
+    <span asp-validation-for="UserVm.Name" class="text-danger"></span>
+
+    <label asp-for="UserVm.Surname" class="form-check-label mt-2"></label>
+    <textarea class="form-control" rows="1" asp-for="UserVm.Surname"></textarea>
+    <span asp-validation-for="UserVm.Surname" class="text-danger"></span>
+
+    <label asp-for="UserVm.Patronymic" class="form-check-label mt-2"></label>
+    <textarea class="form-control" rows="1" asp-for="UserVm.Patronymic" id="-text"></textarea>
+    <span asp-validation-for="UserVm.Patronymic" class="text-danger"></span>
+
+    <div class="list-group list-group-flush">
+        <div class="input-group">
+            <select asp-for="UserVm.CitytId" class="form-select" asp-items="@Model.Cities"></select>
+            <span asp-validation-for="UserVm.CitytId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col form-check form-switch">
+        <input class="form-check-input" type="checkbox" asp-for="UserVm.TutorProfileEnabled">
+        <label asp-for="UserVm.TutorProfileEnabled" class="form-check-label"></label>
+    </div>
+
+    @if (Model.UserVm.TutorProfileEnabled && Model.TutorVm != null)
+    {
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="TutorVm.Id"/>
+        <h5 class="card-title mt-3">Тематика</h5>
+        <div class="list-group list-group-flush">
+            <div class="input-group">
+                @* <select asp-for="TutorVm." class="form-select" asp-items="@Model.Subjects"></select> *@
+                SUBJECT TODO
+            </div>
+        </div>
+        <select class="selectpicker" multiple>
+            <!--TODO-->
+            <option>Mustard</option>
+            <option>Ketchup</option>
+            <option>Relish</option>
+        </select>
+
+        <h5 class="card-title mt-3">Готов проводити заняття</h5>
+        <div class="row ps-3">
+            <div class="col form-check form-switch">
+                <input class="form-check-input" type="checkbox" asp-for="TutorVm.TutorHomeAccess">
+                <label asp-for="TutorVm.TutorHomeAccess" class="form-check-label"></label>
+            </div>
+            <div class="col form-check form-switch">
+                <input class="form-check-input" type="checkbox" asp-for="TutorVm.StudentHomeAccess">
+                <label asp-for="TutorVm.StudentHomeAccess" class="form-check-label"></label>
+            </div>
+            <div class="col form-check form-switch">
+                <input class="form-check-input" type="checkbox" asp-for="TutorVm.OnlineAccess">
+                <label asp-for="TutorVm.OnlineAccess" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TutorVm.HourRate" class="control-label"></label>
+            <div>
+                <input asp-for="TutorVm.HourRate" class="form-control"/>
+                <span asp-validation-for="TutorVm.HourRate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <label asp-for="TutorVm.Address" class="form-check-label mt-2"></label>
+        <textarea class="form-control" rows="1" asp-for="TutorVm.Address" id="address-text"></textarea>
+        <span asp-validation-for="TutorVm.Address" class="text-danger"></span>
+        <label asp-for="TutorVm.Descriptions" class="form-check-label  mt-2"></label>
+        <textarea class="form-control" rows="2" asp-for="TutorVm.Descriptions"></textarea>
+        <span asp-validation-for="TutorVm.Descriptions" class="text-danger"></span>
+        <label asp-for="TutorVm.About" class="form-check-label  mt-2"></label>
+        <textarea class="form-control" rows="10" asp-for="TutorVm.About"></textarea>
+        <span asp-validation-for="TutorVm.About" class="text-danger"></span>
+    }
+    <div class="row justify-content-end mt-3 end-50">
+        <button type="submit" class="w-25 btn btn-primary">Оновити</button>
+    </div>
+</form>

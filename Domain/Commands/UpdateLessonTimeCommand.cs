@@ -24,28 +24,28 @@ public class UpdateLessonTimeCommand : IRequest<int>
         {
             //On day event
             if (request.From.Date != request.To.Date)
-                throw new Exception("Подія має бути протягом дня.");
+                throw new Exception("РџРѕРґС–СЏ РјР°С” Р±СѓС‚Рё РїСЂРѕС‚СЏРіРѕРј РґРЅСЏ.");
             var weekday = (int)request.From.DayOfWeek;
             var start = TimeOnly.FromDateTime(request.From);
             var end = TimeOnly.FromDateTime(request.To);
 
             var dbLesson = ApplicationDb.Lessons.FirstOrDefault(x => x.Id == request.EventId);
             if (dbLesson == null)
-                throw new Exception("Подію не знайдено");
+                throw new Exception("РџРѕРґС–СЋ РЅРµ Р·РЅР°Р№РґРµРЅРѕ");
 
-            //Перевірка що входить до одного з доступних діапазонів
+            //РџРµСЂРµРІС–СЂРєР° С‰Рѕ РІС…РѕРґРёС‚СЊ РґРѕ РѕРґРЅРѕРіРѕ Р· РґРѕСЃС‚СѓРїРЅРёС… РґС–Р°РїР°Р·РѕРЅС–РІ
             var availableRange = ApplicationDb.AvailableTimes
                 .Where(x => x.StartTime <= start && end <= x.EndTime && x.DayOfWeek == weekday)
                 .FirstOrDefault();
             if (availableRange == null)
-                throw new Exception("Вибрано поза робочий час");
+                throw new Exception("Р’РёР±СЂР°РЅРѕ РїРѕР·Р° СЂРѕР±РѕС‡РёР№ С‡Р°СЃ");
 
-            //Перевірка перетинання часу
+            //РџРµСЂРµРІС–СЂРєР° РїРµСЂРµС‚РёРЅР°РЅРЅСЏ С‡Р°СЃСѓ
             //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
             var lessonOnRange = ApplicationDb.Lessons
                 .Where(x => x.To > request.From || request.To > x.From).ToList();
             if (lessonOnRange.Count > 0)
-                throw new Exception("Оновлення неможливе, час перетинається");
+                throw new Exception("РћРЅРѕРІР»РµРЅРЅСЏ РЅРµРјРѕР¶Р»РёРІРµ, С‡Р°СЃ РїРµСЂРµС‚РёРЅР°С”С‚СЊСЃСЏ");
 
             //Time params
             dbLesson.From = request.From;
@@ -55,7 +55,7 @@ public class UpdateLessonTimeCommand : IRequest<int>
             {
                 var dbSubject = ApplicationDb.Subjects.FirstOrDefault(x => x.Name == request.Subject);
                 if (dbSubject == null)
-                    throw new Exception("Предмет не знайдено");
+                    throw new Exception("РџСЂРµРґРјРµС‚ РЅРµ Р·РЅР°Р№РґРµРЅРѕ");
                 dbLesson.Subject = dbSubject;
             }
 
