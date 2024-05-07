@@ -32,10 +32,6 @@ public class GetTutorProfileQuery : IRequest<Tutor>
                     throw new Exception("Профіль вчителя не знайдено");
 
             var profile = Mapper.Map<Tutor>(dbProfile);
-            //Додати активні тематики
-            foreach (var subject in dbProfile.Subjects)
-                profile.Subjects[subject.Id] = subject.Name;
-
             return profile;
         }
 

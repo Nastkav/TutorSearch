@@ -36,8 +36,8 @@ public class Tutor
     [Range(10, 9999)]
     public decimal HourRate { get; set; }
 
-    //-
-    public Dictionary<int, string> Subjects { get; set; } = [];
+    [Display(Name = "Оберіть предмети які плануєте викладати")]
+    public List<int> SubjectIds { get; set; } = [];
 
     public int ReviewCount { get; set; }
     public float ReviewValue { get; set; }

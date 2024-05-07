@@ -22,7 +22,7 @@ function createCalendar() {
         firstDay: 1,
         select: addNewEvent,
         eventClick: removeEvent,
-        eventSources: [{events: getEvents}]
+        eventSources: [{ events: getEvents }]
     });
     calendar.render();
 }
@@ -66,7 +66,7 @@ function addNewEvent(info) {
             TimeTypes: "Available"
         },
         success: function (data) {
-            alert("Відправлено")
+            //alert("Відправлено")
             calendar.refetchEvents();
         },
         error: function (data) {
@@ -85,7 +85,7 @@ function removeEvent(info) {
             Id: info.event.id,
         },
         success: function (data) {
-            alert("Видалено")
+            //alert("Видалено")
             calendar.refetchEvents();
         },
         error: function (data) {
@@ -94,7 +94,3 @@ function removeEvent(info) {
         }
     })
 }
-
-
-
-

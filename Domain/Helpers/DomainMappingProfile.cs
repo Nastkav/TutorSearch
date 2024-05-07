@@ -16,13 +16,14 @@ public class DomainMappingProfile : Profile
 
         CreateMap<TutorProfileModel, Tutor>()
             .ForMember(d => d.About, o => o.MapFrom(x => x.About.Content))
-            .ForMember(d => d.Subjects, o => o.Ignore())
+            .ForMember(d => d.SubjectIds, o => o.MapFrom(x => x.Subjects.Select(o => o.Id).ToList()))
             .AfterMap((s, d) => d.ImgPath = s.ImgPath != string.Empty ? s.ImgPath : "/img/example_face.jpg");
         CreateMap<Tutor, TutorProfileModel>()
             .ForPath(d => d.About.Content, o => o.MapFrom(x => x.About))
             .ForPath(d => d.About.Id, o => o.MapFrom(x => x.Id))
             .ForMember(d => d.Subjects, o => o.Ignore())
             .AfterMap((s, d) => d.ImgPath = s.ImgPath != string.Empty ? s.ImgPath : "/img/example_face.jpg");
+
 
         //Requests
         CreateMap<LessonRequest, RequestModel>();
@@ -32,18 +33,15 @@ public class DomainMappingProfile : Profile
             .ForMember(d => d.Subject, o => o.Ignore())
             .ForAllMembers(opts => { opts.Condition((_, _, srcMember) => srcMember != null); });
 
-        // CreateMap<CreateRequestCommand, RequestModel>()
-        //     .ForMember(d => d.TutorId, o => o.MapFrom(x => x.TutorProfileId))
-        //     .ForMember(d => d.Subject, o => o.Ignore());
-        // CreateMap<UpdateRequestCommand, RequestModel>()
-        //     .ForMember(d => d.TutorId, o => o.MapFrom(x => x.TutorProfileId))
-        //     .ForMember(d => d.Subject, o => o.Ignore())
+
+        //OLD_OLD_OLD
+
+        // CreateMap<UpdateRequestCommand, LessonModel>()
+        // .ForMember(d => d.Subject, o => o.Ignore());
         //     .ForAllMembers(opts => { opts.Condition((_, _, srcMember) => srcMember != null); });
         //
         // CreateMap<RequestModel, LessonRequestDto>();
         //
-        // CreateMap<UpdateRequestCommand, LessonModel>()
-        //     .ForMember(d => d.Subject, o => o.Ignore());
         // CreateMap<RequestModel, LessonModel>()
         //     .ForMember(d => d.TutorProfileId, o => o.MapFrom(x => x.TutorId));
         // CreateMap<LessonModel, LessonDetailsDto>()

@@ -41,7 +41,7 @@ public class UpdateTutorCommand : IRequest<bool>
 
             //Subjects
             dbProfile.Subjects = await ApplicationDb.Subjects
-                .Where(x => r.Profile.Subjects.Keys.Contains(x.Id))
+                .Where(x => r.Profile.SubjectIds.Contains(x.Id))
                 .ToListAsync();
 
             if (newObject)

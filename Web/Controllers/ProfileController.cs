@@ -58,15 +58,21 @@ public class ProfileController : Controller
     public async Task<IActionResult> SearchTutor(SearchVm model)
     {
         //Main Lists
+        var shareSubjects = await _mediator.Send(new GetAllSubjectsQuery());
         model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
         model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
         //Add Cards
-        model.TutorCards = [];
-        foreach (var dbTutor in await _mediator.Send(model.Filters))
+        var userIds = await _mediator.Send(model.Filters);
+        foreach (var userId in userIds)
         {
-            var tutorVm = _mapper.Map<TutorProfileModel, TutorCardVm>(dbTutor);
-            //TODO: tutorVm.City = dbTutor.City?.FullName() ?? "";
-            model.TutorCards.Add(tutorVm);
+            var card = new TutorCardVm()
+            {
+                Subjects = shareSubjects,
+                TutorData = await _mediator.Send(new GetTutorProfileQuery { ProfileId = userId }),
+                UserData = await _mediator.Send(new GetUserProfileQuery { ProfileId = userId })
+            };
+            card.UserData.CitytId = model.Cities.FirstOrDefault(x => x.Value == card.UserData.CitytId)?.Text ?? "---";
+            model.TutorCards.Add(card);
         }
 
         //Result
@@ -148,8 +154,7 @@ public class ProfileController : Controller
                 if (model.TutorVm.Id == 0)
                     model.TutorVm.Id = model.UserVm.Id;
                 await _mediator.Send(new UpdateTutorCommand { Profile = model.TutorVm });
-                model.Subjects = await GetSelectList("Оберіть предмет", new GetAllCitiesQuery());
-                var tt = 0; //TODO: Add subjects dict to save
+                model.Subjects = await GetSelectList("Оберіть предмет", new GetAllSubjectsQuery());
             }
         }
 

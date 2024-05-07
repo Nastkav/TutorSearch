@@ -4,31 +4,31 @@
     <div class="row g-0">
         <div class="col-4">
             <img class="img-fluid rounded-start"
-                 src="@Model.GetImgPath()"
-                 alt="..."/>
+                 src="@Model.TutorData.ImgPath"
+                 alt="..." />
         </div>
     </div>
     <div class="col">
         <div class="card-body">
             <div class="row card-title">
                 <div class="col lead">
-                    <a class="stretched-link" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Id">
-                        @Model.Name @Model.Patronymic @Model.Surname
+                    <a class="stretched-link" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.UserData.Id">
+                        @Model.UserData.Name @Model.UserData.Patronymic @Model.UserData.Surname
                     </a>
-                    <i class="fa fa-star"></i> @Model.ReviewValue (@Model.ReviewCount reviews)
+                    <i class="fa fa-star"></i> @Model.TutorData.ReviewValue (@Model.TutorData.ReviewCount reviews)
                 </div>
                 <div class="col text-end">
-                    <span class="text-light bg-primary rounded-5 p-lg-2">@Model.HourRate грн/година</span>
+                    <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorData.HourRate грн/година</span>
                 </div>
             </div>
-            <p class="card-text">@Model.Descriptions</p>
+            <p class="card-text">@Model.TutorData.Descriptions</p>
             <small class="text-muted">
-                <i class="fa-solid fa-location-dot"></i> @Model.City
+                <i class="fa-solid fa-location-dot"></i> @Model.UserData.CitytId)
             </small>
             <div class="card-footer">
-                @foreach (var sub in Model.Subjects)
+                @foreach (var subjectId in Model.TutorData.SubjectIds)
                 {
-                    <span class="badge bg-info">sub</span>
+                    <span class="badge bg-info"> @Model.Subjects[subjectId]</span>
                 }
             </div>
         </div>

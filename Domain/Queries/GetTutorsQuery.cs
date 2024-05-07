@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
 
-public class GetTutorsQuery : IRequest<List<TutorProfileModel>>
+public class GetTutorsQuery : IRequest<List<int>>
 {
     public decimal? HourRateFrom { get; set; }
     public decimal? HourRateTo { get; set; }
@@ -22,11 +22,14 @@ public class GetTutorsQuery : IRequest<List<TutorProfileModel>>
     public bool TutorHomeAccess { get; set; }
     public bool StudentHomeAccess { get; set; }
 
-    public class GetTutorsQueryHandler : BaseMediatrHandler<GetTutorsQuery, List<TutorProfileModel>>
+    public string SearchText { get; set; }
+
+    public class GetTutorsQueryHandler : BaseMediatrHandler<GetTutorsQuery, List<int>>
     {
-        public override async Task<List<TutorProfileModel>> Handle(GetTutorsQuery r, CancellationToken token)
+        public override async Task<List<int>> Handle(GetTutorsQuery r, CancellationToken token)
         {
             var q = ApplicationDb.Users
+                .Include(x => x.Reviews)
                 .Include(x => x.TutorProfile)
                 .ThenInclude(x => x.Subjects)
                 .Where(x => x.TutorProfileEnabled);
@@ -46,7 +49,7 @@ public class GetTutorsQuery : IRequest<List<TutorProfileModel>>
             if (r.OnlineAccess)
                 q = q.Where(x => x.TutorProfile.StudentHomeAccess);
 
-            return q.Select(x => x.TutorProfile).ToList();
+            return q.OrderBy(x => x.Reviews.Count).Select(x => x.Id).ToList();
         }
 
         public GetTutorsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)

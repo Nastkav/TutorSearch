@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace Domain.Models;
 
@@ -26,6 +28,7 @@ public class User
     public string Patronymic { get; set; } = string.Empty;
 
     [Required][Display(Name = "Місто")] public string CitytId { get; set; } = "0";
+
 
     public string FullName() => $"{Name} {Patronymic} {Surname}";
 }

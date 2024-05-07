@@ -33,7 +33,7 @@
             <div class="col-4">
                 <img class="img-fluid rounded-start"
                      src="@Model.TutorVm.ImgPath"
-                     alt="..."/>
+                     alt="..." />
             </div>
         </div>
         <div class="col">
@@ -45,7 +45,8 @@
                         @if (Model.TutorVm.ReviewCount > 0)
                         {
                             <i class="fa fa-star"></i>
-                            @Model.TutorVm.ReviewValue //TODO: ReviewValue + Count
+                            @Model.TutorVm.ReviewValue
+                            //TODO: ReviewValue + Count
                         }
                     </div>
                     <div class="col text-end">
@@ -78,17 +79,9 @@
     <div class="card bg-light mb-3" id="subjects">
         <div class="card-body">
             <h5 class="card-title mt-3">Subjects</h5>
-            @for (var i = 0; i < Model.TutorVm.Subjects.Count; i++)
+            @for (var i = 1; i < Model.TutorVm.SubjectIds.Count; i++)
             {
-                if (i == 5)
-                {
-                    <span class="badge bg-light">...</span>
-                    break;
-                }
-                else
-                {
-                    <span class="badge bg-info"> @Model.TutorVm.Subjects[i] </span>
-                }
+                <span class="badge bg-info"> @Model.Subjects.FirstOrDefault(x => x.Value == i.ToString())?.Text</span>
             }
         </div>
     </div>
@@ -157,9 +150,9 @@
         </div>
     </div>
 
-    <partial name="RequestForm" model="@Model.CreateRequestCommand"/>
+    <partial name="RequestForm" model="@Model.CreateRequestCommand" />
     @section Scripts
     {
-        <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
     }
 }

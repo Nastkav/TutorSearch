@@ -37,7 +37,7 @@ public class UpdateRequestCommand : IRequest<int>
             var dbRequest = ApplicationDb.Requests
                                 .Include(x => x.Subject)
                                 .First(x => x.Id == r.Id && x.TutorId == r.TutorId)
-                            ?? throw new Exception("The required query was not found");
+                            ?? throw new Exception("Потрібний запит не знайдено");
 
             if (dbRequest.Status != CourseRequestStatus.New)
                 throw new Exception("Заявка вже закрита");
@@ -50,26 +50,26 @@ public class UpdateRequestCommand : IRequest<int>
 
             if (dbRequest.Status == CourseRequestStatus.Approved)
             {
-                var student = ApplicationDb.Users.First(x => x.Id == dbRequest.CreatedId);
-                //Course
-                var newCourse = new CourseModel
-                {
-                    Title = "", //TODO: dbRequest.Tutor.Created.FullName(),
-                    SubjectId = dbRequest.Subject.Id,
-                    RequestId = r.Id,
-                    TutorId = r.TutorId
-                };
-                newCourse.Students.Add(student);
-
-                //Lesson
-                var firstLesson = Mapper.Map<RequestModel, LessonModel>(dbRequest);
-                firstLesson.CreatedId = r.UpdatedBy;
-                firstLesson.Students.Add(student);
-                firstLesson.TutorProfileId = dbRequest.TutorId;
-
-                newCourse.Lessons.Add(firstLesson);
-                await ApplicationDb.Courses.AddAsync(newCourse);
-                // await ApplicationDb.Lessons.AddAsync(firstLesson);
+                // var student = ApplicationDb.Users.First(x => x.Id == dbRequest.CreatedId);
+                // //Course
+                // var newCourse = new CourseModel
+                // {
+                //     Title = "", //TODO: dbRequest.Tutor.Created.FullName(),
+                //     SubjectId = dbRequest.Subject.Id,
+                //     RequestId = r.Id,
+                //     TutorId = r.TutorId
+                // };
+                // newCourse.Students.Add(student);
+                //
+                // //Lesson
+                // var firstLesson = Mapper.Map<RequestModel, LessonModel>(dbRequest);
+                // firstLesson.CreatedId = r.UpdatedBy;
+                // firstLesson.Students.Add(student);
+                // firstLesson.TutorProfileId = dbRequest.TutorId;
+                //
+                // newCourse.Lessons.Add(firstLesson);
+                // await ApplicationDb.Courses.AddAsync(newCourse);
+                // // await ApplicationDb.Lessons.AddAsync(firstLesson);
             }
 
             await ApplicationDb.SaveChangesAsync();
