@@ -7,6 +7,5 @@ public class SubjectModel
     public int Id { get; set; }
     [MaxLength(100)] public string Name { get; set; } = string.Empty;
 
-    public virtual List<TutorProfileModel> Profiles { get; set; } = [];
-    public virtual List<CourseModel> Courses { get; set; } = [];
+    public virtual List<TutorModel> Profiles { get; set; } = [];
 }

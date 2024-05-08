@@ -1,11 +1,11 @@
-@model Web.Models.TutorProfile.TutorCardVm
+@model Web.Models.Profile.TutorCardVm
 
 <div class="card card-flex align-items-center bg-light mb-3">
     <div class="row g-0">
         <div class="col-4">
             <img class="img-fluid rounded-start"
-                 src="@Model.TutorData.ImgPath"
-                 alt="..." />
+                 src="@Model.UserData.Avatar"
+                 alt="..."/>
         </div>
     </div>
     <div class="col">
@@ -23,7 +23,7 @@
             </div>
             <p class="card-text">@Model.TutorData.Descriptions</p>
             <small class="text-muted">
-                <i class="fa-solid fa-location-dot"></i> @Model.UserData.CitytId)
+                <i class="fa-solid fa-location-dot"></i> @Model.UserData.CityId)
             </small>
             <div class="card-footer">
                 @foreach (var subjectId in Model.TutorData.SubjectIds)

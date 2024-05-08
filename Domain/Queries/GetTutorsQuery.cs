@@ -30,24 +30,24 @@ public class GetTutorsQuery : IRequest<List<int>>
         {
             var q = ApplicationDb.Users
                 .Include(x => x.Reviews)
-                .Include(x => x.TutorProfile)
+                .Include(x => x.Tutor)
                 .ThenInclude(x => x.Subjects)
-                .Where(x => x.TutorProfileEnabled);
+                .Where(x => x.ProfileEnabled);
 
             if (r.HourRateFrom != null)
-                q = q.Where(x => x.TutorProfile.HourRate > r.HourRateFrom);
+                q = q.Where(x => x.Tutor.HourRate > r.HourRateFrom);
             if (r.HourRateTo != null)
-                q = q.Where(x => x.TutorProfile.HourRate < r.HourRateTo);
+                q = q.Where(x => x.Tutor.HourRate < r.HourRateTo);
             if (r.CityId != "0")
                 q = q.Where(x => x.CityId == int.Parse(r.CityId));
             if (r.SubjectId != "0")
-                q = q.Where(x => x.TutorProfile.Subjects.Any(x => x.Id == int.Parse(r.SubjectId)));
+                q = q.Where(x => x.Tutor.Subjects.Any(x => x.Id == int.Parse(r.SubjectId)));
             if (r.OnlineAccess)
-                q = q.Where(x => x.TutorProfile.OnlineAccess);
+                q = q.Where(x => x.Tutor.OnlineAccess);
             if (r.TutorHomeAccess)
-                q = q.Where(x => x.TutorProfile.TutorHomeAccess);
+                q = q.Where(x => x.Tutor.TutorHomeAccess);
             if (r.OnlineAccess)
-                q = q.Where(x => x.TutorProfile.StudentHomeAccess);
+                q = q.Where(x => x.Tutor.StudentHomeAccess);
 
             return q.OrderBy(x => x.Reviews.Count).Select(x => x.Id).ToList();
         }

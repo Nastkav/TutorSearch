@@ -22,7 +22,7 @@ public class LessonCloneCommand : IRequest<int>
         }
 
 
-        public override async Task<int> Handle(LessonCloneCommand request,
+        public override async Task<int> Handle(LessonCloneCommand r,
             CancellationToken cancellationToken) =>
             //TODO: LessonCloneCommandHandler
             0;

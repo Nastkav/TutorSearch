@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Web.Models.Shared;
-using Web.Models.TutorProfile;
+using Web.Models.Profile;
 
 namespace Web.Controllers;
 
@@ -71,7 +71,7 @@ public class ProfileController : Controller
                 TutorData = await _mediator.Send(new GetTutorProfileQuery { ProfileId = userId }),
                 UserData = await _mediator.Send(new GetUserProfileQuery { ProfileId = userId })
             };
-            card.UserData.CitytId = model.Cities.FirstOrDefault(x => x.Value == card.UserData.CitytId)?.Text ?? "---";
+            card.UserData.CityId = model.Cities.FirstOrDefault(x => x.Value == card.UserData.CityId)?.Text ?? "---";
             model.TutorCards.Add(card);
         }
 
@@ -99,7 +99,7 @@ public class ProfileController : Controller
         ProfileVm model = new() { IdentityId = IdentityId };
         model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
         model.UserVm = await _mediator.Send(new GetUserProfileQuery { ProfileId = userId });
-        if (model.UserVm.TutorProfileEnabled)
+        if (model.UserVm.ProfileEnabled)
         {
             model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
             model.TutorVm = await _mediator.Send(new GetTutorProfileQuery { ProfileId = userId });
@@ -138,7 +138,7 @@ public class ProfileController : Controller
     public async Task<IActionResult> Edit(ProfileVm model)
     {
         // Ігнорувати помилки форми якщо не вчитель
-        if (!model.UserVm.TutorProfileEnabled)
+        if (!model.UserVm.ProfileEnabled)
             foreach (var state in ModelState)
                 if (state.Key.StartsWith(nameof(model.TutorVm)))
                     state.Value.ValidationState = ModelValidationState.Skipped;
@@ -147,7 +147,7 @@ public class ProfileController : Controller
         {
             await _mediator.Send(new UpdateUserCommand { Profile = model.UserVm });
 
-            if (model.UserVm.TutorProfileEnabled)
+            if (model.UserVm.ProfileEnabled)
             {
                 if (model.TutorVm == null)
                     model.TutorVm = await _mediator.Send(new GetTutorProfileQuery { ProfileId = model.UserVm.Id });

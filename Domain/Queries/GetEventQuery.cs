@@ -1,16 +1,13 @@
+using AutoMapper;
 using Domain.Models;
 using Domain.Port.Driving;
 using Infra.DatabaseAdapter;
-using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Infra.DatabaseAdapter.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
 
-public class GetLessonQuery : IRequest<List<LessonDto>>
+public class GetEventQuery : IRequest<List<LessonEvent>>
 {
     public List<TimeType> TimeTypes { get; set; } = [];
 
@@ -18,17 +15,16 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
     public DateTime? From { get; set; }
     public DateTime? To { get; set; }
 
-    public class GetLessonQueryHandler : BaseMediatrHandler<GetLessonQuery, List<LessonDto>>
+    public class GetEventQueryHandler : BaseMediatrHandler<GetEventQuery, List<LessonEvent>>
     {
-        public override async Task<List<LessonDto>> Handle(GetLessonQuery r, CancellationToken token)
+        public override async Task<List<LessonEvent>> Handle(GetEventQuery r, CancellationToken token)
         {
             if (!r.From.HasValue) r.From = DateTime.MinValue;
             if (!r.To.HasValue) r.To = DateTime.MaxValue;
 
-            List<LessonDto> events = new();
+            List<LessonEvent> events = new();
             var dbLessons = ApplicationDb.Lessons
-                .Include(x => x.Course)
-                .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorProfileId == r.UserId)
+                .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorId == r.UserId)
                 .Where(x => r.From < x.From && x.To < r.To)
                 .ToList();
 
@@ -40,11 +36,11 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
 
             //Calc Busy Time
             foreach (var lesson in dbLessons)
-                events.Add(new LessonDto
+                events.Add(new LessonEvent
                 {
                     Id = lesson.Id,
                     Type = TimeType.Busy,
-                    Title = lesson.Course.Title,
+                    Title = lesson.Title,
                     From = lesson.From,
                     To = lesson.To
                 });
@@ -52,12 +48,12 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
             //Available Time
             var prevSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
-            var availableTimes = new List<LessonDto>();
-            for (var i = -2; i <= 2; i++) //+- 2 тижня
+            var availableTimes = new List<LessonEvent>();
+            for (var i = 0; i <= 4; i++) //Розрахунок наступних тижнів 4
             {
                 var offsetWeek = i * 7;
                 foreach (var dbRange in dbAvailableTime)
-                    availableTimes.Add(new LessonDto
+                    availableTimes.Add(new LessonEvent
                     {
                         Id = dbRange.Id,
                         Type = TimeType.Available,
@@ -70,7 +66,7 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
 
             events = events.OrderBy(x => x.From).ToList();
             //Unavailable Time
-            var unavailableTimes = new List<LessonDto>();
+            var unavailableTimes = new List<LessonEvent>();
             var prevEventEnd = DateTime.MinValue;
             for (var i = 0; i < availableTimes.Count; i++)
             {
@@ -79,7 +75,7 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
                 else if (availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
                     prevEventEnd = availableTimes[i - 1].To; // Взяти останній час з минулого дня
 
-                unavailableTimes.Add(new LessonDto
+                unavailableTimes.Add(new LessonEvent
                 {
                     Type = TimeType.Unavailable,
                     From = prevEventEnd,
@@ -97,7 +93,7 @@ public class GetLessonQuery : IRequest<List<LessonDto>>
             return events.ToList();
         }
 
-        public GetLessonQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public GetEventQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }

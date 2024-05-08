@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Domain;
 using Domain.Port.Driving;

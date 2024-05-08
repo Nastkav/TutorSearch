@@ -41,7 +41,7 @@ public class CreateRequestCommand : IRequest<int>
         {
             if (r.CreatedId == r.TutorId)
                 throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
-            if (!ApplicationDb.TutorProfiles.Any(x => x.Id == r.TutorId))
+            if (!ApplicationDb.Tutor.Any(x => x.Id == r.TutorId))
                 throw new Exception("Репетитор вказан невірно");
             if (!ApplicationDb.Users.Any(x => x.Id == r.CreatedId))
                 throw new Exception("Ученик вказан невірно");
@@ -52,7 +52,7 @@ public class CreateRequestCommand : IRequest<int>
 
             var newRequest = Mapper.Map<RequestModel>(r);
             newRequest.Subject = dbSubject;
-            newRequest.Status = CourseRequestStatus.New;
+            newRequest.Status = LessonRequestStatus.New;
 
             //Перевірка існування схожого запиту до цього викладача    
             var requestExist = ApplicationDb.Requests.Any(x =>

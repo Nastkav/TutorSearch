@@ -4,7 +4,7 @@ using Domain.Commands;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Web.Models.TutorProfile;
+namespace Web.Models.Profile;
 
 public class ProfileVm
 {

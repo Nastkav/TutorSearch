@@ -5,19 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class CourseReviewModel : ITrackable
+public class TutorReviewModel : ITrackable
 {
     public int Id { get; set; }
-    public Guid CourseId { get; set; }
-    public CourseModel Course { get; set; } = null!;
+    public int TutorId { get; set; }
+    public TutorModel Tutor { get; set; } = null!;
     [Range(0, 5)] public int Rating { get; set; }
     [MaxLength(300)] public string Description { get; set; } = string.Empty;
 
+    public int CreatedId { get; set; }
     public UserModel Created { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }
-    public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public int? UpdatedId { get; set; }
 }

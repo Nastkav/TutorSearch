@@ -8,9 +8,12 @@ public class CityModel : ITrackable
 {
     public int Id { get; set; }
 
-    [DisplayName("Назва"), MaxLength(100)] public string Name { get; set; } = string.Empty;
+    [DisplayName("Назва")]
+    [MaxLength(100)]
+    public string Name { get; set; } = string.Empty;
 
-    [MaxLength(140), DisplayName("Область")]
+    [MaxLength(140)]
+    [DisplayName("Область")]
     public string Region { get; set; } = string.Empty;
 
     //ITrackable

@@ -19,7 +19,7 @@ public class LessonCheckInCommand : IRequest<bool>
 
     public class LessonCheckInCommandHandler : BaseMediatrHandler<LessonCheckInCommand, bool>
     {
-        public override async Task<bool> Handle(LessonCheckInCommand request,
+        public override async Task<bool> Handle(LessonCheckInCommand r,
             CancellationToken cancellationToken) =>
             //TODO: LessonCheckInCommandHandler
             true;

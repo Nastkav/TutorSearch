@@ -1,4 +1,4 @@
-@model Web.Models.TutorProfile.ProfileVm
+@model Web.Models.Profile.ProfileVm
 
 @{
     ViewBag.Title = "Edit Tutor Profile";
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-@if (Model.UserVm.TutorProfileEnabled && Model.TutorVm != null)
+@if (Model.UserVm.ProfileEnabled && Model.TutorVm != null)
 {
     <!-- Calendar -->
     <div class="card bg-light mt-3" id="schedule">

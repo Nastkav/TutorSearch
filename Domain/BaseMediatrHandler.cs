@@ -19,5 +19,5 @@ public abstract class BaseMediatrHandler<T, TU> : IRequestHandler<T, TU>
         Mapper = mapper;
     }
 
-    public abstract Task<TU> Handle(T request, CancellationToken cancellationToken);
+    public abstract Task<TU> Handle(T r, CancellationToken token);
 }

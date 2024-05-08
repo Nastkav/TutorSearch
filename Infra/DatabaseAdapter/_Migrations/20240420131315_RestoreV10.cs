@@ -9,7 +9,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace Infra.DatabaseAdapter._Migrations
 {
     /// <inheritdoc />
-    public partial class RestoreV7 : Migration
+    public partial class RestoreV10 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,10 +94,11 @@ namespace Infra.DatabaseAdapter._Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Surname = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Patronymic = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    TutorProfileEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Surname = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Patronymic = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Avatar = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: false),
+                    ProfileEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
@@ -216,7 +217,7 @@ namespace Infra.DatabaseAdapter._Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "TutorProfiles",
+                name: "Tutor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -225,16 +226,15 @@ namespace Infra.DatabaseAdapter._Migrations
                     TutorHomeAccess = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     StudentHomeAccess = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Descriptions = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
-                    ImgPath = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: false),
                     HourRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TutorProfiles", x => x.Id);
+                    table.PrimaryKey("PK_Tutor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TutorProfiles_AspNetUsers_Id",
+                        name: "FK_Tutor_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -243,7 +243,7 @@ namespace Infra.DatabaseAdapter._Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AboutTutorModel",
+                name: "AboutTutor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -251,11 +251,11 @@ namespace Infra.DatabaseAdapter._Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AboutTutorModel", x => x.Id);
+                    table.PrimaryKey("PK_AboutTutor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AboutTutorModel_TutorProfiles_Id",
+                        name: "FK_AboutTutor_Tutor_Id",
                         column: x => x.Id,
-                        principalTable: "TutorProfiles",
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -280,9 +280,9 @@ namespace Infra.DatabaseAdapter._Migrations
                 {
                     table.PrimaryKey("PK_AvailableTimes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AvailableTimes_TutorProfiles_ProfileId",
+                        name: "FK_AvailableTimes_Tutor_ProfileId",
                         column: x => x.ProfileId,
-                        principalTable: "TutorProfiles",
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -305,9 +305,9 @@ namespace Infra.DatabaseAdapter._Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FavoriteTutors_TutorProfiles_ProfileId",
+                        name: "FK_FavoriteTutors_Tutor_ProfileId",
                         column: x => x.ProfileId,
-                        principalTable: "TutorProfiles",
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -330,9 +330,9 @@ namespace Infra.DatabaseAdapter._Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfileSubjects_TutorProfiles_ProfilesId",
+                        name: "FK_ProfileSubjects_Tutor_ProfilesId",
                         column: x => x.ProfilesId,
-                        principalTable: "TutorProfiles",
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -344,17 +344,16 @@ namespace Infra.DatabaseAdapter._Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    TutorId = table.Column<int>(type: "int", nullable: false),
+                    TutorId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     From = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     To = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Comment = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
                     TutorComment = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    CreatedId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -372,75 +371,64 @@ namespace Infra.DatabaseAdapter._Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Requests_TutorProfiles_TutorId",
+                        name: "FK_Requests_Tutor_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "TutorProfiles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Tutor",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Title = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    RequestId = table.Column<int>(type: "int", nullable: false),
-                    TutorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Courses_Requests_RequestId",
-                        column: x => x.RequestId,
-                        principalTable: "Requests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Courses_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Courses_TutorProfiles_TutorId",
-                        column: x => x.TutorId,
-                        principalTable: "TutorProfiles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "CourseReviewModel",
+                name: "Tasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    TutorId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseReviewModel", x => x.Id);
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseReviewModel_AspNetUsers_CreatedId",
+                        name: "FK_Tasks_Tutor_TutorId",
+                        column: x => x.TutorId,
+                        principalTable: "Tutor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "TutorReviewModel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    TutorId = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    CreatedId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TutorReviewModel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TutorReviewModel_AspNetUsers_CreatedId",
                         column: x => x.CreatedId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CourseReviewModel_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_TutorReviewModel_Tutor_TutorId",
+                        column: x => x.TutorId,
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -452,24 +440,24 @@ namespace Infra.DatabaseAdapter._Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    TutorId = table.Column<int>(type: "int", nullable: false),
                     TutorProfileId = table.Column<int>(type: "int", nullable: false),
                     From = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     To = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Title = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Comment = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
-                    CourseId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    RequestId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lessons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lessons_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_Lessons_Requests_RequestId",
+                        column: x => x.RequestId,
+                        principalTable: "Requests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -479,88 +467,39 @@ namespace Infra.DatabaseAdapter._Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Lessons_TutorProfiles_TutorProfileId",
+                        name: "FK_Lessons_Tutor_TutorProfileId",
                         column: x => x.TutorProfileId,
-                        principalTable: "TutorProfiles",
+                        principalTable: "Tutor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "StudentsOnCourse",
-                columns: table => new
-                {
-                    CoursesId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    StudentsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentsOnCourse", x => new { x.CoursesId, x.StudentsId });
-                    table.ForeignKey(
-                        name: "FK_StudentsOnCourse_AspNetUsers_StudentsId",
-                        column: x => x.StudentsId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StudentsOnCourse_Courses_CoursesId",
-                        column: x => x.CoursesId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Tasks",
+                name: "Solutions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Title = table.Column<string>(type: "longtext", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Attendance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<int>(type: "int", nullable: false),
-                    LessonId = table.Column<int>(type: "int", nullable: false)
+                    Answer = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
+                    table.PrimaryKey("PK_Solutions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attendance_AspNetUsers_StudentId",
+                        name: "FK_Solutions_AspNetUsers_StudentId",
                         column: x => x.StudentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Attendance_Lessons_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lessons",
+                        name: "FK_Solutions_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -592,44 +531,6 @@ namespace Infra.DatabaseAdapter._Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Solutions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Answer = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
-                    TaskId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Solutions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Solutions_AspNetUsers_CreatedId",
-                        column: x => x.CreatedId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Solutions_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Solutions_Tasks_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Files",
                 columns: table => new
                 {
@@ -637,17 +538,16 @@ namespace Infra.DatabaseAdapter._Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     TaskId = table.Column<int>(type: "int", nullable: true),
                     SolutionId = table.Column<int>(type: "int", nullable: true),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatedId = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedId = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Files_AspNetUsers_CreatedId",
-                        column: x => x.CreatedId,
+                        name: "FK_Files_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -675,11 +575,11 @@ namespace Infra.DatabaseAdapter._Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "CityId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "TutorProfileEnabled", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "Avatar", "BirthDate", "CityId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "ProfileEnabled", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, new DateTime(2004, 4, 19, 0, 0, 0, 0, DateTimeKind.Local), null, "b0ae31a5-ae8a-4813-85f5-6c469d658b66", "admin@example.com", true, false, null, "Administrator", "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAED/JcnGip5yrSrBHQH+LmlC7r6Pf1nzvsaAZgxa0Pc25cvBsvI1hAD7lJ+61BoGihQ==", "None", null, false, "482ea3c3-a1c3-4c83-aced-72e0e5b8808c", "None", false, false, "admin@example.com" },
-                    { 2, 0, new DateTime(1999, 4, 19, 0, 0, 0, 0, DateTimeKind.Local), null, "22db7cb4-0545-4f6a-a0b9-e410cc49020f", "tutor@example.com", true, false, null, "Ірина", "TUTOR@EXAMPLE.COM", "TUTOR@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==", "Миколаївна", null, false, "9cbd20e0-3497-4bbb-95f7-da2f2710e420", "Мельник", false, false, "tutor@example.com" }
+                    { 1, 0, "", new DateTime(2004, 4, 20, 0, 0, 0, 0, DateTimeKind.Local), null, "185c8567-5c71-4272-bce5-5e61dbe36bf3", "admin@example.com", true, false, null, "Administrator", "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAED/JcnGip5yrSrBHQH+LmlC7r6Pf1nzvsaAZgxa0Pc25cvBsvI1hAD7lJ+61BoGihQ==", "None", null, false, false, "482ea3c3-a1c3-4c83-aced-72e0e5b8808c", "None", false, "admin@example.com" },
+                    { 2, 0, "", new DateTime(1999, 4, 20, 0, 0, 0, 0, DateTimeKind.Local), null, "1be26e7e-12b6-4733-9952-cac5105b144e", "tutor@example.com", true, false, null, "Ірина", "TUTOR@EXAMPLE.COM", "TUTOR@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==", "Миколаївна", null, false, false, "9cbd20e0-3497-4bbb-95f7-da2f2710e420", "Мельник", false, "tutor@example.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -1380,45 +1280,9 @@ namespace Infra.DatabaseAdapter._Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendance_LessonId",
-                table: "Attendance",
-                column: "LessonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Attendance_StudentId",
-                table: "Attendance",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AvailableTimes_ProfileId",
                 table: "AvailableTimes",
                 column: "ProfileId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseReviewModel_CourseId",
-                table: "CourseReviewModel",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseReviewModel_CreatedId",
-                table: "CourseReviewModel",
-                column: "CreatedId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_RequestId",
-                table: "Courses",
-                column: "RequestId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_SubjectId",
-                table: "Courses",
-                column: "SubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_TutorId",
-                table: "Courses",
-                column: "TutorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FavoriteTutors_ProfileId",
@@ -1426,9 +1290,9 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Files_CreatedId",
+                name: "IX_Files_OwnerId",
                 table: "Files",
-                column: "CreatedId");
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_SolutionId",
@@ -1441,9 +1305,9 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lessons_CourseId",
+                name: "IX_Lessons_RequestId",
                 table: "Lessons",
-                column: "CourseId");
+                column: "RequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_SubjectId",
@@ -1476,14 +1340,9 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Solutions_CourseId",
+                name: "IX_Solutions_StudentId",
                 table: "Solutions",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Solutions_CreatedId",
-                table: "Solutions",
-                column: "CreatedId");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Solutions_TaskId",
@@ -1496,21 +1355,26 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "StudentsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentsOnCourse_StudentsId",
-                table: "StudentsOnCourse",
-                column: "StudentsId");
+                name: "IX_Tasks_TutorId",
+                table: "Tasks",
+                column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CourseId",
-                table: "Tasks",
-                column: "CourseId");
+                name: "IX_TutorReviewModel_CreatedId",
+                table: "TutorReviewModel",
+                column: "CreatedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TutorReviewModel_TutorId",
+                table: "TutorReviewModel",
+                column: "TutorId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AboutTutorModel");
+                name: "AboutTutor");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -1528,13 +1392,7 @@ namespace Infra.DatabaseAdapter._Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Attendance");
-
-            migrationBuilder.DropTable(
                 name: "AvailableTimes");
-
-            migrationBuilder.DropTable(
-                name: "CourseReviewModel");
 
             migrationBuilder.DropTable(
                 name: "FavoriteTutors");
@@ -1549,7 +1407,7 @@ namespace Infra.DatabaseAdapter._Migrations
                 name: "StudentLessons");
 
             migrationBuilder.DropTable(
-                name: "StudentsOnCourse");
+                name: "TutorReviewModel");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1564,16 +1422,13 @@ namespace Infra.DatabaseAdapter._Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "Courses");
-
-            migrationBuilder.DropTable(
                 name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "TutorProfiles");
+                name: "Tutor");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

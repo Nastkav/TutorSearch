@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml;
 
 namespace Infra.DatabaseAdapter.Models;
 
+[Table("AboutTutor")]
 public class AboutTutorModel
 {
     [Required] public int Id { get; set; }

@@ -12,17 +12,17 @@ public class DomainMappingProfile : Profile
     {
         //User & Tutor Profiles
         CreateMap<UserModel, User>()
-            .ReverseMap();
+            .AfterMap((s, d) => d.Avatar = s.Avatar != string.Empty ? s.Avatar : "/img/example_face.jpg");
+        CreateMap<User, UserModel>()
+            .AfterMap((s, d) => d.Avatar = s.Avatar != string.Empty ? s.Avatar : "/img/example_face.jpg");
 
-        CreateMap<TutorProfileModel, Tutor>()
+        CreateMap<TutorModel, Tutor>()
             .ForMember(d => d.About, o => o.MapFrom(x => x.About.Content))
-            .ForMember(d => d.SubjectIds, o => o.MapFrom(x => x.Subjects.Select(o => o.Id).ToList()))
-            .AfterMap((s, d) => d.ImgPath = s.ImgPath != string.Empty ? s.ImgPath : "/img/example_face.jpg");
-        CreateMap<Tutor, TutorProfileModel>()
+            .ForMember(d => d.SubjectIds, o => o.MapFrom(x => x.Subjects.Select(o => o.Id).ToList()));
+        CreateMap<Tutor, TutorModel>()
             .ForPath(d => d.About.Content, o => o.MapFrom(x => x.About))
             .ForPath(d => d.About.Id, o => o.MapFrom(x => x.Id))
-            .ForMember(d => d.Subjects, o => o.Ignore())
-            .AfterMap((s, d) => d.ImgPath = s.ImgPath != string.Empty ? s.ImgPath : "/img/example_face.jpg");
+            .ForMember(d => d.Subjects, o => o.Ignore());
 
 
         //Requests
@@ -32,44 +32,15 @@ public class DomainMappingProfile : Profile
         CreateMap<UpdateRequestCommand, RequestModel>()
             .ForMember(d => d.Subject, o => o.Ignore())
             .ForAllMembers(opts => { opts.Condition((_, _, srcMember) => srcMember != null); });
+        CreateMap<RequestModel, LessonModel>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.RequestId, o => o.MapFrom(x => x.Id))
+            .ForMember(d => d.Comment, o => o.MapFrom(x => x.TutorComment));
 
-
-        //OLD_OLD_OLD
-
-        // CreateMap<UpdateRequestCommand, LessonModel>()
-        // .ForMember(d => d.Subject, o => o.Ignore());
-        //     .ForAllMembers(opts => { opts.Condition((_, _, srcMember) => srcMember != null); });
-        //
-        // CreateMap<RequestModel, LessonRequestDto>();
-        //
-        // CreateMap<RequestModel, LessonModel>()
-        //     .ForMember(d => d.TutorProfileId, o => o.MapFrom(x => x.TutorId));
-        // CreateMap<LessonModel, LessonDetailsDto>()
-        //     .ForMember(d => d.Title, o => o.MapFrom(x => $"{x.Subject.Name} - {x.Course.Title}"))
-        //     .ForMember(d => d.Subject, o => o.MapFrom(x => x.Subject.Name))
-        //     .ForMember(d => d.CourseId, o => o.MapFrom(x => x.Course.Id))
-        //     .ForMember(d => d.CourseName, o => o.MapFrom(x => x.Course.Title));
-        //
-        //
-        // // TutorProfileModel <-> TutorDto
-        // CreateMap<TutorDto, TutorProfileModel>()
-        //     .ForMember(d => d.About, o => o.Ignore())
-        //     .ForMember(d => d.City, o => o.Ignore())
-        //     ;
-        // CreateMap<TutorProfileModel, TutorDto>()
-        //     .ForMember(d => d.About, o => o.Ignore())
-        //     .ForMember(d => d.City, o => o.MapFrom(x => x.City.FullName()))
-        //     ;
+        //Lessons
+        CreateMap<LessonModel, Lesson>()
+            .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Subject.Name))
+            .ForMember(d => d.Students, o => o.Ignore())
+            .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()));
     }
-
-    // .ForMember(d => d.Subjects,
-    //     o => o.MapFrom(
-    //         x => x.Subjects.Values.ToList()))
-    // .ForMember(d => d.ReviewString,
-    //     o => o.MapFrom(
-    //         x => $"{x.RatingValue} ({x.ReviewCount} reviews)"));
-    // CreateMap<TutorDto, DetailsViewModel>()
-    //     .ForMember(d => d.Subjects,
-    //         o => o.Ignore())
-    //     .AfterMap((dto, vm, context) => vm.TutorCard = context.Mapper.Map<TutorCardViewModel>(dto));
 }

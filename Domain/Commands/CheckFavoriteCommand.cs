@@ -9,7 +9,7 @@ namespace Domain.Commands;
 public class CheckFavoriteCommand : IRequest<bool>
 {
     public int UserId { get; set; }
-    public int TutorProfileId { get; set; }
+    public int TutorId { get; set; }
     public bool Status { get; set; }
 
     public class CheckFavoriteCommandHandler : BaseMediatrHandler<CheckFavoriteCommand, bool>
@@ -19,19 +19,19 @@ public class CheckFavoriteCommand : IRequest<bool>
         {
         }
 
-        public override async Task<bool> Handle(CheckFavoriteCommand request, CancellationToken cancellationToken)
+        public override async Task<bool> Handle(CheckFavoriteCommand r, CancellationToken token)
         {
             var tutorSaved = ApplicationDb.FavoriteTutors.Where(x =>
-                    x.UserId == request.UserId
-                    && x.ProfileId == request.TutorProfileId)
+                    x.UserId == r.UserId
+                    && x.ProfileId == r.TutorId)
                 .FirstOrDefault();
-            if (request.Status && tutorSaved == null)
+            if (r.Status && tutorSaved == null)
                 ApplicationDb.FavoriteTutors.Add(new FavoriteTutorModel
                 {
-                    ProfileId = request.TutorProfileId,
-                    UserId = request.UserId
+                    ProfileId = r.TutorId,
+                    UserId = r.UserId
                 });
-            else if (!request.Status && tutorSaved != null)
+            else if (!r.Status && tutorSaved != null)
                 ApplicationDb.FavoriteTutors.Remove(tutorSaved);
             await ApplicationDb.SaveChangesAsync();
             return true;

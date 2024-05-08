@@ -62,7 +62,7 @@
                 @Html.DisplayFor(modelItem => item.TutorComment)
             </td>
             <td>
-                @if (item.IsTutor && item.Status == CourseRequestStatus.New)
+                @if (item.IsTutor && item.Status == LessonRequestStatus.New)
                 {
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateStatus" data-item="@item.ToJson()">Відповісти</button>
                 }

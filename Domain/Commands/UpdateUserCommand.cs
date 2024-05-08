@@ -25,7 +25,7 @@ public class UpdateUserCommand : IRequest<bool>
             //Check exist
             if (dbUser.Id == 0 || !ApplicationDb.Users.Any(x => x.Id == dbUser.Id))
                 throw new Exception("Ідентіфікатор користувача не знайдено.");
-
+            //TODO: NewAvatarFileAvatar Load new Avatar
             Mapper.Map(r.Profile, dbUser);
             ApplicationDb.Users.Update(dbUser);
             await ApplicationDb.SaveChangesAsync(token);

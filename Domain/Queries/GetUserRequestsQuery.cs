@@ -5,7 +5,6 @@ using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using Domain.Entities;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +23,8 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
         {
             List<LessonRequest> listRequest = new();
             var q = ApplicationDb.Requests
-                .Include(x => x.Tutor.User)
+                .Include(x => x.Tutor)
+                .ThenInclude(x => x.User)
                 .Include(x => x.Subject)
                 .Include(x => x.Created).AsQueryable();
 

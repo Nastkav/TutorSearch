@@ -19,10 +19,9 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
     public virtual DbSet<CityModel> Cities { get; set; } = null!;
     public virtual DbSet<SubjectModel> Subjects { get; set; } = null!;
 
-    public virtual DbSet<TutorProfileModel> TutorProfiles { get; set; } = null!;
+    public virtual DbSet<TutorModel> Tutors { get; set; } = null!;
 
-    public virtual DbSet<AvailableTime> AvailableTimes { get; set; } = null!;
-    public virtual DbSet<CourseModel> Courses { get; set; } = null!;
+    public virtual DbSet<AvailableTimeModel> AvailableTimes { get; set; } = null!;
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
     public virtual DbSet<TaskModel> Tasks { get; set; } = null!;
     public virtual DbSet<SolutionModel> Solutions { get; set; } = null!;
@@ -43,7 +42,7 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
     {
         var entityFavoriteTutor = builder.Entity<FavoriteTutorModel>(entity =>
         {
-            entity.HasKey(x => new { UserModelId = x.UserId, TutorProfileId = x.ProfileId });
+            entity.HasKey(x => new { UserModelId = x.UserId, TutorId = x.ProfileId });
             entity.HasOne(x => x.User)
                 .WithMany(x => x.FavoriteTutors)
                 .HasForeignKey(x => x.UserId);
@@ -51,19 +50,19 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
 
         builder.Entity<UserModel>(entity =>
         {
-            entity.HasOne(o => o.TutorProfile).WithOne()
-                .HasForeignKey<TutorProfileModel>(o => o.Id);
-            entity.Navigation(o => o.TutorProfile).IsRequired();
+            entity.HasOne(o => o.Tutor).WithOne()
+                .HasForeignKey<TutorModel>(o => o.Id);
+            entity.Navigation(o => o.Tutor).IsRequired();
         });
 
         builder.Entity<UserModel>(entity =>
         {
-            entity.HasOne(o => o.TutorProfile).WithOne()
-                .HasForeignKey<TutorProfileModel>(o => o.Id);
-            entity.Navigation(o => o.TutorProfile).IsRequired();
+            entity.HasOne(o => o.Tutor).WithOne()
+                .HasForeignKey<TutorModel>(o => o.Id);
+            entity.Navigation(o => o.Tutor).IsRequired();
         });
 
-        builder.Entity<TutorProfileModel>(entity =>
+        builder.Entity<TutorModel>(entity =>
         {
             entity.HasOne(o => o.About).WithOne()
                 .HasForeignKey<AboutTutorModel>(o => o.Id);
@@ -75,19 +74,15 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
             .WithMany(e => e.Lessons)
             .UsingEntity("StudentLessons");
 
-        builder.Entity<TutorProfileModel>()
+        builder.Entity<TutorModel>()
             .HasMany(e => e.Subjects)
             .WithMany(e => e.Profiles)
             .UsingEntity("ProfileSubjects");
 
-        builder.Entity<CourseModel>()
-            .HasMany(e => e.Students)
-            .WithMany(e => e.Courses)
-            .UsingEntity("StudentsOnCourse");
-        builder.Entity<AvailableTime>()
+        builder.Entity<AvailableTimeModel>()
             .Property(p => p.StartTime)
             .HasConversion(new TimeOnlyConverter());
-        builder.Entity<AvailableTime>()
+        builder.Entity<AvailableTimeModel>()
             .Property(p => p.EndTime)
             .HasConversion(new TimeOnlyConverter());
         // InitialSeed(builder);
@@ -96,10 +91,9 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
 
     private void OnBeforeSaving()
     {
-        var userId = 99999; //TODO: Get Real UserId
         var entries = ChangeTracker.Entries();
-        ITrackable.BeforeSaving(entries, userId);
+        ITrackable.BeforeSaving(entries);
     }
 
-public DbSet<Domain.Commands.UpdateRequestCommand> UpdateRequestCommand { get; set; } = default!;
+    public DbSet<UpdateRequestCommand> UpdateRequestCommand { get; set; } = default!;
 }

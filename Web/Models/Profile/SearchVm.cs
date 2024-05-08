@@ -1,9 +1,7 @@
-using System.Drawing.Printing;
 using Domain.Queries;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Web.Models.Shared;
 
-namespace Web.Models.TutorProfile;
+namespace Web.Models.Profile;
 
 public class SearchVm
 {

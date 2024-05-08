@@ -25,15 +25,15 @@ public class UpdateTutorCommand : IRequest<bool>
         public override async Task<bool> Handle(UpdateTutorCommand r, CancellationToken token)
         {
             //Check exist
-            if (!ApplicationDb.Users.Any(x => x.Id == r.Profile.Id && x.TutorProfileEnabled))
+            if (!ApplicationDb.Users.Any(x => x.Id == r.Profile.Id && x.ProfileEnabled))
                 throw new Exception("Ідентіфікатор вчителя не знайдено.");
 
             //Select from database
-            var dbProfile = await ApplicationDb.TutorProfiles
+            var dbProfile = await ApplicationDb.Tutor
                                 .Include(x => x.About)
                                 .Include(x => x.Subjects)
                                 .FirstOrDefaultAsync(x => x.Id == r.Profile.Id)
-                            ?? new TutorProfileModel();
+                            ?? new TutorModel();
             var newObject = dbProfile.Id == 0;
 
             //Mapping

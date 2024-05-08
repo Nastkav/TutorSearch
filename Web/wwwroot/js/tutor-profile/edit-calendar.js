@@ -22,7 +22,7 @@ function createCalendar() {
         firstDay: 1,
         select: addNewEvent,
         eventClick: removeEvent,
-        eventSources: [{ events: getEvents }]
+        eventSources: [{events: getEvents}]
     });
     calendar.render();
 }
@@ -94,3 +94,7 @@ function removeEvent(info) {
         }
     })
 }
+
+
+
+

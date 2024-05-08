@@ -139,11 +139,11 @@ public class RegisterModel : PageModel
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        [StringLength(254, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.",
+        [StringLength(254, ErrorMessage = "{0} РјР°С” РјС–СЃС‚РёС‚Рё РїСЂРёРЅР°Р№РјРЅС– {2} С– РЅРµ Р±С–Р»СЊС€Рµ {1} СЃРёРјРІРѕР»С–РІ.",
             MinimumLength = 6)]
         [Required]
-        [EmailAddress(ErrorMessage = "Пошта не є дійсною адресою електронної пошти.")]
-        [Display(Name = "Пошта")]
+        [EmailAddress(ErrorMessage = "РџРѕС€С‚Р° РЅРµ С” РґС–Р№СЃРЅРѕСЋ Р°РґСЂРµСЃРѕСЋ РµР»РµРєС‚СЂРѕРЅРЅРѕС— РїРѕС€С‚Рё.")]
+        [Display(Name = "РџРѕС€С‚Р°")]
 
         public string Email { get; set; }
 
@@ -152,10 +152,10 @@ public class RegisterModel : PageModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [Required]
-        [StringLength(100, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.",
+        [StringLength(100, ErrorMessage = "{0} РјР°С” РјС–СЃС‚РёС‚Рё РїСЂРёРЅР°Р№РјРЅС– {2} С– РЅРµ Р±С–Р»СЊС€Рµ {1} СЃРёРјРІРѕР»С–РІ.",
             MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
+        [Display(Name = "РџР°СЂРѕР»СЊ")]
         public string Password { get; set; }
 
         /// <summary>
@@ -163,8 +163,8 @@ public class RegisterModel : PageModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [DataType(DataType.Password)]
-        [Display(Name = "Підтвердити пароль")]
-        [Compare("Password", ErrorMessage = "Пароль і пароль підтвердження не збігаються.")]
+        [Display(Name = "РџС–РґС‚РІРµСЂРґРёС‚Рё РїР°СЂРѕР»СЊ")]
+        [Compare("Password", ErrorMessage = "РџР°СЂРѕР»СЊ С– РїР°СЂРѕР»СЊ РїС–РґС‚РІРµСЂРґР¶РµРЅРЅСЏ РЅРµ Р·Р±С–РіР°СЋС‚СЊСЃСЏ.")]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -88,7 +88,7 @@ public class LoginModel : PageModel
                 return RedirectToPage("./Lockout");
             }
 
-            ModelState.AddModelError(string.Empty, "Недійсна спроба входу. ");
+            ModelState.AddModelError(string.Empty, "РќРµРґС–Р№СЃРЅР° СЃРїСЂРѕР±Р° РІС…РѕРґСѓ. ");
             return Page();
         }
 
@@ -122,7 +122,7 @@ public class LoginModel : PageModel
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        [Display(Name = "Запам'ятати?")]
+        [Display(Name = "Р—Р°РїР°Рј'СЏС‚Р°С‚Рё?")]
         public bool RememberMe { get; set; }
     }
 }

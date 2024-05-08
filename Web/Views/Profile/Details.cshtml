@@ -1,4 +1,4 @@
-@model Web.Models.TutorProfile.ProfileVm
+@model Web.Models.Profile.ProfileVm
 
 @{
     ViewBag.Title = "Tutor Profile";
@@ -7,10 +7,6 @@
 <div class="row">
     <div class="row mb-2"></div>
     <h1 class="text-center">@ViewData["Title"]</h1>
-    @if (!@Model.UserVm.TutorProfileEnabled)
-    {
-        <h2>Цей профіль вимкнено</h2>
-    }
     @if (@Model.IdentityId == Model.UserVm.Id)
     {
         <div class="m-2">
@@ -26,43 +22,45 @@
     }
 </div>
 
-@if (@Model.TutorVm != null)
-{
-    <div class="card card-flex align-items-center bg-light mb-3">
-        <div class="row g-0">
-            <div class="col-4">
-                <img class="img-fluid rounded-start"
-                     src="@Model.TutorVm.ImgPath"
-                     alt="..." />
-            </div>
+<div class="card card-flex align-items-center bg-light mb-3">
+    <div class="row g-0">
+        <div class="col-4">
+            <img class="img-fluid rounded-start"
+                 src="@Model.UserVm.Avatar"
+                 alt="..."/>
         </div>
-        <div class="col">
-            <div class="card-body">
-                <div class="row card-title">
-                    <div class="col lead">
-                        <a>@Model.UserVm.FullName()</a>
+    </div>
+    <div class="col">
+        <div class="card-body">
+            <div class="row card-title">
+                <div class="col lead">
+                    <a>@Model.UserVm.FullName()</a>
 
-                        @if (Model.TutorVm.ReviewCount > 0)
-                        {
-                            <i class="fa fa-star"></i>
-                            @Model.TutorVm.ReviewValue
-                            //TODO: ReviewValue + Count
-                        }
-                    </div>
+                    @if (Model.TutorVm != null && Model.TutorVm.ReviewCount > 0)
+                    {
+                        <i class="fa fa-star"></i>
+                        @Model.TutorVm.ReviewValue //TODO: ReviewValue + Count
+                    }
+                </div>
+                @if (Model.TutorVm != null)
+                {
                     <div class="col text-end">
                         <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorVm.HourRate грн/час</span>
                     </div>
-                </div>
-                <p class="card-text">@Model.TutorVm.Descriptions</p>
-                @if (Model.UserVm.CitytId != "0")
-                {
-                    <small class="text-muted">
-                        <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CitytId)
-                    </small>
                 }
             </div>
+            <p class="card-text">@Model.TutorVm?.Descriptions</p>
+            @if (Model.UserVm.CityId != "0")
+            {
+                <small class="text-muted">
+                    <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CityId)
+                </small>
+            }
         </div>
     </div>
+</div>
+@if (@Model.TutorVm != null)
+{
     <div class="row justify-content-center mb-3">
         <div class="btn-group col-md-8 col-sm" role="group" aria-label="Select Tutor Part">
             <input type="radio" class="btn-check" name="select_part" id="select_part1" autocomplete="off" checked="">
@@ -150,9 +148,9 @@
         </div>
     </div>
 
-    <partial name="RequestForm" model="@Model.CreateRequestCommand" />
+    <partial name="RequestForm" model="@Model.CreateRequestCommand"/>
     @section Scripts
     {
-    <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
     }
 }

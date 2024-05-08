@@ -23,7 +23,7 @@ var services = builder.Services;
 //Infra
 services.AddInfra(connectionString);
 services.AddApplication();
-services.AddAutoMapper(typeof(WebMappingProfile), typeof(DomainMappingProfile));
+services.AddAutoMapper(typeof(DomainMappingProfile));
 services.AddDatabaseDeveloperPageExceptionFilter();
 services.AddDefaultIdentity<UserModel>(o => o.SignIn.RequireConfirmedEmail = false)
     .AddEntityFrameworkStores<AppDbContext>();

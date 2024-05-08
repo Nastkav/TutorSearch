@@ -28,8 +28,6 @@ public class Tutor
     [MinLength(0)]
     public string Descriptions { get; set; } = string.Empty;
 
-    [MaxLength(400)] public string ImgPath { get; set; } = string.Empty;
-
     [Required()]
     [DisplayName("Ціна за одну годину")]
     [DataType(DataType.Currency)]

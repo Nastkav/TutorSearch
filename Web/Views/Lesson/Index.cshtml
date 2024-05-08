@@ -1,0 +1,66 @@
+@model Web.Models.Lesson.ListLessonViewModel
+
+@{
+    ViewData["Title"] = "Lessons";
+}
+
+<h1>Lessons</h1>
+@if (Model.IsTutor)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().SubjectName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().TutorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().StudentNames)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().To)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().Comment)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Lessons)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentNames)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.From)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.To)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Перегляд</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

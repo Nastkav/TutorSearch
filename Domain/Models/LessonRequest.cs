@@ -14,7 +14,7 @@ public class LessonRequest
     [DisplayName("Коментар вчителя")] public string TutorComment { get; set; } = string.Empty;
 
 
-    [DisplayName("Статус")] public CourseRequestStatus Status { get; set; }
+    [DisplayName("Статус")] public LessonRequestStatus Status { get; set; }
     [DisplayName("Початок")] public DateTime From { get; set; }
     [DisplayName("Кінець")] public DateTime To { get; set; }
 

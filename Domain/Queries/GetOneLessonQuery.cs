@@ -1,0 +1,44 @@
+using Domain.Models;
+using Domain.Port.Driving;
+using Infra.DatabaseAdapter;
+using Infra.Ports;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
+using Infra.DatabaseAdapter.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Domain.Queries;
+
+public class GetOneLessonQuery : IRequest<Lesson?>
+{
+    public int LessonId { get; set; }
+    public int UserId { get; set; }
+
+    public class GetOneLessonQueryHandler : BaseMediatrHandler<GetOneLessonQuery, Lesson?>
+    {
+        public override async Task<Lesson?> Handle(GetOneLessonQuery r, CancellationToken token)
+        {
+            //Запит
+            var dbLesson = await ApplicationDb.Lessons
+                .Include(x => x.Students)
+                .Include(x => x.Subject)
+                .Include(x => x.Tutor)
+                .FirstOrDefaultAsync(x =>
+                    (x.TutorId == r.UserId || x.Students.Any(s => s.Id == r.UserId))
+                    && x.Id == r.LessonId);
+            if (dbLesson == null)
+                return null;
+
+            var lesson = Mapper.Map<Lesson>(dbLesson);
+            if (dbLesson.Students.Count > 0)
+                lesson.StudentsIds = dbLesson.Students.Select(x => x.Id).ToList();
+            return lesson;
+        }
+
+        public GetOneLessonQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+            : base(loggerFactory, dbContext, mapper)
+        {
+        }
+    }
+}
