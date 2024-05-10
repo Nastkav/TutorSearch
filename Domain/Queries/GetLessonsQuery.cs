@@ -31,8 +31,8 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
                 .Where(x => x.To > r.From || r.To > x.From)
-                .Where(x => !r.UserId.HasValue || x.Students.Any(s => s.Id == r.UserId))
-                .Where(x => !r.TutorId.HasValue || x.TutorId == r.TutorId)
+                .Where(x => !r.UserId.HasValue || x.Students.Any(s => s.Id == r.UserId) || //Взтяти всі записи учня
+                            !r.TutorId.HasValue || x.TutorId == r.TutorId) //Взтяти всі записи вчителя
                 .ToList();
 
             var lesList = Mapper.Map<List<Lesson>>(dbLessons);

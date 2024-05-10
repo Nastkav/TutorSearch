@@ -8,7 +8,7 @@ public class LessonViewModel
     public int UserId { get; set; }
     public bool IsTutor { get; set; }
     public List<SelectListItem> Subjects { get; set; } = [];
-    public Domain.Models.Lesson Lesson { get; set; } = null!;
+    public Domain.Models.Lesson Lesson { get; set; } = new();
 
     public List<SelectListItem> HisStudents { get; set; } = [];
 }

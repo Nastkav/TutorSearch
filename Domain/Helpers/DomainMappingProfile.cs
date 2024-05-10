@@ -42,5 +42,9 @@ public class DomainMappingProfile : Profile
             .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Subject.Name))
             .ForMember(d => d.Students, o => o.Ignore())
             .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()));
+        CreateMap<Lesson, LessonModel>()
+            .ForMember(d => d.Students, o => o.Ignore())
+            .ForMember(d => d.Tutor, o => o.Ignore())
+            ;
     }
 }

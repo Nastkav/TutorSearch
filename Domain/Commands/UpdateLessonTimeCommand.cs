@@ -17,6 +17,7 @@ public class UpdateLessonTimeCommand : IRequest<int>
     public DateTime To { get; set; }
     public string? Comment { get; set; }
     public string? Subject { get; set; }
+    public int? SubjectId { get; set; }
 
     public class UpdateLessonTimeCommandHandler : BaseMediatrHandler<UpdateLessonTimeCommand, int>
     {
@@ -51,6 +52,7 @@ public class UpdateLessonTimeCommand : IRequest<int>
             dbLesson.From = r.From;
             dbLesson.To = r.To;
             //Subject
+            if (r.SubjectId != null) dbLesson.SubjectId = r.SubjectId.Value;
             if (r.Subject != null)
             {
                 var dbSubject = ApplicationDb.Subjects.FirstOrDefault(x => x.Name == r.Subject);

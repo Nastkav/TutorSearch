@@ -13,8 +13,8 @@ public class LessonModel : ITrackable
     [MaxLength(50)] public string Title { get; set; } = string.Empty;
     [MaxLength(200)] public string Comment { get; set; } = string.Empty;
 
-    public int RequestId { get; set; }
-    public RequestModel Request { get; set; } = null!;
+    public int? RequestId { get; set; }
+    public RequestModel? Request { get; set; } = null;
     public int SubjectId { get; set; }
     public SubjectModel Subject { get; set; } = null!;
 

@@ -24,6 +24,7 @@ public class GetOneLessonQuery : IRequest<Lesson?>
                 .Include(x => x.Students)
                 .Include(x => x.Subject)
                 .Include(x => x.Tutor)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x =>
                     (x.TutorId == r.UserId || x.Students.Any(s => s.Id == r.UserId))
                     && x.Id == r.LessonId);
