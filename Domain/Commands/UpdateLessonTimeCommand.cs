@@ -9,7 +9,7 @@ using Infra.DatabaseAdapter.Models;
 
 namespace Domain.Commands;
 
-public class UpdateLessonTimeCommand : IRequest<int>
+public class UpdateSessionCommand : IRequest<int>
 {
     public int UpdatedBy { get; set; }
     public int EventId { get; set; }
@@ -19,9 +19,9 @@ public class UpdateLessonTimeCommand : IRequest<int>
     public string? Subject { get; set; }
     public int? SubjectId { get; set; }
 
-    public class UpdateLessonTimeCommandHandler : BaseMediatrHandler<UpdateLessonTimeCommand, int>
+    public class UpdateSessionCommandHandler : BaseMediatrHandler<UpdateSessionCommand, int>
     {
-        public override async Task<int> Handle(UpdateLessonTimeCommand r, CancellationToken token)
+        public override async Task<int> Handle(UpdateSessionCommand r, CancellationToken token)
         {
             //On day event
             if (r.From.Date != r.To.Date)
@@ -69,7 +69,7 @@ public class UpdateLessonTimeCommand : IRequest<int>
             return dbLesson.Id;
         }
 
-        public UpdateLessonTimeCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public UpdateSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }

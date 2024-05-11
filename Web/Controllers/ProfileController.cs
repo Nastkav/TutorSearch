@@ -4,6 +4,7 @@ using AutoMapper.Configuration.Annotations;
 using Domain.Commands;
 using Domain.Queries;
 using Domain.Exceptions;
+using Domain.Helpers;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,39 +20,17 @@ namespace Web.Controllers;
 [Authorize]
 public class ProfileController : Controller
 {
-    private readonly ILogger<ProfileController> _logger;
-    private readonly IMapper _mapper;
     private readonly IMediator _mediator;
+    private readonly ControllerHelpers _helper;
     public int IdentityId => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-    public ProfileController(ILogger<ProfileController> logger, IMapper mapper, IMediator mediator)
+    public ProfileController(IMediator mediator)
     {
-        _logger = logger;
-        _mapper = mapper;
         _mediator = mediator;
+        _helper = new ControllerHelpers(mediator);
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    private async Task<List<CheckboxViewModel>> GetListCheckbox(IRequest<Dictionary<int, string>> q)
-    {
-        var query = await _mediator.Send(q);
-        var list = query
-            .Select(o => new CheckboxViewModel { Id = o.Key, LabelName = o.Value, IsChecked = false })
-            .ToList();
-        return list;
-    }
-
-    [ApiExplorerSettings(IgnoreApi = true)]
-    private async Task<List<SelectListItem>> GetSelectList(string defaultText, IRequest<Dictionary<int, string>> q)
-    {
-        var query = await _mediator.Send(q);
-        var list = query
-            .Select(o => new SelectListItem { Value = o.Key.ToString(), Text = o.Value })
-            .ToList();
-        list.Insert(0, new SelectListItem(defaultText, "0"));
-        return list;
-    }
-
     [HttpGet]
     [Route("/[controller]")]
     [AllowAnonymous]
@@ -59,8 +38,8 @@ public class ProfileController : Controller
     {
         //Main Lists
         var shareSubjects = await _mediator.Send(new GetAllSubjectsQuery());
-        model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
-        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Cities = await _helper.GetSelectList(new GetAllCitiesQuery(), "Оберіть населений пункт");
         //Add Cards
         var userIds = await _mediator.Send(model.Filters);
         foreach (var userId in userIds)
@@ -97,11 +76,11 @@ public class ProfileController : Controller
     public async Task<ProfileVm> GetUserModel(int userId)
     {
         ProfileVm model = new() { IdentityId = IdentityId };
-        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        model.Cities = await _helper.GetSelectList(new GetAllCitiesQuery(), "Оберіть населений пункт");
         model.UserVm = await _mediator.Send(new GetUserProfileQuery { ProfileId = userId });
         if (model.UserVm.ProfileEnabled)
         {
-            model.Subjects = await GetSelectList("Оберіть тематику", new GetAllSubjectsQuery());
+            model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
             model.TutorVm = await _mediator.Send(new GetTutorProfileQuery { ProfileId = userId });
             model.CreateRequestCommand.Subjects = model.Subjects; //Необхідний для показу списку предметів
             model.CreateRequestCommand.TutorId = userId;
@@ -120,6 +99,7 @@ public class ProfileController : Controller
     [HttpPost]
     public async Task<IActionResult> CheckFavorite(CheckFavoriteCommand command)
     {
+        //TODO:CheckFavorite
         try
         {
             if (command.UserId != IdentityId)
@@ -129,7 +109,6 @@ public class ProfileController : Controller
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message);
             return BadRequest(e.Message);
         }
     }
@@ -154,11 +133,11 @@ public class ProfileController : Controller
                 if (model.TutorVm.Id == 0)
                     model.TutorVm.Id = model.UserVm.Id;
                 await _mediator.Send(new UpdateTutorCommand { Profile = model.TutorVm });
-                model.Subjects = await GetSelectList("Оберіть предмет", new GetAllSubjectsQuery());
+                model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть предмет");
             }
         }
 
-        model.Cities = await GetSelectList("Оберіть населений пункт", new GetAllCitiesQuery());
+        model.Cities = await _helper.GetSelectList(new GetAllCitiesQuery(), "Оберіть населений пункт");
         return View(model);
     }
 }

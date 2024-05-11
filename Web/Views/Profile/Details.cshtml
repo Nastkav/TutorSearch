@@ -34,7 +34,7 @@
         <div class="card-body">
             <div class="row card-title">
                 <div class="col lead">
-                    <a>@Model.UserVm.FullName()</a>
+                    <a>@Model.UserVm.FullName</a>
 
                     @if (Model.TutorVm != null && Model.TutorVm.ReviewCount > 0)
                     {
@@ -53,7 +53,7 @@
             @if (Model.UserVm.CityId != "0")
             {
                 <small class="text-muted">
-                    <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CityId)
+                    <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CityId)?.Text
                 </small>
             }
         </div>

@@ -65,7 +65,8 @@ public class CreateRequestCommand : IRequest<int>
                 throw new Exception("Ви вже маєте активний запит на курс для цього викладача");
 
             //Перевірка перетинання часу    
-            if (await ApplicationDb.Lessons.CountAsync(x => x.To > newRequest.From || newRequest.To > x.From) > 0)
+            //aF > bT and bF > aT
+            if (await ApplicationDb.Lessons.CountAsync(x => x.From > newRequest.To && newRequest.From > x.To) > 0)
                 throw new Exception("Додавання неможливе, час перетинається");
 
             await ApplicationDb.Requests.AddAsync(newRequest);

@@ -7,15 +7,15 @@ using Domain.Port.Driving;
 
 namespace Domain.Commands;
 
-public class DeleteEventTimeCommand : IRequest<bool>
+public class DeleteSessionCommand : IRequest<bool>
 {
     public TimeType Type { get; set; }
     public int UpdatedBy { get; set; }
     public int EventId { get; set; }
 
-    public class DeleteEventTimeCommandHandler : BaseMediatrHandler<DeleteEventTimeCommand, bool>
+    public class DeleteSessionCommandHandler : BaseMediatrHandler<DeleteSessionCommand, bool>
     {
-        public override async Task<bool> Handle(DeleteEventTimeCommand r, CancellationToken token)
+        public override async Task<bool> Handle(DeleteSessionCommand r, CancellationToken token)
         {
             if (r.Type == TimeType.Available)
             {
@@ -37,7 +37,7 @@ public class DeleteEventTimeCommand : IRequest<bool>
             return true;
         }
 
-        public DeleteEventTimeCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public DeleteSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }

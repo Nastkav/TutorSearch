@@ -1,7 +1,6 @@
 using AutoMapper;
 using Domain.Commands;
 using Domain.Models;
-using Domain.Queries;
 using Infra.DatabaseAdapter.Models;
 
 namespace Domain.Helpers;
@@ -12,6 +11,7 @@ public class DomainMappingProfile : Profile
     {
         //User & Tutor Profiles
         CreateMap<UserModel, User>()
+            .ForMember(d => d.FullName, o => o.MapFrom(x => x.FullName()))
             .AfterMap((s, d) => d.Avatar = s.Avatar != string.Empty ? s.Avatar : "/img/example_face.jpg");
         CreateMap<User, UserModel>()
             .AfterMap((s, d) => d.Avatar = s.Avatar != string.Empty ? s.Avatar : "/img/example_face.jpg");
@@ -44,7 +44,20 @@ public class DomainMappingProfile : Profile
             .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()));
         CreateMap<Lesson, LessonModel>()
             .ForMember(d => d.Students, o => o.Ignore())
-            .ForMember(d => d.Tutor, o => o.Ignore())
-            ;
+            .ForMember(d => d.Tutor, o => o.Ignore());
+
+
+        //Assignments
+        CreateMap<AssignmentModel, Assignment>()
+            .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Subject.Name))
+            .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()))
+            .ForMember(d => d.Deadline, o => o.MapFrom(x => DateOnly.FromDateTime(x.Deadline)))
+            .ForMember(d => d.AttachmentFile, o => o.Ignore())
+            .ForMember(d => d.StudentSolutions, o => o.Ignore());
+        CreateMap<Assignment, AssignmentModel>()
+            .ForMember(d => d.Deadline, o => o.MapFrom(x => x.Deadline.ToDateTime(TimeOnly.MinValue)))
+            .ForMember(d => d.Subject, o => o.Ignore())
+            .ForMember(d => d.Solutions, o => o.Ignore())
+            .ForMember(d => d.Files, o => o.Ignore());
     }
 }

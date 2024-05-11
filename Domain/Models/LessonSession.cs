@@ -2,7 +2,7 @@ using Domain.Port.Driving;
 
 namespace Domain.Models;
 
-public class LessonEvent
+public class LessonSession
 {
     public int Id { get; set; }
     public TimeType Type { get; set; }

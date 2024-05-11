@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infra.DatabaseAdapter.Models;
@@ -27,5 +28,5 @@ public class UserModel : IdentityUser<int>
 
     public virtual List<FileModel> Files { get; set; } = [];
 
-    public string FullName() => $"{Name} {Patronymic} {Surname}";
+    public string FullName() => Name.Length > 2 ? $"{Name} {Patronymic} {Surname}" : Email ?? "";
 }

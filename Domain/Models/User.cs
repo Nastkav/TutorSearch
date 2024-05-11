@@ -37,5 +37,5 @@ public class User
 
     public IFormFile? NewAvatarFile { get; set; }
 
-    public string FullName() => $"{Name} {Patronymic} {Surname}";
+    public string FullName { get; set; } = string.Empty;
 }

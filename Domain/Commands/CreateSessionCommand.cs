@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Domain.Commands;
 
-public class CreateLessonTimeCommand : IRequest<int>
+public class CreateSessionCommand : IRequest<int>
 {
     public int CreatedBy { get; set; }
 
@@ -16,17 +16,17 @@ public class CreateLessonTimeCommand : IRequest<int>
     public string Title { get; set; } = "";
     public DateTimeOffset From { get; set; }
     public DateTimeOffset To { get; set; }
-    public List<int> Students { get; set; }
+    public List<int> Students { get; set; } = [];
 
 
-    public class CreateLessonTimeCommandHandler : BaseMediatrHandler<CreateLessonTimeCommand, int>
+    public class CreateSessionCommandHandler : BaseMediatrHandler<CreateSessionCommand, int>
     {
-        public CreateLessonTimeCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public CreateSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }
 
-        public override async Task<int> Handle(CreateLessonTimeCommand r, CancellationToken token)
+        public override async Task<int> Handle(CreateSessionCommand r, CancellationToken token)
         {
             //On day event
             if (r.From.Date != r.To.Date)
@@ -85,7 +85,7 @@ public class CreateLessonTimeCommand : IRequest<int>
                     //Перевірка перетинання часу
                     //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
                     var lessonOnRange = ApplicationDb.Lessons
-                        .Where(x => x.To > r.From || r.To > x.From).ToList();
+                        .Where(x => x.From > r.To || r.From > x.To).ToList();
                     if (lessonOnRange.Count > 0)
                         throw new Exception("Додавання неможливе, час перетинається");
 

@@ -6,6 +6,7 @@ using Web.Controllers;
 using Domain.Queries;
 using Domain.Commands;
 using Domain.Exceptions;
+using Domain.Helpers;
 using Web.Models.LessonRequest;
 
 namespace Web.Controllers;
@@ -13,14 +14,14 @@ namespace Web.Controllers;
 [Route("[controller]/[action]")]
 public class LessonRequestController : Controller
 {
-    private readonly ILogger<LessonRequestController> _logger;
     private readonly IMediator _mediator;
-    public int UserId => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+    private readonly ControllerHelpers _helper;
+    public int IdentityId => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-    public LessonRequestController(ILogger<LessonRequestController> logger, IMediator mediator)
+    public LessonRequestController(IMediator mediator)
     {
-        _logger = logger;
         _mediator = mediator;
+        _helper = new ControllerHelpers(mediator);
     }
 
     [HttpGet]
@@ -29,8 +30,10 @@ public class LessonRequestController : Controller
     {
         var vm = new LessonRequestVm
         {
-            MyRequests = await _mediator.Send(new GetUserRequestsQuery { UserId = UserId, IsTutor = false }),
-            RequestsForMe = await _mediator.Send(new GetUserRequestsQuery { UserId = UserId, IsTutor = true })
+            MyRequests =
+                await _mediator.Send(new GetUserRequestsQuery { UserId = IdentityId, IsTutor = false }),
+            RequestsForMe = await _mediator.Send(new GetUserRequestsQuery
+                { UserId = IdentityId, IsTutor = true })
         };
         return View(vm);
     }
@@ -38,32 +41,38 @@ public class LessonRequestController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateRequestCommand command)
     {
-        if (command.CreatedId == 0)
-            command.CreatedId = UserId;
-        else if (command.CreatedId != UserId)
-            throw new IncorrectUserId($"command.CreatedBy={command.CreatedId},app.UserId={UserId}");
+        try
+        {
+            if (command.CreatedId == 0)
+                command.CreatedId = IdentityId;
+            else if (command.CreatedId != IdentityId)
+                throw new IncorrectUserId($"command.CreatedBy={command.CreatedId},app.UserId={IdentityId}");
 
-        if (ModelState.IsValid)
-        {
-            var result = await _mediator.Send(command);
-            return Json(result);
+            if (ModelState.IsValid)
+            {
+                var result = await _mediator.Send(command);
+
+                return Json(result);
+            }
         }
-        else
+        catch (Exception e)
         {
-            var errList = (from item in ModelState
-                where item.Value.Errors.Any()
-                select item.Value.Errors[0].ErrorMessage).ToList();
-            return StatusCode(500, errList);
+            ModelState.AddModelError("", e.Message);
         }
+
+        var errList = (from item in ModelState
+            where item.Value.Errors.Any()
+            select item.Value.Errors[0].ErrorMessage).ToList();
+        return StatusCode(500, errList);
     }
 
     [HttpPost]
     public async Task<IActionResult> Update(UpdateRequestCommand command)
     {
         if (command.UpdatedBy == 0)
-            command.UpdatedBy = UserId;
-        else if (command.UpdatedBy != UserId)
-            throw new IncorrectUserId($"command.UpdatedBy={command.UpdatedBy},app.UserId={UserId}");
+            command.UpdatedBy = IdentityId;
+        else if (command.UpdatedBy != IdentityId)
+            throw new IncorrectUserId($"command.UpdatedBy={command.UpdatedBy},app.UserId={IdentityId}");
         await _mediator.Send(command);
         return RedirectToAction(nameof(Index));
     }

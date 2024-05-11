@@ -12,7 +12,7 @@ public class DeleteLessonCommand : IRequest<bool>
     public int LessonId { get; set; }
     public int TutorId { get; set; }
 
-    public class DeleteLessonTimeCommandHandler : BaseMediatrHandler<DeleteLessonCommand, bool>
+    public class DeleteLessonCommandHandler : BaseMediatrHandler<DeleteLessonCommand, bool>
     {
         public override async Task<bool> Handle(DeleteLessonCommand r, CancellationToken token)
         {
@@ -26,7 +26,7 @@ public class DeleteLessonCommand : IRequest<bool>
             return true;
         }
 
-        public DeleteLessonTimeCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public DeleteLessonCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }

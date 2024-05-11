@@ -31,7 +31,7 @@ function createCalendar() {
 //Отримання списку подій
 function getEvents(info, successCallback, failureCallback) {
     $.ajax({
-        url: "/Lesson/List",
+        url: "/Session/List",
         type: "GET",
         dataType: 'json',
         data: {
@@ -55,7 +55,7 @@ function getEvents(info, successCallback, failureCallback) {
 
 function addNewEvent(info) {
     $.ajax({
-        url: "/Lesson/Create",
+        url: "/Session/Create",
         type: "POST",
         dataType: 'json',
         data: {
@@ -78,7 +78,7 @@ function addNewEvent(info) {
 
 function removeEvent(info) {
     $.ajax({
-        url: "/Lesson/Delete",
+        url: "/Session/Delete",
         type: "POST",
         dataType: 'json',
         data: {

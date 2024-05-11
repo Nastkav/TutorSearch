@@ -23,7 +23,7 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
 
     public virtual DbSet<AvailableTimeModel> AvailableTimes { get; set; } = null!;
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
-    public virtual DbSet<TaskModel> Tasks { get; set; } = null!;
+    public virtual DbSet<AssignmentModel> Tasks { get; set; } = null!;
     public virtual DbSet<SolutionModel> Solutions { get; set; } = null!;
     public virtual DbSet<FileModel> Files { get; set; } = null!;
     public virtual DbSet<RequestModel> Requests { get; set; } = null!;

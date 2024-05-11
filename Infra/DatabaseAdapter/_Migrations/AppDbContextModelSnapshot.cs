@@ -19,6 +19,26 @@ namespace Infra.DatabaseAdapter._Migrations
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("AssignmentFiles", b =>
+                {
+                    b.Property<int>("AssignmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SolutionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignmentsId", "FilesId");
+
+                    b.HasIndex("FilesId");
+
+                    b.HasIndex("SolutionsId");
+
+                    b.ToTable("AssignmentFiles");
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AboutTutorModel", b =>
                 {
                     b.Property<int>("Id")
@@ -32,6 +52,46 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AboutTutor");
+                });
+
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.AssignmentModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("TutorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("Assignments");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AvailableTimeModel", b =>
@@ -3818,14 +3878,18 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SolutionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TaskId")
-                        .HasColumnType("int");
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -3833,10 +3897,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
-
-                    b.HasIndex("SolutionId");
-
-                    b.HasIndex("TaskId");
 
                     b.ToTable("Files");
                 });
@@ -3951,13 +4011,16 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TaskId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -3965,9 +4028,9 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("AssignmentId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Solutions");
                 });
@@ -4845,41 +4908,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         });
                 });
 
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.TaskModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("TutorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TutorId");
-
-                    b.ToTable("Tasks");
-                });
-
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.TutorModel", b =>
                 {
                     b.Property<int>("Id")
@@ -5055,7 +5083,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             AccessFailedCount = 0,
                             Avatar = "",
                             BirthDate = new DateTime(2004, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "cc21b982-ab0b-4bd9-bbf9-f52834f5cc13",
+                            ConcurrencyStamp = "04b6e721-52bf-437b-bdfe-99ef9906bb7d",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5077,7 +5105,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             AccessFailedCount = 0,
                             Avatar = "",
                             BirthDate = new DateTime(1999, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "d0c5f39d-c2fa-42b1-9c84-e88fea0be07c",
+                            ConcurrencyStamp = "fd20a7fe-1481-4781-9647-0349196975f3",
                             Email = "tutor@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5281,6 +5309,27 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.ToTable("StudentLessons");
                 });
 
+            modelBuilder.Entity("AssignmentFiles", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.AssignmentModel", null)
+                        .WithMany()
+                        .HasForeignKey("AssignmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.FileModel", null)
+                        .WithMany()
+                        .HasForeignKey("FilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.SolutionModel", null)
+                        .WithMany()
+                        .HasForeignKey("SolutionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AboutTutorModel", b =>
                 {
                     b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", null)
@@ -5288,6 +5337,25 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasForeignKey("Infra.DatabaseAdapter.Models.AboutTutorModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.AssignmentModel", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.SubjectModel", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Tutor")
+                        .WithMany()
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Tutor");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AvailableTimeModel", b =>
@@ -5328,19 +5396,7 @@ namespace Infra.DatabaseAdapter._Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infra.DatabaseAdapter.Models.SolutionModel", "Solution")
-                        .WithMany("Files")
-                        .HasForeignKey("SolutionId");
-
-                    b.HasOne("Infra.DatabaseAdapter.Models.TaskModel", "Task")
-                        .WithMany("Files")
-                        .HasForeignKey("TaskId");
-
                     b.Navigation("Owner");
-
-                    b.Navigation("Solution");
-
-                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.LessonModel", b =>
@@ -5397,32 +5453,21 @@ namespace Infra.DatabaseAdapter._Migrations
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.SolutionModel", b =>
                 {
+                    b.HasOne("Infra.DatabaseAdapter.Models.AssignmentModel", "Assignment")
+                        .WithMany("Solutions")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Student")
                         .WithMany("Solutions")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infra.DatabaseAdapter.Models.TaskModel", "Task")
-                        .WithMany("Solutions")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Assignment");
 
                     b.Navigation("Student");
-
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.TaskModel", b =>
-                {
-                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Tutor")
-                        .WithMany()
-                        .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tutor");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.TutorModel", b =>
@@ -5545,15 +5590,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.SolutionModel", b =>
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.AssignmentModel", b =>
                 {
-                    b.Navigation("Files");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.TaskModel", b =>
-                {
-                    b.Navigation("Files");
-
                     b.Navigation("Solutions");
                 });
 

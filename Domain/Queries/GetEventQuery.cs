@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Domain.Queries;
 
-public class GetEventQuery : IRequest<List<LessonEvent>>
+public class GetEventQuery : IRequest<List<LessonSession>>
 {
     public List<TimeType> TimeTypes { get; set; } = [];
 
@@ -15,17 +15,17 @@ public class GetEventQuery : IRequest<List<LessonEvent>>
     public DateTime? From { get; set; }
     public DateTime? To { get; set; }
 
-    public class GetEventQueryHandler : BaseMediatrHandler<GetEventQuery, List<LessonEvent>>
+    public class GetEventQueryHandler : BaseMediatrHandler<GetEventQuery, List<LessonSession>>
     {
-        public override async Task<List<LessonEvent>> Handle(GetEventQuery r, CancellationToken token)
+        public override async Task<List<LessonSession>> Handle(GetEventQuery r, CancellationToken token)
         {
             if (!r.From.HasValue) r.From = DateTime.MinValue;
             if (!r.To.HasValue) r.To = DateTime.MaxValue;
 
-            List<LessonEvent> events = new();
+            List<LessonSession> events = new();
             var dbLessons = ApplicationDb.Lessons
                 .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorId == r.UserId)
-                .Where(x => r.From < x.From && x.To < r.To)
+                .Where(x => r.From <= x.To && x.From <= r.To)
                 .ToList();
 
             var dbAvailableTime = ApplicationDb.AvailableTimes
@@ -36,24 +36,24 @@ public class GetEventQuery : IRequest<List<LessonEvent>>
 
             //Calc Busy Time
             foreach (var lesson in dbLessons)
-                events.Add(new LessonEvent
+                events.Add(new LessonSession
                 {
                     Id = lesson.Id,
                     Type = TimeType.Busy,
                     Title = lesson.Title,
-                    From = lesson.From,
-                    To = lesson.To
+                    From = lesson.From > r.From.Value ? lesson.From : r.From.Value,
+                    To = lesson.To < r.To.Value ? lesson.To : r.To.Value
                 });
 
             //Available Time
             var prevSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
 
-            var availableTimes = new List<LessonEvent>();
-            for (var i = 0; i <= 4; i++) //Розрахунок наступних тижнів 4
+            var availableTimes = new List<LessonSession>();
+            for (var i = -1; i <= 4; i++) //Розрахунок наступних тижнів 4
             {
                 var offsetWeek = i * 7;
                 foreach (var dbRange in dbAvailableTime)
-                    availableTimes.Add(new LessonEvent
+                    availableTimes.Add(new LessonSession
                     {
                         Id = dbRange.Id,
                         Type = TimeType.Available,
@@ -65,22 +65,20 @@ public class GetEventQuery : IRequest<List<LessonEvent>>
             events.AddRange(availableTimes.Where(x => r.From < x.From && x.To < r.To));
 
             events = events.OrderBy(x => x.From).ToList();
-            //Unavailable Time
-            var unavailableTimes = new List<LessonEvent>();
-            var prevEventEnd = DateTime.MinValue;
+            //Unavailable Time //TODO: ИСПРАВИТЬ ОШИБКИ В РАСЧЁТЕ ДАТЫ
+            var unavailableTimes = new List<LessonSession>();
+            var prevEventEnd = r.From.Value; // Фиксування почутку дня
             for (var i = 0; i < availableTimes.Count; i++)
             {
-                if (i == 0)
-                    prevEventEnd = availableTimes[i].From.Date; // Фиксування почутку дня
-                else if (availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
+                if (i != 0 && availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
                     prevEventEnd = availableTimes[i - 1].To; // Взяти останній час з минулого дня
-
-                unavailableTimes.Add(new LessonEvent
-                {
-                    Type = TimeType.Unavailable,
-                    From = prevEventEnd,
-                    To = availableTimes[i].From
-                });
+                if ((availableTimes[i].From - prevEventEnd).TotalMinutes != 0) //Якщо події не йдуть поспіль
+                    unavailableTimes.Add(new LessonSession
+                    {
+                        Type = TimeType.Unavailable,
+                        From = prevEventEnd,
+                        To = availableTimes[i].From
+                    });
                 prevEventEnd = availableTimes[i].To;
             }
 

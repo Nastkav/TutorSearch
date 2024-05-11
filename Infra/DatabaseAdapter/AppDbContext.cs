@@ -19,7 +19,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     public virtual DbSet<TutorModel> Tutor { get; set; } = null!;
     public virtual DbSet<AvailableTimeModel> AvailableTimes { get; set; } = null!;
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
-    public virtual DbSet<TaskModel> Tasks { get; set; } = null!;
+    public virtual DbSet<AssignmentModel> Assignments { get; set; } = null!;
     public virtual DbSet<SolutionModel> Solutions { get; set; } = null!;
     public virtual DbSet<FileModel> Files { get; set; } = null!;
     public virtual DbSet<RequestModel> Requests { get; set; } = null!;
@@ -68,12 +68,23 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
             .WithMany(x => x.Profiles)
             .UsingEntity("ProfileSubjects");
 
+        builder.Entity<AssignmentModel>()
+            .HasMany(x => x.Files)
+            .WithMany(x => x.Assignments)
+            .UsingEntity("AssignmentFiles");
+
+        builder.Entity<SolutionModel>()
+            .HasMany(x => x.Files)
+            .WithMany(x => x.Solutions)
+            .UsingEntity("AssignmentFiles");
+
         builder.Entity<AvailableTimeModel>()
             .Property(x => x.StartTime)
             .HasConversion(new TimeOnlyConverter());
         builder.Entity<AvailableTimeModel>()
             .Property(x => x.EndTime)
             .HasConversion(new TimeOnlyConverter());
+
         //Seed
         InitialSeed(builder);
         base.OnModelCreating(builder);

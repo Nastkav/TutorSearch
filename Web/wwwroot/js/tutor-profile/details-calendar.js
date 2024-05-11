@@ -29,7 +29,7 @@ function createCalendar() {
 //Отримання списку подій
 function getEvents(info, successCallback, failureCallback) {
     $.ajax({
-        url: "/Lesson/List",
+        url: "/Session/List",
         type: "GET",
         dataType: 'json',
         data: {
@@ -40,7 +40,7 @@ function getEvents(info, successCallback, failureCallback) {
         success: function (data) {
             availableDates = data.filter(date => date.type.toLowerCase() !== "available");
             calEvents = availableDates.map(({from, to}) => ({
-                groupId: "unavailable",
+                groupId: "игын",
                 start: from,
                 end: to,
                 display: 'background',

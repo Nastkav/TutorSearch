@@ -30,9 +30,9 @@ public class Lesson
     /// Id,Name
     /// </summary>
     [DisplayName("Учні")]
-    public virtual Dictionary<int, string> Students { get; set; } = [];
+    public Dictionary<int, string> Students { get; set; } = [];
 
-    public virtual List<int> StudentsIds { get; set; } = [];
+    public List<int> StudentsIds { get; set; } = [];
 
     [DisplayName("Учні")] public string StudentNames => string.Join(", ", Students.Values);
 }
