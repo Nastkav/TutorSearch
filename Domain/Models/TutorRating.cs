@@ -2,16 +2,16 @@ using Domain.Models;
 
 namespace Domain.Models;
 
-public class TutorRatingDto
+public class TutorRating
 {
-    public TutorRatingDto(float average = 0, int count = 0)
+    public TutorRating(float average = 0, int count = 0)
     {
         Average = average;
         Count = count;
-        ListReviews = new List<ReviewDto>();
+        ListReviews = new List<Review>();
     }
 
     public float Average { get; set; }
     public int Count { get; set; }
-    public List<ReviewDto> ListReviews { get; set; }
+    public List<Review> ListReviews { get; set; }
 }

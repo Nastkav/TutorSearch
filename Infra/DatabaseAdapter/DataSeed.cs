@@ -10,7 +10,7 @@ public static class DataSeed
         get
         {
             var iSubject = 1;
-            var objSubject = File.ReadAllLines("../Infra/Helpers/subjects_list.csv")
+            var objSubject = File.ReadAllLines("../Infra/Data/subjects_list.csv")
                 .Select(line => line.Split(','))
                 .Select(x => new SubjectModel
                 {
@@ -27,7 +27,7 @@ public static class DataSeed
         get
         {
             var iCity = 1;
-            var objCity = File.ReadAllLines("../Infra/Helpers/ukr_cities.csv")
+            var objCity = File.ReadAllLines("../Infra/Data/ukr_cities.csv")
                 .Select(line => line.Split(','))
                 .Select(x => new CityModel
                 {

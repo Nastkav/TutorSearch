@@ -1,6 +1,4 @@
-using System.ComponentModel;
-
-namespace Domain.Port.Driving;
+namespace Domain.Models;
 
 public enum TimeType
 {

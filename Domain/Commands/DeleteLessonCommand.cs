@@ -1,5 +1,5 @@
 using AutoMapper;
-using Domain.Port.Driving;
+using Domain.Helpers;
 using Infra.DatabaseAdapter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

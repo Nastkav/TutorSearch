@@ -3,6 +3,7 @@ using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Domain.Helpers;
 
 namespace Domain.Commands;
 

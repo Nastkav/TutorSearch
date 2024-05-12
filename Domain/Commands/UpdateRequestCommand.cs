@@ -1,11 +1,10 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Infra.DatabaseAdapter;
-using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using Domain.Exceptions;
+using Domain.Helpers;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;

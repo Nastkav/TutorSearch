@@ -2,16 +2,15 @@ using System.Security.Claims;
 using AutoMapper;
 using Domain.Commands;
 using Domain.Queries;
-using Domain.Exceptions;
 using Domain.Helpers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models.Lessons;
 using Web.Models.Shared;
 
 namespace Web.Controllers;
 
-[Route("[controller]/[action]")]
 public class SessionController : Controller
 {
     private readonly IMediator _mediator;
@@ -21,6 +20,7 @@ public class SessionController : Controller
 
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(CreateSessionCommand command)
     {
         try
@@ -39,6 +39,7 @@ public class SessionController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Edit(int id, UpdateSessionCommand command)
     {
         try
@@ -55,6 +56,7 @@ public class SessionController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
         try
@@ -62,7 +64,7 @@ public class SessionController : Controller
             await _mediator.Send(new DeleteSessionCommand() { UpdatedBy = IdentityId, EventId = id });
             return Json(1);
         }
-        catch (Exception e)
+        catch
         {
             return StatusCode(500);
         }
@@ -70,6 +72,7 @@ public class SessionController : Controller
 
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> List(GetEventQuery filter)
     {
         try
@@ -77,7 +80,7 @@ public class SessionController : Controller
             var times = await _mediator.Send(filter);
             return Json(times);
         }
-        catch (Exception e)
+        catch
         {
             return StatusCode(500);
         }

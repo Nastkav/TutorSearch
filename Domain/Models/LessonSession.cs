@@ -1,5 +1,3 @@
-using Domain.Port.Driving;
-
 namespace Domain.Models;
 
 public class LessonSession

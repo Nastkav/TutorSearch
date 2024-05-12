@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Domain.Exceptions;
+namespace Domain.Helpers;
 
 public static class EnumExtensions
 {
@@ -11,12 +11,12 @@ public static class EnumExtensions
             .GetMember(enumValue.ToString())
             .First()
             .GetCustomAttribute<DisplayAttribute>()
-            .GetName();
+            ?.GetName() ?? "";
 
     public static ImmutableList<string> GetDisplayNames(this Enum enumValue) =>
         enumValue
             .GetType()
             .GetMember(enumValue.ToString())
-            .Select(x => x.GetCustomAttribute<DisplayAttribute>().GetName())
+            .Select(x => x.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? "")
             .ToImmutableList();
 }

@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row justify-content-md-center">
                 <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
-                <div id="calendar" data-tutorid="@Model.TutorId"></div>
+                <div id="calendar" data-tutorid="@Model.TutorId" data-userid="@Model.CreatedId"></div>
             </div>
         </div>
     </div>
@@ -46,6 +46,23 @@
                     <button type="submit" class="btn btn-primary">Підтвердити</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="auth-modal" tabindex="-1" aria-labelledby="authmodal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="authmodal">Інформаційне повідомлення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Дорогий гість, зверни увагу, що тільки зареєстровані користувачі можуть надсилати запити до репетиторів.
+                <a class="link-primary" asp-area="Identity" asp-page="/Account/Login">Вхід</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

@@ -9,10 +9,8 @@ namespace Domain.Helpers;
 public class ControllerHelpers
 {
     private readonly IMediator _mediator;
-    // private readonly ClaimsPrincipal _user;
 
     public ControllerHelpers(IMediator mediator) =>
-        // _user = userClaims;
         _mediator = mediator;
 
     public async Task<List<CheckboxViewModel>> GetListSubjects()
@@ -34,6 +32,4 @@ public class ControllerHelpers
             list.Insert(0, new SelectListItem(defaultText, "0"));
         return list;
     }
-
-    // public int IdentityId => Convert.ToInt32(_user.FindFirstValue(ClaimTypes.NameIdentifier));
 }

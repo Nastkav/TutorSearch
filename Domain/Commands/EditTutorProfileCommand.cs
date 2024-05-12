@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
+using Domain.Helpers;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Models;
 using MediatR;

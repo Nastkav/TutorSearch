@@ -2,68 +2,60 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Domain;
 using Domain.Helpers;
-using Domain.Port.Driving;
 using Infra;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
-using Infra.Ports;
+using Infra.StorageAdapter;
 using Microsoft.EntityFrameworkCore;
 using Web;
-using Web.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
 var services = builder.Services;
 //Infra
-services.AddInfra(connectionString);
-services.AddApplication();
-services.AddAutoMapper(typeof(DomainMappingProfile));
-services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDbContext<AppDbContext>(options => options.UseMySQL(connectionString));
 services.AddDefaultIdentity<UserModel>(o => o.SignIn.RequireConfirmedEmail = false)
     .AddEntityFrameworkStores<AppDbContext>();
-services.AddDbContext<TemplateDbContext>(options => options.UseMySQL(connectionString));
+services.AddScoped<IStorage, LocalFileStorage>();
+services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDbContext<TemplateDbContext>(options => options.UseMySQL(connectionString)); //TODO: Remove DEBUG
 
+//Domain
+services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(BaseMediatrHandler<,>).Assembly));
+services.AddAutoMapper(typeof(DomainMappingProfile));
+
+//Web
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddProblemDetails();
 services.AddControllersWithViews()
-    .AddJsonOptions(options =>
+    .AddJsonOptions(options => //Опція щоб віддавати enum списки не числами, а рядковими значеннями
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 services.AddRazorPages();
+
+//Запуск програми
 var app = builder.Build();
-app.Logger.LogInformation($"EnvironmentName: {app.Environment.EnvironmentName}");
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
+//Оновлення бази даних
+app.UseMigrationsEndPoint();
+//Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//wwwroot
 app.UseStaticFiles();
-
+//Додавання маршрутизації
 app.UseRouting();
-// app.UseExceptionHandler();
 
-
+//User Auth
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-app.MapControllerRoute("areas", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages(); // need for identity user 
+//Routing
+app.MapControllerRoute("default", "{controller=Profile}/{action=Index}/{id?}");
+app.MapRazorPages(); // Потреба в ідентифікації користувача
 
 app.Run();

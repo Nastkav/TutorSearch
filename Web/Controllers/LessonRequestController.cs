@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Web.Controllers;
 using Domain.Queries;
 using Domain.Commands;
-using Domain.Exceptions;
 using Domain.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Web.Models.LessonRequest;
 
 namespace Web.Controllers;
 
-[Route("[controller]/[action]")]
+[Authorize]
 public class LessonRequestController : Controller
 {
     private readonly IMediator _mediator;
@@ -25,7 +25,6 @@ public class LessonRequestController : Controller
     }
 
     [HttpGet]
-    [Route("/[controller]")]
     public async Task<IActionResult> Index(bool onlyActive = false)
     {
         var vm = new LessonRequestVm

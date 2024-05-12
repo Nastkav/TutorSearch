@@ -1,7 +1,9 @@
 using AutoMapper;
+using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Domain.Queries;
@@ -14,7 +16,7 @@ public class GetUserProfileQuery : IRequest<User>
     {
         public override async Task<User> Handle(GetUserProfileQuery r, CancellationToken token)
         {
-            var dbProfile = ApplicationDb.Users.FirstOrDefault(x => x.Id == r.ProfileId);
+            var dbProfile = await ApplicationDb.Users.FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  користувача
             if (dbProfile == null)

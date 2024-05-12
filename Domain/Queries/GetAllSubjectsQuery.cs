@@ -2,6 +2,7 @@ using Infra.DatabaseAdapter;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
@@ -16,7 +17,7 @@ public class GetAllSubjectsQuery : IRequest<Dictionary<int, string>>
         }
 
         public override async Task<Dictionary<int, string>> Handle(GetAllSubjectsQuery r, CancellationToken token) =>
-            ApplicationDb.Subjects.ToDictionary(k => k.Id, v => v.Name);
+            await ApplicationDb.Subjects.ToDictionaryAsync(k => k.Id, v => v.Name);
     }
 }
 
@@ -34,9 +35,9 @@ public class GetTutorStudentsQuery : IRequest<Dictionary<int, string>>
         public override async Task<Dictionary<int, string>> Handle(GetTutorStudentsQuery r, CancellationToken token)
         {
             //Вибір усіх студентів, у яких був хоча б один урок з репетитором
-            var students = ApplicationDb.Users.Include(x => x.Lessons)
+            var students = await ApplicationDb.Users.Include(x => x.Lessons)
                 .Where(x => x.Lessons.Any(y => y.TutorId == r.TutorId))
-                .ToDictionary(x => x.Id, x => $"{x.Name} {x.Surname}({x.Email})");
+                .ToDictionaryAsync(x => x.Id, x => $"{x.Name} {x.Surname}({x.Email})");
             return students;
         }
     }

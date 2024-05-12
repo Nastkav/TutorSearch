@@ -53,14 +53,20 @@ function getEvents(info, successCallback, failureCallback) {
 
 //Додання нового запису
 function addNewEvent(info) {
-    document.requestForm.timeFrom.value = info.start.toISOString().replace(/.\d+Z$/g, "")
-    document.requestForm.timeTo.value = info.end.toISOString().replace(/.\d+Z$/g, "")
-    $('#requestModal').modal('show');
+    var userid = $("#calendar").data('userid')
+    if (userid > 0) {
+
+        document.requestForm.timeFrom.value = info.start.toISOString().replace(/.\d+Z$/g, "")
+        document.requestForm.timeTo.value = info.end.toISOString().replace(/.\d+Z$/g, "")
+        $('#requestModal').modal('show');
+    } else {
+        $('#auth-modal').modal('show');
+    }
 }
 
 
 //зберегти в базу
-async function send_request(e) {
+async function send_request() {
     formData = {
         TutorId: document.requestForm.tutorProfileId.value,
         SubjectId: document.requestForm.subject.value,
@@ -73,7 +79,7 @@ async function send_request(e) {
         type: "POST",
         url: document.requestForm.action,
         data: formData,
-        success: function (data) {
+        success: function () {
             $('#requestModal').modal('hide');
         }, error: function (data) {
             alert(data.responseJSON.join('\n')); // show response from the php script.

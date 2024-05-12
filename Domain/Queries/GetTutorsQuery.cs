@@ -2,10 +2,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Domain.Models;
 using Infra.DatabaseAdapter;
-using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Domain.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +22,7 @@ public class GetTutorsQuery : IRequest<List<int>>
     public bool TutorHomeAccess { get; set; }
     public bool StudentHomeAccess { get; set; }
 
-    public string SearchText { get; set; }
+    public string SearchText { get; set; } = string.Empty;
 
     public class GetTutorsQueryHandler : BaseMediatrHandler<GetTutorsQuery, List<int>>
     {
@@ -49,7 +49,7 @@ public class GetTutorsQuery : IRequest<List<int>>
             if (r.OnlineAccess)
                 q = q.Where(x => x.Tutor.StudentHomeAccess);
 
-            return q.OrderBy(x => x.Reviews.Count).Select(x => x.Id).ToList();
+            return await q.OrderBy(x => x.Reviews.Count).Select(x => x.Id).ToListAsync();
         }
 
         public GetTutorsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)

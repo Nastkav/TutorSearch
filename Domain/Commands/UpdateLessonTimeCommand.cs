@@ -1,10 +1,9 @@
 using Domain.Models;
 using Infra.DatabaseAdapter;
-using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
-using Domain.Port.Driving;
+using Domain.Helpers;
 using Infra.DatabaseAdapter.Models;
 
 namespace Domain.Commands;

@@ -1,10 +1,9 @@
 using System.Diagnostics;
 using AutoMapper;
+using Domain.Helpers;
 using Domain.Models;
-using Domain.Port.Driving;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Models;
-using Infra.Ports;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,14 +18,14 @@ public class GetTutorProfileQuery : IRequest<Tutor>
     {
         public override async Task<Tutor> Handle(GetTutorProfileQuery r, CancellationToken token)
         {
-            var dbProfile = ApplicationDb.Tutor
+            var dbProfile = await ApplicationDb.Tutor
                 .Include(x => x.About)
                 .Include(x => x.Subjects)
-                .FirstOrDefault(x => x.Id == r.ProfileId);
+                .FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  профілю
             if (dbProfile == null)
-                if (ApplicationDb.Users.Any(x => x.Id == r.ProfileId))
+                if (await ApplicationDb.Users.AnyAsync(x => x.Id == r.ProfileId))
                     return new Tutor(); //Новий профіль
                 else
                     throw new Exception("Профіль вчителя не знайдено");

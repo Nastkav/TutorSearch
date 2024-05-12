@@ -1,4 +1,5 @@
 using AutoMapper;
+using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;
 using MediatR;
@@ -25,7 +26,7 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
                 r.To = DateTime.MaxValue;
 
             //Запит
-            var dbLessons = ApplicationDb.Lessons
+            var dbLessons = await ApplicationDb.Lessons
                 .Include(x => x.Subject)
                 .Include(x => x.Students)
                 .Include(x => x.Tutor)
@@ -33,7 +34,7 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
                 .Where(x => x.To > r.From || r.To > x.From)
                 .Where(x => !r.UserId.HasValue || x.Students.Any(s => s.Id == r.UserId) || //Взтяти всі записи учня
                             !r.TutorId.HasValue || x.TutorId == r.TutorId) //Взтяти всі записи вчителя
-                .ToList();
+                .ToListAsync();
 
             var lesList = Mapper.Map<List<Lesson>>(dbLessons);
             for (var i = 0; i < lesList.Count; i++)

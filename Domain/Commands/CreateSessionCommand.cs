@@ -1,6 +1,6 @@
 using AutoMapper;
+using Domain.Helpers;
 using Domain.Models;
-using Domain.Port.Driving;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Models;
 using MediatR;

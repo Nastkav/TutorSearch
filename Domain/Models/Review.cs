@@ -1,6 +1,6 @@
 namespace Domain.Models;
 
-public class ReviewDto
+public class Review
 {
     public int Id { get; set; }
     public int TutorId { get; set; }

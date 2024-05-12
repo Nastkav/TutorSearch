@@ -5,11 +5,12 @@ using Domain.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Web.Models.Lessons;
 
 namespace Web.Controllers;
 
-[Route("[controller]/[action]")]
+[Authorize]
 public class LessonController : Controller
 {
     private readonly IMediator _mediator;
@@ -91,7 +92,6 @@ public class LessonController : Controller
 
 
     [HttpGet]
-    [Route("{id}")]
     public async Task<IActionResult> Details(int id)
     {
         var model = new LessonViewModel();
@@ -114,7 +114,6 @@ public class LessonController : Controller
     }
 
     [HttpPost]
-    [Route("{id}")]
     public async Task<IActionResult> Details(int id, LessonViewModel model)
     {
         LessonValidation(model);
@@ -140,7 +139,6 @@ public class LessonController : Controller
 
 
     [HttpPost]
-    [Route("{id}")]
     public async Task<ActionResult<int>> Delete(int id)
     {
         Response.StatusCode = 400;

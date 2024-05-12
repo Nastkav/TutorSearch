@@ -1,8 +1,8 @@
 using Infra.DatabaseAdapter;
-using Infra.Ports;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Queries;
@@ -18,7 +18,7 @@ public class GetAllCitiesQuery : IRequest<Dictionary<int, string>>
 
 
         public override async Task<Dictionary<int, string>> Handle(GetAllCitiesQuery r, CancellationToken token) =>
-            ApplicationDb.Cities.ToDictionary(k => k.Id, v => v.FullName());
+            await ApplicationDb.Cities.ToDictionaryAsync(k => k.Id, v => v.FullName());
     }
 }
 

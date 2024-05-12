@@ -3,7 +3,6 @@ using AutoMapper;
 using AutoMapper.Configuration.Annotations;
 using Domain.Commands;
 using Domain.Queries;
-using Domain.Exceptions;
 using Domain.Helpers;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
@@ -16,8 +15,6 @@ using Web.Models.Profile;
 
 namespace Web.Controllers;
 
-[Route("[controller]/[action]")]
-[Authorize]
 public class ProfileController : Controller
 {
     private readonly IMediator _mediator;
@@ -32,9 +29,8 @@ public class ProfileController : Controller
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet]
-    [Route("/[controller]")]
     [AllowAnonymous]
-    public async Task<IActionResult> SearchTutor(SearchVm model)
+    public async Task<IActionResult> Index(SearchVm model)
     {
         //Main Lists
         var shareSubjects = await _mediator.Send(new GetAllSubjectsQuery());
@@ -59,16 +55,13 @@ public class ProfileController : Controller
     }
 
     [HttpGet]
-    [Route("/[controller]/[action]/{id?}")]
-    [AllowAnonymous]
     public async Task<IActionResult> Details(int id = 0)
     {
         if (id == 0)
             id = IdentityId;
-        if (IdentityId == 0)
-            return RedirectToPage("/Account/Login", new { area = "Identity" });
 
         var model = await GetUserModel(id);
+        model.CreateRequestCommand.CreatedId = IdentityId;
         return View(model);
     }
 
@@ -90,6 +83,7 @@ public class ProfileController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Edit()
     {
         var model = await GetUserModel(IdentityId);
@@ -114,6 +108,7 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Edit(ProfileVm model)
     {
         // Ігнорувати помилки форми якщо не вчитель

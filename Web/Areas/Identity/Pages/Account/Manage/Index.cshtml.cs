@@ -35,11 +35,7 @@ public class IndexModel : PageModel
         Profile = new UserProfileModel
         {
             Username = userName,
-            PhoneNumber = phoneNumber,
-            Name = user.Name,
-            Surname = user.Surname,
-            Patronymic = user.Patronymic,
-            BirthDate = user.BirthDate
+            PhoneNumber = phoneNumber
         };
     }
 
@@ -74,14 +70,6 @@ public class IndexModel : PageModel
             }
         }
 
-        if (Profile.Name != user.Name)
-            user.Name = Profile.Name;
-        if (Profile.Surname != user.Surname)
-            user.Surname = Profile.Surname;
-        if (Profile.Patronymic != user.Patronymic)
-            user.Patronymic = Profile.Patronymic;
-        if (Profile.BirthDate != user.BirthDate) //TODO: Check correct send data.
-            user.BirthDate = Profile.BirthDate;
         await _userManager.UpdateAsync(user);
 
 

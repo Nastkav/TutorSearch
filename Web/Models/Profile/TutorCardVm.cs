@@ -4,7 +4,7 @@ namespace Web.Models.Profile;
 
 public class TutorCardVm
 {
-    public User UserData { get; set; }
-    public Tutor TutorData { get; set; }
+    public User UserData { get; set; } = null!;
+    public Tutor TutorData { get; set; } = null!;
     public Dictionary<int, string> Subjects { get; set; } = [];
 }

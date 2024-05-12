@@ -3,7 +3,7 @@ using Infra.DatabaseAdapter;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Domain;
+namespace Domain.Helpers;
 
 public abstract class BaseMediatrHandler<T, TU> : IRequestHandler<T, TU>
     where T : IRequest<TU>

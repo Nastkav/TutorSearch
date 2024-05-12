@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using Domain.Helpers;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;

@@ -1,8 +1,9 @@
 using AutoMapper;
+using Domain.Helpers;
 using Domain.Models;
-using Domain.Port.Driving;
 using Infra.DatabaseAdapter;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Domain.Queries;
@@ -23,16 +24,16 @@ public class GetEventQuery : IRequest<List<LessonSession>>
             if (!r.To.HasValue) r.To = DateTime.MaxValue;
 
             List<LessonSession> events = new();
-            var dbLessons = ApplicationDb.Lessons
+            var dbLessons = await ApplicationDb.Lessons
                 .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorId == r.UserId)
                 .Where(x => r.From <= x.To && x.From <= r.To)
-                .ToList();
+                .ToListAsync();
 
-            var dbAvailableTime = ApplicationDb.AvailableTimes
+            var dbAvailableTime = await ApplicationDb.AvailableTimes
                 .Where(x => x.ProfileId == r.UserId)
                 .OrderBy(x => x.DayOfWeek)
                 .ThenBy(x => x.StartTime)
-                .ToList();
+                .ToListAsync();
 
             //Calc Busy Time
             foreach (var lesson in dbLessons)
