@@ -55,9 +55,13 @@ function getEvents(info, successCallback, failureCallback) {
 function addNewEvent(info) {
     var userid = $("#calendar").data('userid')
     if (userid > 0) {
+        let start = new Date(info.start)
+        let end = new Date(info.end)
+        start.setMinutes(start.getMinutes() - start.getTimezoneOffset());
+        end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
+        document.requestForm.timeFrom.value = start.toISOString().slice(0, -1);
+        document.requestForm.timeTo.value = end.toISOString().slice(0, -1);
 
-        document.requestForm.timeFrom.value = info.start.toISOString().replace(/.\d+Z$/g, "")
-        document.requestForm.timeTo.value = info.end.toISOString().replace(/.\d+Z$/g, "")
         $('#requestModal').modal('show');
     } else {
         $('#auth-modal').modal('show');

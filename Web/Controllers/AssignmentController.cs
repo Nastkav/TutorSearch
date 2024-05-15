@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Web;
 using Web.Models.Assignments;
 using ZstdSharp.Unsafe;
@@ -34,6 +35,12 @@ public class AssignmentController : Controller
 
     public void AssignmentValidation(AssignmentVm model)
     {
+        if (DateTime.Now > model.Assignment.Deadline.ToDateTime(TimeOnly.MinValue))
+            ModelState.AddModelError("Assignment.Deadline", "Не можна встановити термін здачі у минулому");
+        if (model.Assignment.StudentsIds.Count == 0)
+            ModelState.AddModelError("Assignment.StudentsIds", "Треба вибирати хоча б одного учня");
+        if (model.Assignment.TutorId != IdentityId)
+            ModelState.AddModelError("Assignment.TutorId", "Обрано невірного вчителя");
     }
 
     [HttpGet]
@@ -83,80 +90,52 @@ public class AssignmentController : Controller
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
     }
-}
 
-// public async Task<IActionResult> Details(int? id)
-// {
-//     if (id == null) return NotFound();
-//
-//     var taskModel = await _context.Tasks
-//         .Include(t => t.Tutor)
-//         .FirstOrDefaultAsync(m => m.Id == id);
-//     if (taskModel == null) return NotFound();
-//
-//     return View(taskModel);
-// }
-//
-// public IActionResult Create() =>
-//     // ViewData["TutorId"] = new SelectList(_context.TutorProfiles, "Id", "Address");
-//     View();
-//
-// [HttpPost]
-// [ValidateAntiForgeryToken]
-// public async Task<IActionResult> Create(
-//     [Bind("Id,TutorId,Title,Description,Deadline,CreatedAt,UpdatedAt")]
-//     TaskModel taskModel)
-// {
-//     if (ModelState.IsValid)
-//     {
-//         _context.Add(taskModel);
-//         await _context.SaveChangesAsync();
-//         return RedirectToAction(nameof(Index));
-//     }
-//
-//     // ViewData["TutorId"] = new SelectList(_context.TutorProfiles, "Id", "Address", taskModel.TutorId);
-//     return View(taskModel);
-// }
-//
-// // GET: Task/Edit/5
-// public async Task<IActionResult> Edit(int? id)
-// {
-//     if (id == null) return NotFound();
-//
-//     var taskModel = await _context.Tasks.FindAsync(id);
-//     if (taskModel == null) return NotFound();
-//     // ViewData["TutorId"] = new SelectList(_context.TutorProfiles, "Id", "Address", taskModel.TutorId);
-//     return View(taskModel);
-// }
-//
-// // POST: Task/Edit/5
-//
-// [HttpPost]
-// [ValidateAntiForgeryToken]
-// public async Task<IActionResult> Edit(int id,
-//     [Bind("Id,TutorId,Title,Description,Deadline,CreatedAt,UpdatedAt")]
-//     TaskModel taskModel)
-// {
-//     if (id != taskModel.Id) return NotFound();
-//
-//     if (ModelState.IsValid)
-//     {
-//         try
-//         {
-//             _context.Update(taskModel);
-//             await _context.SaveChangesAsync();
-//         }
-//         catch (DbUpdateConcurrencyException)
-//         {
-//             if (!TaskModelExists(taskModel.Id))
-//                 return NotFound();
-//             else
-//                 throw;
-//         }
-//
-//         return RedirectToAction(nameof(Index));
-//     }
-//
-//     // ViewData["TutorId"] = new SelectList(_context.TutorProfiles, "Id", "Address", taskModel.TutorId);
-//     return View(taskModel);
-// }
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var model = new AssignmentVm();
+
+        if (IdentityId == 0)
+            return NotFound();
+
+        var curAssignment = await _mediator.Send(new GetOneAssignmentQuery { AssignmentId = id, UserId = IdentityId });
+
+        if (curAssignment == null)
+            return NotFound();
+
+        model.UserId = IdentityId;
+        model.Assignment = curAssignment;
+        if (model.Assignment.TutorId == IdentityId)
+            model.IsTutor = true;
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Details(int id, AssignmentVm model)
+    {
+        AssignmentValidation(model);
+        if (id != model.Assignment.Id) return NotFound();
+
+        if (ModelState.IsValid)
+        {
+            await _mediator.Send(new UpdateAssignmentCommand()
+            {
+                UpdatedBy = IdentityId,
+                AssignmentId = model.Assignment.Id,
+                Title = model.Assignment.Title,
+                Description = model.Assignment.Description,
+                Deadline = model.Assignment.Deadline,
+                SubjectId = model.Assignment.SubjectId,
+                StudentIds = model.Assignment.StudentSolutions.Keys.ToList()
+            });
+            return RedirectToAction(nameof(Index));
+        }
+
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
+        return View(model);
+    }
+}

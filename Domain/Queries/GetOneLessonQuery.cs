@@ -31,8 +31,6 @@ public class GetOneLessonQuery : IRequest<Lesson?>
                 return null;
 
             var lesson = Mapper.Map<Lesson>(dbLesson);
-            if (dbLesson.Students.Count > 0)
-                lesson.StudentsIds = dbLesson.Students.Select(x => x.Id).ToList();
             return lesson;
         }
 

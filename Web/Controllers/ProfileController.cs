@@ -97,7 +97,7 @@ public class ProfileController : Controller
         try
         {
             if (command.UserId != IdentityId)
-                throw new IncorrectUserId($"command.UserId={command.UserId},app.UserId={IdentityId}");
+                throw new Exception($"command.UserId={command.UserId},app.UserId={IdentityId}");
             var result = await _mediator.Send(command);
             return Json(result);
         }

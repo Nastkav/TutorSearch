@@ -10,4 +10,5 @@ public class AssignmentVm
     public List<SelectListItem> Subjects { get; set; } = [];
 
     public List<SelectListItem> HisStudents { get; set; } = [];
+    public bool IsTutor { get; set; }
 }

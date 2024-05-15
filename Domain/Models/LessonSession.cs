@@ -1,3 +1,5 @@
+using Domain.Helpers;
+
 namespace Domain.Models;
 
 public class LessonSession

@@ -24,15 +24,15 @@ public class Lesson
     [Range(1, int.MaxValue, ErrorMessage = "Оберіть предмет")]
     public int SubjectId { get; set; }
 
-    public string? SubjectName { get; set; } = null;
+    [DisplayName("Предмет")] public string? SubjectName { get; set; } = null;
 
     /// <summary>
     /// Id,Name
     /// </summary>
     [DisplayName("Учні")]
-    public Dictionary<int, string> Students { get; set; } = [];
-
     public List<int> StudentsIds { get; set; } = [];
 
-    [DisplayName("Учні")] public string StudentNames => string.Join(", ", Students.Values);
+    [DisplayName("Учні")] public string StudentNames { get; set; } = string.Empty;
+
+    // [DisplayName("Учні")] public string StudentNames => string.Join(", ", StudentsIds.Values);
 }

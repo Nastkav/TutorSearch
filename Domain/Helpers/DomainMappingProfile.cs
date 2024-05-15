@@ -40,7 +40,10 @@ public class DomainMappingProfile : Profile
         //Lessons
         CreateMap<LessonModel, Lesson>()
             .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Subject.Name))
-            .ForMember(d => d.Students, o => o.Ignore())
+            // .ForMember(d => d.StudentsIds, o => o.MapFrom(x => x.Students.ToDictionary(k => k.Id, v => v.FullName())))
+            .ForMember(d => d.StudentsIds, o => o.MapFrom(x => x.Students.Select(s => s.Id)))
+            .ForMember(d => d.StudentNames,
+                o => o.MapFrom(x => string.Join(", ", x.Students.Select(s => s.FullName()))))
             .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()));
         CreateMap<Lesson, LessonModel>()
             .ForMember(d => d.Students, o => o.Ignore())

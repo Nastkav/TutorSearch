@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Domain.Helpers;
 using Infra.DatabaseAdapter.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Commands;
 
@@ -17,6 +18,7 @@ public class UpdateSessionCommand : IRequest<int>
     public string? Comment { get; set; }
     public string? Subject { get; set; }
     public int? SubjectId { get; set; }
+    public List<int>? StudentsIds { get; set; }
 
     public class UpdateSessionCommandHandler : BaseMediatrHandler<UpdateSessionCommand, int>
     {
@@ -42,14 +44,13 @@ public class UpdateSessionCommand : IRequest<int>
 
             //Перевірка перетинання часу
             //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
-            var lessonOnRange = ApplicationDb.Lessons
-                .Where(x => x.To > r.From || r.To > x.From).ToList();
-            if (lessonOnRange.Count > 0)
+            if (ApplicationDb.Lessons.Any(x => x.From > r.To && r.From > x.To))
                 throw new Exception("Оновлення неможливе, час перетинається");
 
             //Time params
             dbLesson.From = r.From;
             dbLesson.To = r.To;
+
             //Subject
             if (r.SubjectId != null) dbLesson.SubjectId = r.SubjectId.Value;
             if (r.Subject != null)
@@ -59,6 +60,10 @@ public class UpdateSessionCommand : IRequest<int>
                     throw new Exception("Предмет не знайдено");
                 dbLesson.Subject = dbSubject;
             }
+
+            //Students
+            if (r.StudentsIds != null)
+                dbLesson.Students = await ApplicationDb.Users.Where(x => r.StudentsIds.Contains(x.Id)).ToListAsync();
 
             //Comment
             if (r.Comment != null) dbLesson.Comment = r.Comment;

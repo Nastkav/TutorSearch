@@ -13,14 +13,14 @@ public class ControllerHelpers
     public ControllerHelpers(IMediator mediator) =>
         _mediator = mediator;
 
-    public async Task<List<CheckboxViewModel>> GetListSubjects()
-    {
-        var query = await _mediator.Send(new GetAllSubjectsQuery());
-        var subjects = query
-            .Select(o => new CheckboxViewModel { Id = o.Key, LabelName = o.Value, IsChecked = false })
-            .ToList();
-        return subjects;
-    }
+    // public async Task<List<CheckboxVm>> GetListSubjects()
+    // {
+    //     var query = await _mediator.Send(new GetAllSubjectsQuery());
+    //     var subjects = query
+    //         .Select(o => new CheckboxVm { Id = o.Key, LabelName = o.Value, IsChecked = false })
+    //         .ToList();
+    //     return subjects;
+    // }
 
     public async Task<List<SelectListItem>> GetSelectList(IRequest<Dictionary<int, string>> q, string defaultText = "")
     {

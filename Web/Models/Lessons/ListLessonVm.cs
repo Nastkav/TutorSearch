@@ -2,7 +2,7 @@ using Domain.Models;
 
 namespace Web.Models.Lessons;
 
-public class ListLessonViewModel
+public class ListLessonVm
 {
     public int UserId { get; set; }
     public bool IsTutor { get; set; }

@@ -76,7 +76,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
         builder.Entity<SolutionModel>()
             .HasMany(x => x.Files)
             .WithMany(x => x.Solutions)
-            .UsingEntity("AssignmentFiles");
+            .UsingEntity("SolutiontFiles");
 
         builder.Entity<AvailableTimeModel>()
             .Property(x => x.StartTime)

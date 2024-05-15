@@ -36,10 +36,11 @@ public class UpdateRequestCommand : IRequest<int>
         public override async Task<int> Handle(UpdateRequestCommand r, CancellationToken token)
         {
             if (r.UpdatedBy != r.TutorId)
-                throw new IncorrectUserId("Тільки репетитор може оновлювати запити");
+                throw new Exception("Тільки репетитор може оновлювати запити");
 
             var dbRequest = ApplicationDb.Requests
                                 .Include(x => x.Subject)
+                                .Include(x => x.Created)
                                 .First(x => x.Id == r.Id && x.TutorId == r.TutorId)
                             ?? throw new Exception("Потрібний запит не знайдено");
 
@@ -55,8 +56,8 @@ public class UpdateRequestCommand : IRequest<int>
             if (dbRequest.Status == LessonRequestStatus.Approved) // Створення нового уроку
             {
                 var lesson = Mapper.Map<LessonModel>(dbRequest);
+                lesson.Students.Add(dbRequest.Created);
                 await ApplicationDb.Lessons.AddAsync(lesson);
-                await ApplicationDb.SaveChangesAsync();
             }
 
             await ApplicationDb.SaveChangesAsync();

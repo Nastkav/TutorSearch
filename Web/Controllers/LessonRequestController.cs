@@ -45,7 +45,7 @@ public class LessonRequestController : Controller
             if (command.CreatedId == 0)
                 command.CreatedId = IdentityId;
             else if (command.CreatedId != IdentityId)
-                throw new IncorrectUserId($"command.CreatedBy={command.CreatedId},app.UserId={IdentityId}");
+                throw new Exception($"command.CreatedBy={command.CreatedId},app.UserId={IdentityId}");
 
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ public class LessonRequestController : Controller
         if (command.UpdatedBy == 0)
             command.UpdatedBy = IdentityId;
         else if (command.UpdatedBy != IdentityId)
-            throw new IncorrectUserId($"command.UpdatedBy={command.UpdatedBy},app.UserId={IdentityId}");
+            throw new Exception($"command.UpdatedBy={command.UpdatedBy},app.UserId={IdentityId}");
         await _mediator.Send(command);
         return RedirectToAction(nameof(Index));
     }

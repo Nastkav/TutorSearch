@@ -28,7 +28,7 @@ public class SessionController : Controller
             if (command.CreatedBy == 0)
                 command.CreatedBy = IdentityId;
             else if (command.CreatedBy != IdentityId)
-                throw new IncorrectUserId($"command.CreatedBy={command.CreatedBy},app.UserId={IdentityId}");
+                throw new Exception($"command.CreatedBy={command.CreatedBy},app.UserId={IdentityId}");
             var id = await _mediator.Send(command);
             return Json(id);
         }

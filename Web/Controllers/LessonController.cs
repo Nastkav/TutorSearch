@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Domain.Commands;
 using Domain.Helpers;
 using Domain.Queries;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MediatR;
@@ -24,10 +25,10 @@ public class LessonController : Controller
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    private void LessonValidation(LessonViewModel model)
+    private void LessonValidation(LessonVm model)
     {
-        if (model.Lesson.TutorId == model.UserId && model.UserId == IdentityId)
-            ModelState.AddModelError("Lesson.TutorId", "Вибрано невірного вчителя");
+        if (model.Lesson.TutorId != IdentityId)
+            ModelState.AddModelError("Lesson.TutorId", "Обрано невірного вчителя");
         if (model.Lesson.From.Date != model.Lesson.To.Date)
             ModelState.AddModelError("Lesson.To", "Зустріч має проходити протягом дня");
         if (model.Lesson.From.Date > model.Lesson.To.Date)
@@ -35,14 +36,14 @@ public class LessonController : Controller
         if (model.Lesson.From < DateTime.Today.AddDays(-7))
             ModelState.AddModelError("Lesson.To", "Занадто стара дата");
         if (model.Lesson.StudentsIds.Count == 0)
-            ModelState.AddModelError("Lesson.Students", "Треба вибирати хоча б одного учня");
+            ModelState.AddModelError("Lesson.StudentsIds", "Треба вибирати хоча б одного учня");
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var lessons = new ListLessonViewModel();
+        var lessons = new ListLessonVm();
         lessons.Lessons = await _mediator.Send(new GetLessonsQuery()
         {
             UserId = IdentityId,
@@ -56,7 +57,7 @@ public class LessonController : Controller
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-        var model = new LessonViewModel();
+        var model = new LessonVm();
 
         if (IdentityId == 0)
             return NotFound();
@@ -73,7 +74,7 @@ public class LessonController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> Create(LessonViewModel model)
+    public async Task<IActionResult> Create(LessonVm model)
     {
         LessonValidation(model);
         if (ModelState.IsValid)
@@ -94,7 +95,7 @@ public class LessonController : Controller
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var model = new LessonViewModel();
+        var model = new LessonVm();
 
         if (IdentityId == 0)
             return NotFound();
@@ -113,8 +114,29 @@ public class LessonController : Controller
         return View(model);
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var model = new LessonVm();
+
+        if (IdentityId == 0)
+            return NotFound();
+
+        var curLesson = await _mediator.Send(new GetOneLessonQuery { LessonId = id, UserId = IdentityId });
+
+        if (curLesson == null || curLesson.TutorId != IdentityId)
+            return NotFound();
+
+        model.UserId = IdentityId;
+        model.Lesson = curLesson;
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
+        return View(model);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> Details(int id, LessonViewModel model)
+    public async Task<IActionResult> Edit(int id, LessonVm model)
     {
         LessonValidation(model);
         if (id != model.Lesson.Id) return NotFound();
@@ -123,23 +145,27 @@ public class LessonController : Controller
         {
             await _mediator.Send(new UpdateSessionCommand()
             {
+                EventId = model.Lesson.Id,
                 UpdatedBy = IdentityId,
                 From = model.Lesson.From,
                 To = model.Lesson.To,
                 Comment = model.Lesson.Comment,
-                SubjectId = model.Lesson.SubjectId
+                SubjectId = model.Lesson.SubjectId,
+                StudentsIds = model.Lesson.StudentsIds
             });
-            return RedirectToAction(nameof(Index)); //TODO: Save Update Lesson
+            return RedirectToAction(nameof(Index));
         }
 
         model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
+        // model.Lesson.StudentsIds =
+        // await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
         return View(model);
     }
 
 
     [HttpPost]
-    public async Task<ActionResult<int>> Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
         Response.StatusCode = 400;
         if (id != 0)
@@ -147,7 +173,7 @@ public class LessonController : Controller
             var success =
                 await _mediator.Send(new DeleteLessonCommand() { LessonId = id, TutorId = IdentityId });
             if (success)
-                Response.StatusCode = 200;
+                RedirectToAction(nameof(Index));
         }
 
         return Content(id.ToString());

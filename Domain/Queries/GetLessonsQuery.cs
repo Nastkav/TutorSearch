@@ -37,8 +37,6 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
                 .ToListAsync();
 
             var lesList = Mapper.Map<List<Lesson>>(dbLessons);
-            for (var i = 0; i < lesList.Count; i++)
-                lesList[i].StudentsIds = dbLessons[i].Students.Select(x => x.Id).ToList();
             return lesList;
         }
 

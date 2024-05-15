@@ -8,16 +8,14 @@ namespace Web.Controllers;
 
 public class HomeController : Controller
 {
-    public HomeController(ILogger<HomeController> logger)
+    public IActionResult Privacy()
     {
+        var result = View();
+        return result;
     }
 
-    public IActionResult Index() => View();
-
-    public IActionResult Privacy() => View();
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error(string msg = "") => View(new ErrorViewModel
+    public IActionResult Error(string msg = "") => View(new ErrorVm
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
         Message = msg

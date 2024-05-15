@@ -1,6 +1,6 @@
 namespace Web.Models.Shared;
 
-public class CheckboxViewModel
+public class CheckboxVm
 {
     public int Id { get; set; }
     public string LabelName { get; set; } = "";

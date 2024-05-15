@@ -1,4 +1,4 @@
-@model Web.Models.Lessons.LessonViewModel
+@model Web.Models.Lessons.LessonVm
 
 @{
     ViewData["Title"] = "Урок #" + Model.Lesson.Id;
@@ -19,46 +19,35 @@
             <div class="form-group">
                 <label asp-for="Lesson.From" class="control-label"></label>
                 <input asp-for="Lesson.From" class="form-control" readonly/>
-                <span asp-validation-for="Lesson.From" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Lesson.To" class="control-label"></label>
                 <input asp-for="Lesson.To" class="form-control" readonly/>
-                <span asp-validation-for="Lesson.To" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Lesson.Comment" class="control-label"></label>
                 <input asp-for="Lesson.Comment" class="form-control" readonly/>
-                <span asp-validation-for="Lesson.Comment" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Lesson.SubjectId" class="form-check-label mt-2"></label>
                 <select asp-for="Lesson.SubjectId" class="form-select" asp-items="@Model.Subjects" readonly></select>
-                <span asp-validation-for="Lesson.SubjectId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <div class="input-group">
-                    <select asp-for="Lesson.StudentsIds" asp-items="@Model.HisStudents" class="selectpicker  form-control" data-width="100%" data-live-search="true" readonly multiple></select>
-                    @* TODO: Set readonly *@
-                </div>
+                <label asp-for="Lesson.StudentNames" class="control-label"></label>
+                <input asp-for="Lesson.StudentNames" class="form-control" readonly/>
             </div>
-            @if (@Model.Lesson.TutorId == Model.UserId)
-            {
-                <div class="form-group">
-                    @* TODO: Off ReadOnly attr on Comment,Subject,Students and hide button *@
-                    <input type="button" value="Edit" class="btn btn-primary"/>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary"/>
-                </div>
-
-                <a asp-action="Delete" asp-route-id="@Model.Lesson.Id">Видалити</a>
-            }
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Назад до списку</a>
+<div class="row">
+    @if (Model.IsTutor)
+    {
+        <div class="col">
+            <a asp-action="Edit" asp-route-id="@Model.Lesson.Id" class="btn btn-primary" role="button">Оновити заустріч</a>
+        </div>
+    }
+    <div class="col">
+        <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
+    </div>
 </div>
