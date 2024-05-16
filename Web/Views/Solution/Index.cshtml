@@ -1,48 +1,73 @@
-@model IEnumerable<Infra.DatabaseAdapter.Models.SolutionModel>
+@using Infra.DatabaseAdapter.Helpers
+@model Web.Models.Assignments.SolutionListVm
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Учень: Задачі";
 }
-
+<div class="row-cols-md-4">
+    <form asp-action="Index" method="get">
+        <input asp-for="Filter.UserId" name="userid" hidden/>
+        <div class="col">
+            <label asp-for="Filter.Status" class="form-check-label"></label>
+            <select asp-for="Filter.Status" asp-items="@Html.GetEnumSelectList<SolutionStatus>()" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col">
+            <input type="submit" value="Оновити" class="btn btn-primary"/>
+        </div>
+    </form>
+</div>
 <h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Assignment)
+            @Html.DisplayNameFor(model => model.Solutions.First().Id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Student)
+            @Html.DisplayNameFor(model => model.Solutions.First().SubjectName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Answer)
+            @Html.DisplayNameFor(model => model.Solutions.First().AssignmentTitle)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreatedAt)
+            @Html.DisplayNameFor(model => model.Solutions.First().TutorName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UpdatedAt)
+            @Html.DisplayNameFor(model => model.Solutions.First().StudentName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Solutions.First().Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Solutions.First().CreatedAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Solutions.First().UpdatedAt)
         </th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Solutions)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Assignment.Description)
+                @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Student.Avatar)
+                @Html.DisplayFor(modelItem => item.SubjectName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Answer)
+                @Html.DisplayFor(modelItem => item.AssignmentTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
@@ -51,9 +76,7 @@
                 @Html.DisplayFor(modelItem => item.UpdatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Детально</a>
             </td>
         </tr>
     }

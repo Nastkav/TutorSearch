@@ -9,11 +9,6 @@ public class UserModel : IdentityUser<int>
     [MaxLength(50)] public string Name { get; set; } = string.Empty;
     [MaxLength(50)] public string Surname { get; set; } = string.Empty;
     [MaxLength(50)] public string Patronymic { get; set; } = string.Empty;
-
-    [Required(AllowEmptyStrings = false)]
-    [MaxLength(400)]
-    public string Avatar { get; set; } = string.Empty;
-
     public bool ProfileEnabled { get; set; }
     public TutorModel Tutor { get; set; } = null!;
 
@@ -26,7 +21,7 @@ public class UserModel : IdentityUser<int>
     public virtual List<SolutionModel> Solutions { get; set; } = [];
     public virtual List<TutorReviewModel> Reviews { get; set; } = [];
 
-    public virtual List<FileModel> Files { get; set; } = [];
+    public virtual List<UserFileModel> Files { get; set; } = [];
 
     public string FullName() => Name.Length > 2 ? $"{Name} {Patronymic} {Surname}" : Email ?? "";
 }

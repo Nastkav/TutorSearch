@@ -9,7 +9,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace Infra.DatabaseAdapter._Migrations
 {
     /// <inheritdoc />
-    public partial class RestoreV11 : Migration
+    public partial class RESTORE12 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -97,7 +97,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Surname = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Patronymic = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Avatar = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: false),
                     ProfileEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -220,10 +219,8 @@ namespace Infra.DatabaseAdapter._Migrations
                 name: "Files",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    Path = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    FileName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     OwnerId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
@@ -467,6 +464,31 @@ namespace Infra.DatabaseAdapter._Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AssignmentFiles",
+                columns: table => new
+                {
+                    AssignmentsId = table.Column<int>(type: "int", nullable: false),
+                    FilesId = table.Column<Guid>(type: "char(36)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssignmentFiles", x => new { x.AssignmentsId, x.FilesId });
+                    table.ForeignKey(
+                        name: "FK_AssignmentFiles_Assignments_AssignmentsId",
+                        column: x => x.AssignmentsId,
+                        principalTable: "Assignments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AssignmentFiles_Files_FilesId",
+                        column: x => x.FilesId,
+                        principalTable: "Files",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Solutions",
                 columns: table => new
                 {
@@ -476,6 +498,7 @@ namespace Infra.DatabaseAdapter._Migrations
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Answer = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    TutorComment = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
@@ -537,30 +560,23 @@ namespace Infra.DatabaseAdapter._Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AssignmentFiles",
+                name: "SolutiontFiles",
                 columns: table => new
                 {
-                    AssignmentsId = table.Column<int>(type: "int", nullable: false),
-                    FilesId = table.Column<int>(type: "int", nullable: false),
+                    FilesId = table.Column<Guid>(type: "char(36)", nullable: false),
                     SolutionsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssignmentFiles", x => new { x.AssignmentsId, x.FilesId });
+                    table.PrimaryKey("PK_SolutiontFiles", x => new { x.FilesId, x.SolutionsId });
                     table.ForeignKey(
-                        name: "FK_AssignmentFiles_Assignments_AssignmentsId",
-                        column: x => x.AssignmentsId,
-                        principalTable: "Assignments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AssignmentFiles_Files_FilesId",
+                        name: "FK_SolutiontFiles_Files_FilesId",
                         column: x => x.FilesId,
                         principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AssignmentFiles_Solutions_SolutionsId",
+                        name: "FK_SolutiontFiles_Solutions_SolutionsId",
                         column: x => x.SolutionsId,
                         principalTable: "Solutions",
                         principalColumn: "Id",
@@ -604,11 +620,11 @@ namespace Infra.DatabaseAdapter._Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Avatar", "BirthDate", "CityId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "ProfileEnabled", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "CityId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "ProfileEnabled", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { 1, 0, "", new DateTime(2004, 4, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "04b6e721-52bf-437b-bdfe-99ef9906bb7d", "admin@example.com", true, false, null, "Administrator", "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAED/JcnGip5yrSrBHQH+LmlC7r6Pf1nzvsaAZgxa0Pc25cvBsvI1hAD7lJ+61BoGihQ==", "None", null, false, false, "482ea3c3-a1c3-4c83-aced-72e0e5b8808c", "None", false, "admin@example.com" },
-                    { 2, 0, "", new DateTime(1999, 4, 21, 0, 0, 0, 0, DateTimeKind.Local), null, "fd20a7fe-1481-4781-9647-0349196975f3", "tutor@example.com", true, false, null, "Ірина", "TUTOR@EXAMPLE.COM", "TUTOR@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==", "Миколаївна", null, false, false, "9cbd20e0-3497-4bbb-95f7-da2f2710e420", "Мельник", false, "tutor@example.com" }
+                    { 1, 0, new DateTime(2004, 4, 23, 0, 0, 0, 0, DateTimeKind.Local), null, "0830988b-8b2e-438d-af74-4af2b28c7ce2", "admin@example.com", true, false, null, "Administrator", "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAED/JcnGip5yrSrBHQH+LmlC7r6Pf1nzvsaAZgxa0Pc25cvBsvI1hAD7lJ+61BoGihQ==", "None", null, false, false, "482ea3c3-a1c3-4c83-aced-72e0e5b8808c", "None", false, "admin@example.com" },
+                    { 2, 0, new DateTime(1999, 4, 23, 0, 0, 0, 0, DateTimeKind.Local), null, "94a0ab4c-a3eb-4ecb-bd80-bf23a8a704c3", "tutor@example.com", true, false, null, "Ірина", "TUTOR@EXAMPLE.COM", "TUTOR@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==", "Миколаївна", null, false, false, "9cbd20e0-3497-4bbb-95f7-da2f2710e420", "Мельник", false, "tutor@example.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -1314,11 +1330,6 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "FilesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AssignmentFiles_SolutionsId",
-                table: "AssignmentFiles",
-                column: "SolutionsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SubjectId",
                 table: "Assignments",
                 column: "SubjectId");
@@ -1389,6 +1400,11 @@ namespace Infra.DatabaseAdapter._Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SolutiontFiles_SolutionsId",
+                table: "SolutiontFiles",
+                column: "SolutionsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentLessons_StudentsId",
                 table: "StudentLessons",
                 column: "StudentsId");
@@ -1436,6 +1452,9 @@ namespace Infra.DatabaseAdapter._Migrations
 
             migrationBuilder.DropTable(
                 name: "ProfileSubjects");
+
+            migrationBuilder.DropTable(
+                name: "SolutiontFiles");
 
             migrationBuilder.DropTable(
                 name: "StudentLessons");

@@ -27,7 +27,7 @@ public class CreateRequestCommand : IRequest<int>
 
     [MaxLength(300)]
     [MinLength(0)]
-    [DisplayName("Коментар вчителя")]
+    [DisplayName("Коментар учня")]
     public string Comment { get; set; } = string.Empty;
 
 

@@ -9,9 +9,7 @@ public class Assignment
     [DisplayName("#")] public int Id { get; set; }
     [Range(1, int.MaxValue)] public int TutorId { get; set; }
 
-    [DisplayName("Вчитель")]
-    [ReadOnly(true)]
-    public string TutorName { get; set; } = string.Empty;
+    [DisplayName("Вчитель")] public string TutorName { get; set; } = string.Empty;
 
     [DisplayName("Предмет")]
     [Range(1, int.MaxValue, ErrorMessage = "Оберіть предмет")]
@@ -32,22 +30,16 @@ public class Assignment
 
 
     /// <summary>
-    /// int - Id
-    /// string - Title 
+    /// string - File name
+    /// string - File path
     /// </summary>
-    // [DisplayName("Додати файли")]
-    // public Dictionary<int, string> FileNames { get; set; } = [];
+    [DisplayName("Додані файли")]
+    public List<UserFile> FileNames { get; set; } = [];
 
-    public IFormFile? AttachmentFile { get; set; }
-
-    /// <summary>
-    /// int - UserId
-    /// int - SolutionId
-    /// </summary>
-    public Dictionary<int, int> StudentSolutions { get; set; } = [];
 
     [DisplayName("Учні")] public List<int> StudentsIds { get; set; } = [];
 
+    [DisplayName("Учні")] public string StudentNames { get; set; } = string.Empty;
     [DisplayName("Створено")] public DateTime CreatedAt { get; set; }
     [DisplayName("Оновлено")] public DateTime? UpdatedAt { get; set; }
 }

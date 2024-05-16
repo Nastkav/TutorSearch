@@ -121,6 +121,10 @@ public class ProfileController : Controller
         {
             await _mediator.Send(new UpdateUserCommand { Profile = model.UserVm });
 
+            //Upload new avatar
+            if (model.NewAvatar != null)
+                await _mediator.Send(new SaveAvatarCommand() { UserId = IdentityId, FormFile = model.NewAvatar });
+
             if (model.UserVm.ProfileEnabled)
             {
                 if (model.TutorVm == null)

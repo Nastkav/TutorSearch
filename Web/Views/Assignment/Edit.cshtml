@@ -1,21 +1,18 @@
 @model Web.Models.Assignments.AssignmentVm
 
 @{
-    ViewData["Title"] = "Додати нову зустріч";
+    ViewData["Title"] = "Урок #" + Model.Assignment.Id;
 }
 
 <h1>@ViewData["Title"]</h1>
+
 <hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Assignment.Id"/>
             <input asp-for="Assignment.TutorId" hidden/>
-            <div class="form-group">
-                <label asp-for="Assignment.TutorName" class="control-label"></label>
-                <input asp-for="Assignment.TutorName" class="form-control"/>
-                <span asp-validation-for="Assignment.TutorName" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="Assignment.Title" class="control-label"></label>
                 <input asp-for="Assignment.Title" class="form-control"/>
@@ -27,11 +24,6 @@
                 <span asp-validation-for="Assignment.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Assignment.CreatedAt" class="control-label"></label>
-                <input asp-for="Assignment.CreatedAt" class="form-control"/>
-                <span asp-validation-for="Assignment.CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Assignment.Deadline" class="control-label"></label>
                 <input asp-for="Assignment.Deadline" class="form-control"/>
                 <span asp-validation-for="Assignment.Deadline" class="text-danger"></span>
@@ -41,6 +33,7 @@
                 <select asp-for="Assignment.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
                 <span asp-validation-for="Assignment.SubjectId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <div class="input-group">
                     <label asp-for="Assignment.StudentsIds" class="form-check-label mt-2"></label>
@@ -54,7 +47,14 @@
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Назад до списку</a>
+<div class="mt-4 row">
+    <div class="col">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Assignment.Id" name="id"/>
+            <button type="submit" class="btn btn-warning">Видалити</button>
+        </form>
+    </div>
+    <div class="col">
+        <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
+    </div>
 </div>

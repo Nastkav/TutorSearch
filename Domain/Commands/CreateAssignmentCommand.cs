@@ -2,6 +2,7 @@ using AutoMapper;
 using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;
+using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

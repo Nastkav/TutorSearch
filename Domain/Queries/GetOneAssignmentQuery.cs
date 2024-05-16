@@ -31,11 +31,8 @@ public class GetOneAssignmentQuery : IRequest<Assignment?>
             if (dbTask == null)
                 throw new Exception("Задачу не знайдено");
 
-            var task = Mapper.Map<Assignment>(dbTask);
-            task.StudentSolutions = dbTask.Solutions.ToDictionary(k => k.StudentId, v => v.Id);
-            task.AttachmentFile = null; //TODO: dbTasks.Files.ToDictionary(k => k.Id, v => v.Name);
-
-            return task;
+            var assignment = Mapper.Map<Assignment>(dbTask);
+            return assignment;
         }
 
         public GetOneAssignmentQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)

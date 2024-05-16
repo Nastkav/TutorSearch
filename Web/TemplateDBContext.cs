@@ -25,7 +25,7 @@ public class TemplateDbContext : IdentityDbContext<UserModel, IdentityRole<int>,
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
     public virtual DbSet<AssignmentModel> Tasks { get; set; } = null!;
     public virtual DbSet<SolutionModel> Solutions { get; set; } = null!;
-    public virtual DbSet<FileModel> Files { get; set; } = null!;
+    public virtual DbSet<UserFileModel> Files { get; set; } = null!;
     public virtual DbSet<RequestModel> Requests { get; set; } = null!;
     public virtual DbSet<FavoriteTutorModel> FavoriteTutors { get; set; } = null!;
 

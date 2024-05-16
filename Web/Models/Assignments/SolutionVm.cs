@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web.Models.Assignments;
 
-public class AssignmentVm
+public class SolutionVm
 {
     public int? UserId { get; set; }
-    public Assignment Assignment { get; set; } = new();
+    public Solution Solution { get; set; } = new();
     public List<SelectListItem> Subjects { get; set; } = [];
-
-    public List<SelectListItem> HisStudents { get; set; } = [];
+    public bool IsTutor { get; set; }
 }

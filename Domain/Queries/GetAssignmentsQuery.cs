@@ -3,19 +3,18 @@ using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;
 using MediatR;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Domain.Queries;
 
-public class GetAssignmentQuery : IRequest<List<Assignment>>
+public class GetAssignmentsQuery : IRequest<List<Assignment>>
 {
     public int UserId { get; set; }
 
-    public class GetTasksQueryHandler : BaseMediatrHandler<GetAssignmentQuery, List<Assignment>>
+    public class GetAssignmentsQueryHandler : BaseMediatrHandler<GetAssignmentsQuery, List<Assignment>>
     {
-        public override async Task<List<Assignment>> Handle(GetAssignmentQuery r, CancellationToken token)
+        public override async Task<List<Assignment>> Handle(GetAssignmentsQuery r, CancellationToken token)
         {
             //Запит
             var dbTasks = await ApplicationDb.Assignments
@@ -28,16 +27,10 @@ public class GetAssignmentQuery : IRequest<List<Assignment>>
                 .ToListAsync();
 
             var lesList = Mapper.Map<List<Assignment>>(dbTasks);
-            for (var i = 0; i < lesList.Count; i++)
-            {
-                lesList[i].StudentSolutions = dbTasks[i].Solutions.ToDictionary(k => k.StudentId, v => v.Id);
-                lesList[i].AttachmentFile = null; //TODO: dbTasks[i].Files.ToDictionary(k => k.Id, v => v.Name);
-            }
-
             return lesList;
         }
 
-        public GetTasksQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
+        public GetAssignmentsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
             : base(loggerFactory, dbContext, mapper)
         {
         }

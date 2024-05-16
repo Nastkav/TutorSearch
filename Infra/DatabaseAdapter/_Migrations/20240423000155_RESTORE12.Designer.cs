@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.DatabaseAdapter._Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240421030453_RestoreV11")]
-    partial class RestoreV11
+    [Migration("20240423000155_RESTORE12")]
+    partial class RESTORE12
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,17 +27,12 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Property<int>("AssignmentsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FilesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SolutionsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FilesId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("AssignmentsId", "FilesId");
 
                     b.HasIndex("FilesId");
-
-                    b.HasIndex("SolutionsId");
 
                     b.ToTable("AssignmentFiles");
                 });
@@ -3872,38 +3867,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.ToTable("FavoriteTutors");
                 });
 
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.FileModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Files");
-                });
-
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.LessonModel", b =>
                 {
                     b.Property<int>("Id")
@@ -4025,6 +3988,11 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TutorComment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -4984,6 +4952,33 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.ToTable("TutorReviewModel");
                 });
 
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserFileModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Files");
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -4992,11 +4987,6 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime(6)");
@@ -5084,9 +5074,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            Avatar = "",
-                            BirthDate = new DateTime(2004, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "04b6e721-52bf-437b-bdfe-99ef9906bb7d",
+                            BirthDate = new DateTime(2004, 4, 23, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "0830988b-8b2e-438d-af74-4af2b28c7ce2",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5106,9 +5095,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            Avatar = "",
-                            BirthDate = new DateTime(1999, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "fd20a7fe-1481-4781-9647-0349196975f3",
+                            BirthDate = new DateTime(1999, 4, 23, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "94a0ab4c-a3eb-4ecb-bd80-bf23a8a704c3",
                             Email = "tutor@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5297,6 +5285,21 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.ToTable("ProfileSubjects");
                 });
 
+            modelBuilder.Entity("SolutiontFiles", b =>
+                {
+                    b.Property<Guid>("FilesId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("SolutionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FilesId", "SolutionsId");
+
+                    b.HasIndex("SolutionsId");
+
+                    b.ToTable("SolutiontFiles");
+                });
+
             modelBuilder.Entity("StudentLessons", b =>
                 {
                     b.Property<int>("LessonsId")
@@ -5320,15 +5323,9 @@ namespace Infra.DatabaseAdapter._Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infra.DatabaseAdapter.Models.FileModel", null)
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserFileModel", null)
                         .WithMany()
                         .HasForeignKey("FilesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infra.DatabaseAdapter.Models.SolutionModel", null)
-                        .WithMany()
-                        .HasForeignKey("SolutionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -5389,17 +5386,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.FileModel", b =>
-                {
-                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Owner")
-                        .WithMany("Files")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.LessonModel", b =>
@@ -5503,6 +5489,17 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Navigation("Tutor");
                 });
 
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserFileModel", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Owner")
+                        .WithMany("Files")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserModel", b =>
                 {
                     b.HasOne("Infra.DatabaseAdapter.Models.CityModel", "City")
@@ -5574,6 +5571,21 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.HasOne("Infra.DatabaseAdapter.Models.SubjectModel", null)
                         .WithMany()
                         .HasForeignKey("SubjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SolutiontFiles", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserFileModel", null)
+                        .WithMany()
+                        .HasForeignKey("FilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.SolutionModel", null)
+                        .WithMany()
+                        .HasForeignKey("SolutionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

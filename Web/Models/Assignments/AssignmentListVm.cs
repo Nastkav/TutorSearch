@@ -5,6 +5,6 @@ namespace Web.Models.Assignments;
 
 public class AssignmentListVm
 {
-    public GetAssignmentQuery Filter { get; set; } = new();
+    public GetAssignmentsQuery Filter { get; set; } = new();
     public List<Assignment> Assignments { get; set; } = [];
 }

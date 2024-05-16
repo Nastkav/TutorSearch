@@ -15,7 +15,7 @@ public class AssignmentModel : ITrackable
     [MaxLength(500)] public string Description { get; set; } = string.Empty;
     public DateTime Deadline { get; set; }
 
-    public virtual List<FileModel> Files { get; set; } = [];
+    public virtual List<UserFileModel> Files { get; set; } = [];
     public virtual List<SolutionModel> Solutions { get; set; } = [];
 
     //ITrackable

@@ -1,22 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
 using Domain.Commands;
 using Domain.Helpers;
 using Domain.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Web;
 using Web.Models.Assignments;
-using ZstdSharp.Unsafe;
 
 namespace Web.Controllers;
 
@@ -44,11 +33,11 @@ public class AssignmentController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(GetAssignmentQuery? filter)
+    public async Task<IActionResult> Index(GetAssignmentsQuery? filter)
     {
         var model = new AssignmentListVm();
         if (filter == null)
-            filter = new GetAssignmentQuery();
+            filter = new GetAssignmentsQuery();
         filter.UserId = IdentityId;
 
         model.Assignments = await _mediator.Send(filter);
@@ -77,12 +66,12 @@ public class AssignmentController : Controller
         AssignmentValidation(model);
         if (ModelState.IsValid)
         {
-            await _mediator.Send(new CreateAssignmentCommand()
+            var assignmentId = await _mediator.Send(new CreateAssignmentCommand()
             {
                 CreatedId = IdentityId,
                 Assignment = model.Assignment
             });
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit), new { id = assignmentId });
         }
 
         model.UserId = model.Assignment.TutorId = IdentityId;
@@ -92,7 +81,7 @@ public class AssignmentController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Edit(int id)
     {
         var model = new AssignmentVm();
 
@@ -106,15 +95,13 @@ public class AssignmentController : Controller
 
         model.UserId = IdentityId;
         model.Assignment = curAssignment;
-        if (model.Assignment.TutorId == IdentityId)
-            model.IsTutor = true;
         model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Details(int id, AssignmentVm model)
+    public async Task<IActionResult> Edit(int id, AssignmentVm model)
     {
         AssignmentValidation(model);
         if (id != model.Assignment.Id) return NotFound();
@@ -129,7 +116,7 @@ public class AssignmentController : Controller
                 Description = model.Assignment.Description,
                 Deadline = model.Assignment.Deadline,
                 SubjectId = model.Assignment.SubjectId,
-                StudentIds = model.Assignment.StudentSolutions.Keys.ToList()
+                StudentIds = model.Assignment.StudentsIds
             });
             return RedirectToAction(nameof(Index));
         }
@@ -137,5 +124,23 @@ public class AssignmentController : Controller
         model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Delete(int id)
+    {
+        Response.StatusCode = 400;
+        if (id != 0)
+        {
+            var success = await _mediator.Send(new DeleteAssignmentCommand()
+            {
+                AssignmentId = id,
+                TutorId = IdentityId
+            });
+            if (success)
+                return RedirectToAction(nameof(Index));
+        }
+
+        return Content(id.ToString());
     }
 }

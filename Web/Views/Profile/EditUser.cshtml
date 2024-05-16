@@ -23,9 +23,9 @@
 
         <div class="row mt-2">
             <div class="col-12">
-                <label class="col-form-label">Select File</label>
-                <input asp-for="UserVm.NewAvatarFile" class="form-control"/>
-                <span asp-validation-for="UserVm.NewAvatarFile" class="text-danger"></span>
+                <label asp-for="NewAvatar" class="form-check-label mt-2"></label>
+                <input asp-for="NewAvatar" type="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .webp"/>
+                <span asp-validation-for="NewAvatar" class="text-danger"></span>
             </div>
         </div>
 

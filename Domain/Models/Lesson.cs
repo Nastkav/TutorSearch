@@ -9,9 +9,8 @@ public class Lesson
     public int Id { get; set; }
     [Range(1, int.MaxValue)] public int TutorId { get; set; }
 
-    [ReadOnly(true)]
-    [DisplayName("Вчитель")]
-    public string TutorName { get; set; } = string.Empty;
+
+    [DisplayName("Вчитель")] public string TutorName { get; set; } = string.Empty;
 
     [DisplayName("Початок")] public DateTime From { get; set; }
     [DisplayName("Кінець")] public DateTime To { get; set; }
@@ -26,11 +25,7 @@ public class Lesson
 
     [DisplayName("Предмет")] public string? SubjectName { get; set; } = null;
 
-    /// <summary>
-    /// Id,Name
-    /// </summary>
-    [DisplayName("Учні")]
-    public List<int> StudentsIds { get; set; } = [];
+    [DisplayName("Учні")] public List<int> StudentsIds { get; set; } = [];
 
     [DisplayName("Учні")] public string StudentNames { get; set; } = string.Empty;
 

@@ -21,7 +21,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
     public virtual DbSet<AssignmentModel> Assignments { get; set; } = null!;
     public virtual DbSet<SolutionModel> Solutions { get; set; } = null!;
-    public virtual DbSet<FileModel> Files { get; set; } = null!;
+    public virtual DbSet<UserFileModel> Files { get; set; } = null!;
     public virtual DbSet<RequestModel> Requests { get; set; } = null!;
     public virtual DbSet<FavoriteTutorModel> FavoriteTutors { get; set; } = null!;
 
@@ -90,9 +90,17 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
         base.OnModelCreating(builder);
     }
 
-    private void OnBeforeSaving()
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        var entries = ChangeTracker.Entries();
-        ITrackable.BeforeSaving(entries);
+        ITrackable.BeforeSaving(ChangeTracker.Entries());
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = new())
+    {
+        ITrackable.BeforeSaving(ChangeTracker.Entries());
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 }

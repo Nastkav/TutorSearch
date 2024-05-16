@@ -4,11 +4,10 @@ using Infra.DatabaseAdapter.Helpers;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class FileModel : ITrackable
+public class UserFileModel : ITrackable
 {
-    public int Id { get; set; }
-    [MaxLength(100)] public string Name { get; set; } = string.Empty;
-    [MaxLength(300)] public string Path { get; set; } = string.Empty;
+    public Guid Id { get; set; }
+    [MaxLength(100)] public string FileName { get; set; } = string.Empty;
 
     public int OwnerId { get; set; }
     public UserModel Owner { get; set; } = null!;

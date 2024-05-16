@@ -4,13 +4,6 @@ using Infra.DatabaseAdapter.Helpers;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public enum SolutionStatus
-{
-    [Display(Name = "До виконання")] Todo,
-    [Display(Name = "На Перевирці")] Review,
-    [Display(Name = "Виконано")] Completed
-}
-
 public class SolutionModel : ITrackable
 {
     public int Id { get; set; }
@@ -23,7 +16,8 @@ public class SolutionModel : ITrackable
     public SolutionStatus Status { get; set; }
 
     [MaxLength(500)] public string Answer { get; set; } = string.Empty;
-    public virtual List<FileModel> Files { get; set; } = [];
+    [MaxLength(500)] public string TutorComment { get; set; } = string.Empty;
+    public virtual List<UserFileModel> Files { get; set; } = [];
 
     //ITrackable
     public DateTime CreatedAt { get; set; }

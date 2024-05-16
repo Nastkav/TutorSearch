@@ -5,7 +5,7 @@ namespace Domain.Models;
 
 public class Tutor
 {
-    [ReadOnly(true)] public int Id { get; set; }
+    public int Id { get; set; }
 
 
     [Required]

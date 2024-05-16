@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Domain.Helpers;
+using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,14 +62,12 @@ public class UpdateAssignmentCommand : IRequest<Assignment>
                     StudentId = studentId,
                     Status = SolutionStatus.Todo
                 });
+
             //Зберегти
             ApplicationDb.Assignments.Update(dbAssignment);
             await ApplicationDb.SaveChangesAsync();
             //Повернути оновлене завдання
             var task = Mapper.Map<Assignment>(dbAssignment);
-            task.StudentSolutions = dbAssignment.Solutions.ToDictionary(k => k.StudentId, v => v.Id);
-            task.AttachmentFile = null; //TODO: dbTasks.Files.ToDictionary(k => k.Id, v => v.Name);
-
             return task;
         }
 

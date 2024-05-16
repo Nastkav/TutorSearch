@@ -8,7 +8,7 @@ namespace Domain.Models;
 
 public class User
 {
-    [ReadOnly(true)] public int Id { get; set; }
+    public int Id { get; set; }
 
     [DisplayName("Активувати профль викладача")]
     public bool ProfileEnabled { get; set; }
@@ -18,7 +18,7 @@ public class User
     [StringLength(50, ErrorMessage = "Надто довгий текст у полі ім'я")]
     public string Name { get; set; } = string.Empty;
 
-    [MaxLength(400)] public string Avatar { get; set; } = string.Empty;
+    public string Avatar => "/avatars/" + Id + ".png";
 
     [Required]
     [Display(Name = "Прізвище")]
@@ -34,8 +34,6 @@ public class User
     [Range(1, int.MaxValue, ErrorMessage = "Оберіть місто")]
     [Display(Name = "Місто")]
     public string CityId { get; set; } = "0";
-
-    public IFormFile? NewAvatarFile { get; set; }
 
     public string FullName { get; set; } = string.Empty;
 }

@@ -18,7 +18,7 @@ public class UpdateSessionCommand : IRequest<int>
     public string? Comment { get; set; }
     public string? Subject { get; set; }
     public int? SubjectId { get; set; }
-    public List<int>? StudentsIds { get; set; }
+    public List<int>? StudentIds { get; set; }
 
     public class UpdateSessionCommandHandler : BaseMediatrHandler<UpdateSessionCommand, int>
     {
@@ -31,7 +31,9 @@ public class UpdateSessionCommand : IRequest<int>
             var start = TimeOnly.FromDateTime(r.From);
             var end = TimeOnly.FromDateTime(r.To);
 
-            var dbLesson = ApplicationDb.Lessons.FirstOrDefault(x => x.Id == r.EventId);
+            var dbLesson = ApplicationDb.Lessons
+                .Include(x => x.Students)
+                .FirstOrDefault(x => x.Id == r.EventId);
             if (dbLesson == null)
                 throw new Exception("Подію не знайдено");
 
@@ -61,9 +63,24 @@ public class UpdateSessionCommand : IRequest<int>
                 dbLesson.Subject = dbSubject;
             }
 
-            //Students
-            if (r.StudentsIds != null)
-                dbLesson.Students = await ApplicationDb.Users.Where(x => r.StudentsIds.Contains(x.Id)).ToListAsync();
+            if (r.StudentIds != null)
+            {
+                //Виняток учнів зі списку, які є в базі, але зараз не вибрані
+                foreach (var s in dbLesson.Students)
+                    if (!r.StudentIds.Contains(s.Id))
+                        dbLesson.Students.Remove(s);
+
+                var studentsIds = dbLesson.Students.Select(x => x.Id).ToList();
+                //Видалення існуючих студентів зі списку для вставки
+                foreach (var studId in studentsIds)
+                    r.StudentIds.Remove(studId);
+
+                //Додати новіх студентів яких не було у базі 
+                var newStuds = await ApplicationDb.Users
+                    .Where(x => r.StudentIds.Contains(x.Id))
+                    .ToListAsync();
+                dbLesson.Students.AddRange(newStuds);
+            }
 
             //Comment
             if (r.Comment != null) dbLesson.Comment = r.Comment;

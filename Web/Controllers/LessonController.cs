@@ -151,7 +151,7 @@ public class LessonController : Controller
                 To = model.Lesson.To,
                 Comment = model.Lesson.Comment,
                 SubjectId = model.Lesson.SubjectId,
-                StudentsIds = model.Lesson.StudentsIds
+                StudentIds = model.Lesson.StudentsIds
             });
             return RedirectToAction(nameof(Index));
         }

@@ -29,8 +29,8 @@
                 <input asp-for="Lesson.Comment" class="form-control" readonly/>
             </div>
             <div class="form-group">
-                <label asp-for="Lesson.SubjectId" class="form-check-label mt-2"></label>
-                <select asp-for="Lesson.SubjectId" class="form-select" asp-items="@Model.Subjects" readonly></select>
+                <label asp-for="Lesson.SubjectName" class="form-check-label mt-2"></label>
+                <input asp-for="Lesson.SubjectName" class="form-control" readonly></input>
             </div>
 
             <div class="form-group">
@@ -44,7 +44,7 @@
     @if (Model.IsTutor)
     {
         <div class="col">
-            <a asp-action="Edit" asp-route-id="@Model.Lesson.Id" class="btn btn-primary" role="button">Оновити заустріч</a>
+            <a asp-action="Edit" asp-route-id="@Model.Lesson.Id" class="btn btn-primary" role="button">Оновити зустріч</a>
         </div>
     }
     <div class="col">
