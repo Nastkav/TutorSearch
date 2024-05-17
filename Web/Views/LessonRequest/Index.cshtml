@@ -15,19 +15,13 @@
 
 @section Scripts
 {
-    var item;
     <script type="text/javascript">
     $('#updateStatus').on('show.bs.modal', function (event) {
-        // console.log("updateStatus")
-        item = $(event.relatedTarget).data('item') // Extract info from data-* attributes
+        var item = $(event.relatedTarget).data('item') // Extract info from data-* attributes
         document.updateRequest.tutorProfileId.value = item.TutorId
         document.updateRequest.rId.value = item.Id
-        let from = new Date(item.From)
-        let to = new Date(item.To)
-        from.setMinutes(from.getMinutes() - from.getTimezoneOffset());
-        to.setMinutes(to.getMinutes() - to.getTimezoneOffset());
-        document.updateRequest.timeFrom.value =from.toISOString().slice(0, -1);
-        document.updateRequest.timeTo.value = to.toISOString().slice(0, -1);
+        document.updateRequest.timeFrom.value = item.From.slice(0, -1)
+        document.updateRequest.timeTo.value = item.To.slice(0, -1)
     })
     </script>
 }

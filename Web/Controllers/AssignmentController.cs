@@ -5,6 +5,7 @@ using Domain.Queries;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Web.Helpers;
 using Web.Models.Assignments;
 
 namespace Web.Controllers;

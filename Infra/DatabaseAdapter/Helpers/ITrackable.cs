@@ -23,8 +23,6 @@ public interface ITrackable
                         trackable.CreatedAt = now;
                         trackable.UpdatedAt = now;
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
     }
 }

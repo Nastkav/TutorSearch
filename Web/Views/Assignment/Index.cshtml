@@ -7,52 +7,54 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Додати завдання</a>
+    <a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>Додати завдання</a>
 </p>
-<table class="table">
-    <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Assignments.First().Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Assignments.First().Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Assignments.First().SubjectName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Assignments.First().CreatedAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Assignments.First().Deadline)
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.Assignments)
-    {
+<div class="row">
+    <table class="table table-hover table-light">
+        <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubjectName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Детально</a>
-            </td>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Assignments.First().Id)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Assignments.First().Title)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Assignments.First().SubjectName)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Assignments.First().CreatedAt)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Assignments.First().Deadline)
+            </th>
+            <th scope="col"></th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Assignments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubjectName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deadline)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Детально</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

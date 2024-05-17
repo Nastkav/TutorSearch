@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Infra.DatabaseAdapter.Helpers;
@@ -5,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class TutorReviewModel : ITrackable
+public class ReviewModel : ITrackable
 {
     public int Id { get; set; }
     public int TutorId { get; set; }

@@ -7,6 +7,7 @@ using Domain.Queries;
 using Domain.Commands;
 using Domain.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Web.Helpers;
 using Web.Models.LessonRequest;
 
 namespace Web.Controllers;

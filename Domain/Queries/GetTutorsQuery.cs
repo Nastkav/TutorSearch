@@ -28,8 +28,7 @@ public class GetTutorsQuery : IRequest<List<int>>
     {
         public override async Task<List<int>> Handle(GetTutorsQuery r, CancellationToken token)
         {
-            var q = ApplicationDb.Users
-                .Include(x => x.Reviews)
+            var q = DatabaseContext.Users
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.Subjects)
                 .Where(x => x.ProfileEnabled);
@@ -52,8 +51,8 @@ public class GetTutorsQuery : IRequest<List<int>>
             return await q.OrderBy(x => x.Reviews.Count).Select(x => x.Id).ToListAsync();
         }
 
-        public GetTutorsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetTutorsQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

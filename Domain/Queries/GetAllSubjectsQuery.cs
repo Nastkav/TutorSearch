@@ -11,12 +11,12 @@ public class GetAllSubjectsQuery : IRequest<Dictionary<int, string>>
 {
     public class GetAllSubjectsQueryHandler : BaseMediatrHandler<GetAllSubjectsQuery, Dictionary<int, string>>
     {
-        public GetAllSubjectsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetAllSubjectsQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
         public override async Task<Dictionary<int, string>> Handle(GetAllSubjectsQuery r, CancellationToken token) =>
-            await ApplicationDb.Subjects.ToDictionaryAsync(k => k.Id, v => v.Name);
+            await DatabaseContext.Subjects.ToDictionaryAsync(k => k.Id, v => v.Name);
     }
 }

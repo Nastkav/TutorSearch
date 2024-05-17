@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Web.Helpers;
 using Web.Models.Lessons;
 
 namespace Web.Controllers;

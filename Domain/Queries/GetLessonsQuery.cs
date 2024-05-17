@@ -26,7 +26,7 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
                 r.To = DateTime.MaxValue;
 
             //Запит
-            var dbLessons = await ApplicationDb.Lessons
+            var dbLessons = await DatabaseContext.Lessons
                 .Include(x => x.Subject)
                 .Include(x => x.Students)
                 .Include(x => x.Tutor)
@@ -40,8 +40,8 @@ public class GetLessonsQuery : IRequest<List<Lesson>>
             return lesList;
         }
 
-        public GetLessonsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetLessonsQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

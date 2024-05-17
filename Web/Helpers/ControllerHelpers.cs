@@ -1,10 +1,7 @@
-using System.Security.Claims;
-using Domain.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Web.Models.Shared;
 
-namespace Domain.Helpers;
+namespace Web.Helpers;
 
 public class ControllerHelpers
 {
@@ -12,15 +9,6 @@ public class ControllerHelpers
 
     public ControllerHelpers(IMediator mediator) =>
         _mediator = mediator;
-
-    // public async Task<List<CheckboxVm>> GetListSubjects()
-    // {
-    //     var query = await _mediator.Send(new GetAllSubjectsQuery());
-    //     var subjects = query
-    //         .Select(o => new CheckboxVm { Id = o.Key, LabelName = o.Value, IsChecked = false })
-    //         .ToList();
-    //     return subjects;
-    // }
 
     public async Task<List<SelectListItem>> GetSelectList(IRequest<Dictionary<int, string>> q, string defaultText = "")
     {

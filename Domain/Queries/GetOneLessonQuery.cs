@@ -19,7 +19,7 @@ public class GetOneLessonQuery : IRequest<Lesson?>
         public override async Task<Lesson?> Handle(GetOneLessonQuery r, CancellationToken token)
         {
             //Запит
-            var dbLesson = await ApplicationDb.Lessons
+            var dbLesson = await DatabaseContext.Lessons
                 .Include(x => x.Students)
                 .Include(x => x.Subject)
                 .Include(x => x.Tutor)
@@ -34,8 +34,8 @@ public class GetOneLessonQuery : IRequest<Lesson?>
             return lesson;
         }
 
-        public GetOneLessonQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetOneLessonQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

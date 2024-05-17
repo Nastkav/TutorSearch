@@ -4,18 +4,37 @@
 @{
     ViewData["Title"] = "Учень: Задачі";
 }
-<div class="row-cols-md-4">
-    <form asp-action="Index" method="get">
-        <input asp-for="Filter.UserId" name="userid" hidden/>
+<form asp-action="Index" method="get" xmlns="http://www.w3.org/1999/html">
+    <input asp-for="Filter.UserId" name="userid" hidden/>
+    <div class="row row-cols-md-6">
         <div class="col">
             <label asp-for="Filter.Status" class="form-check-label"></label>
             <select asp-for="Filter.Status" asp-items="@Html.GetEnumSelectList<SolutionStatus>()" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
         </div>
         <div class="col">
-            <input type="submit" value="Оновити" class="btn btn-primary"/>
+            <label asp-for="Filter.SubjectId" class="form-check-label"></label>
+            <select asp-for="Filter.SubjectId" asp-items="@Model.Subjects" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
         </div>
-    </form>
-</div>
+        <div class="col">
+            <label asp-for="Filter.TutorId" class="form-check-label"></label>
+            <select asp-for="Filter.TutorId" asp-items="@Model.HisTutors" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col">
+            <label asp-for="Filter.StudentId" class="form-check-label"></label>
+            <select asp-for="Filter.StudentId" asp-items="@Model.HisStudents" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col">
+            <label asp-for="Filter.AssignmentId" class="form-check-label"></label>
+            <select asp-for="Filter.AssignmentId" asp-items="@Model.Assignments" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col justify-content-md-center">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+        </div>
+    </div>
+
+</form>
 <h1>Index</h1>
 <table class="table">
     <thead>

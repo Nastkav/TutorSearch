@@ -35,6 +35,7 @@
         <input asp-for="Solution.SubjectName" class="form-control" readonly/>
     </div>
 </div>
+<partial name="FilesForm" model="@Model.Solution.AssignmentFiles"/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -46,41 +47,76 @@
                 <input asp-for="Solution.StudentName" class="form-control" readonly/>
                 <span asp-validation-for="Solution.StudentName" class="text-danger"></span>
             </div>
+            <!-- Student Answer -->
             <div class="form-group">
                 <label asp-for="Solution.Answer" class="control-label"></label>
-                <input asp-for="Solution.Answer" class="form-control"/>
-                <span asp-validation-for="Solution.Answer" class="text-danger"></span>
+                @if (!Model.IsTutor && Model.Solution.Status == SolutionStatus.Todo)
+                {
+                    <input asp-for="Solution.Answer" class="form-control"/>
+                    <span asp-validation-for="Solution.Answer" class="text-danger"></span>
+                }
+                else
+                {
+                    <input asp-for="Solution.Answer" class="form-control" readonly/>
+                }
             </div>
+            <!-- Tutor comment -->
             <div class="form-group">
                 <label asp-for="Solution.TutorComment" class="control-label"></label>
-                <input asp-for="Solution.TutorComment" class="form-control"/>
-                <span asp-validation-for="Solution.TutorComment" class="text-danger"></span>
+                @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
+                {
+                    <input asp-for="Solution.TutorComment" class="form-control"/>
+                    <span asp-validation-for="Solution.TutorComment" class="text-danger"></span>
+                }
+                else
+                {
+                    <input asp-for="Solution.TutorComment" class="form-control" readonly/>
+                }
             </div>
+            <!-- Solution Status -->
             <div class="form-group">
                 <label asp-for="Solution.Status" class="form-check-label mt-2"></label>
-                @if (Model.IsTutor)
+                @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
                 {
                     <select asp-for="Solution.Status" class="form-select" id="status" asp-items="Html.GetEnumSelectList<SolutionStatus>()"></select>
+                    <span asp-validation-for="Solution.Status" class="text-danger"></span>
                 }
                 else
                 {
                     <label class="form-control" readonly>@Model.Solution.Status.GetDisplayName()</label>
                 }
-                <span asp-validation-for="Solution.Status" class="text-danger"></span>
             </div>
+
+            <!-- Sumbin -->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>
 </div>
+
 <div class="mt-4 row">
-    <div class="col">
-        @* <form asp-action="Delete"> *@
-        @*     <input type="hidden" asp-for="Solution.Id" name="id"/> *@
-        @*     <button type="submit" class="btn btn-warning">Видалити</button> *@
-        @* </form> *@
+    <partial name="FilesForm" model="@Model.Solution.SolutionFiles"/>
+    <div class="row">
+        <form id="uploadform" asp-controller="Files" asp-action="Upload" enctype="multipart/form-data">
+            <div class="col col-md-8">
+                <input type="hidden" asp-for="Solution.Id" name="solutionId"/>
+                <label class="form-control" type="file" id="FormFile" name="FormFile"></label>
+            </div>
+            <div class="col col-md-4">
+                <button type="submit" class="btn btn-primary ">Завантажити файл</button>
+            </div>
+        </form>
     </div>
+</div>
+
+<div class="mb-3">
+    <label for="formFileSm" class="form-label">Small file input example</label>
+    <input class="form-control form-control-sm" id="formFileSm" type="file">
+</div>
+
+
+<div class="mt-4 row">
     <div class="col">
         <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
     </div>

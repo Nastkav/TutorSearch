@@ -40,7 +40,7 @@ function getEvents(info, successCallback, failureCallback) {
         success: function (data) {
             availableDates = data.filter(date => date.type.toLowerCase() !== "available");
             calEvents = availableDates.map(({from, to}) => ({
-                groupId: "игын",
+                groupId: "busy",
                 start: from,
                 end: to,
                 display: 'background',
@@ -55,13 +55,9 @@ function getEvents(info, successCallback, failureCallback) {
 function addNewEvent(info) {
     var userid = $("#calendar").data('userid')
     if (userid > 0) {
-        let start = new Date(info.start)
-        let end = new Date(info.end)
-        start.setMinutes(start.getMinutes() - start.getTimezoneOffset());
-        end.setMinutes(end.getMinutes() - end.getTimezoneOffset());
-        document.requestForm.timeFrom.value = start.toISOString().slice(0, -1);
-        document.requestForm.timeTo.value = end.toISOString().slice(0, -1);
-
+        //'2024-04-23T05:30:00+03:00' --> '2024-04-23T05:30:00'
+        document.requestForm.timeFrom.value = info.startStr.slice(0, -6)
+        document.requestForm.timeTo.value = info.endStr.slice(0, -6)
         $('#requestModal').modal('show');
     } else {
         $('#auth-modal').modal('show');

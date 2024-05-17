@@ -17,8 +17,8 @@ public class CreateLessonCommand : IRequest<int>
 
     public class CreateRequestCommandHandler : BaseMediatrHandler<CreateLessonCommand, int>
     {
-        public CreateRequestCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public CreateRequestCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -26,10 +26,10 @@ public class CreateLessonCommand : IRequest<int>
         {
             if (r.CreatedId != r.Lesson.TutorId)
                 throw new Exception("Лише репетитор може створити зустріч");
-            if (!ApplicationDb.Tutor.Any(x => x.Id == r.Lesson.TutorId))
+            if (!DatabaseContext.Tutor.Any(x => x.Id == r.Lesson.TutorId))
                 throw new Exception("Репетитор вказан невірно");
 
-            var dbSubject = await ApplicationDb.Subjects
+            var dbSubject = await DatabaseContext.Subjects
                 .FirstOrDefaultAsync(x => x.Id == r.Lesson.SubjectId || x.Name == r.Lesson.SubjectName);
             if (dbSubject == null)
                 throw new Exception($"Предмету '{r.Lesson.SubjectId}:{r.Lesson.SubjectName}' не знайдено.");
@@ -38,15 +38,15 @@ public class CreateLessonCommand : IRequest<int>
             newLesson.Subject = dbSubject;
 
             //Дадання учнів
-            newLesson.Students = ApplicationDb.Users.Where(x => r.Lesson.StudentsIds.Contains(x.Id)).ToList();
+            newLesson.Students = DatabaseContext.Users.Where(x => r.Lesson.StudentsIds.Contains(x.Id)).ToList();
 
             //Перевірка перетинання часу    
             //aF > bT and bF > aT
-            if (await ApplicationDb.Lessons.CountAsync(x => x.From > r.Lesson.To && r.Lesson.From > x.To) > 0)
+            if (await DatabaseContext.Lessons.CountAsync(x => x.From > r.Lesson.To && r.Lesson.From > x.To) > 0)
                 throw new Exception("У вас вже є зустріч у цей час");
 
-            await ApplicationDb.Lessons.AddAsync(newLesson);
-            await ApplicationDb.SaveChangesAsync();
+            await DatabaseContext.Lessons.AddAsync(newLesson);
+            await DatabaseContext.SaveChangesAsync();
             return newLesson.Id;
         }
     }

@@ -28,8 +28,8 @@ public class UpdateRequestCommand : IRequest<int>
 
     public class UpdateRequestCommandHandler : BaseMediatrHandler<UpdateRequestCommand, int>
     {
-        public UpdateRequestCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public UpdateRequestCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -38,7 +38,7 @@ public class UpdateRequestCommand : IRequest<int>
             if (r.UpdatedBy != r.TutorId)
                 throw new Exception("Тільки репетитор може оновлювати запити");
 
-            var dbRequest = ApplicationDb.Requests
+            var dbRequest = DatabaseContext.Requests
                                 .Include(x => x.Subject)
                                 .Include(x => x.Created)
                                 .First(x => x.Id == r.Id && x.TutorId == r.TutorId)
@@ -49,18 +49,18 @@ public class UpdateRequestCommand : IRequest<int>
 
             Mapper.Map(r, dbRequest);
             if (r.Subject != null)
-                dbRequest.Subject = ApplicationDb.Subjects
+                dbRequest.Subject = DatabaseContext.Subjects
                     .First(x => x.Name == r.Subject);
-            ApplicationDb.Requests.Update(dbRequest);
+            DatabaseContext.Requests.Update(dbRequest);
 
             if (dbRequest.Status == LessonRequestStatus.Approved) // Створення нового уроку
             {
                 var lesson = Mapper.Map<LessonModel>(dbRequest);
                 lesson.Students.Add(dbRequest.Created);
-                await ApplicationDb.Lessons.AddAsync(lesson);
+                await DatabaseContext.Lessons.AddAsync(lesson);
             }
 
-            await ApplicationDb.SaveChangesAsync();
+            await DatabaseContext.SaveChangesAsync();
             return dbRequest.Id;
         }
     }

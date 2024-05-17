@@ -33,8 +33,8 @@ public class CreateRequestCommand : IRequest<int>
 
     public class CreateRequestCommandHandler : BaseMediatrHandler<CreateRequestCommand, int>
     {
-        public CreateRequestCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public CreateRequestCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -42,12 +42,12 @@ public class CreateRequestCommand : IRequest<int>
         {
             if (r.CreatedId == r.TutorId)
                 throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
-            if (!ApplicationDb.Tutor.Any(x => x.Id == r.TutorId))
+            if (!DatabaseContext.Tutor.Any(x => x.Id == r.TutorId))
                 throw new Exception("Репетитор вказан невірно");
-            if (!ApplicationDb.Users.Any(x => x.Id == r.CreatedId))
+            if (!DatabaseContext.Users.Any(x => x.Id == r.CreatedId))
                 throw new Exception("Ученик вказан невірно");
 
-            var dbSubject = await ApplicationDb.Subjects.FirstOrDefaultAsync(x => x.Id == r.SubjectId);
+            var dbSubject = await DatabaseContext.Subjects.FirstOrDefaultAsync(x => x.Id == r.SubjectId);
             if (dbSubject == null)
                 throw new Exception($"Предмету '{r.SubjectId}' не знайдено.");
 
@@ -56,7 +56,7 @@ public class CreateRequestCommand : IRequest<int>
             newRequest.Status = LessonRequestStatus.New;
 
             //Перевірка існування схожого запиту до цього викладача    
-            var requestExist = ApplicationDb.Requests.Any(x =>
+            var requestExist = DatabaseContext.Requests.Any(x =>
                 x.CreatedId == newRequest.CreatedId &&
                 x.Status == newRequest.Status &&
                 x.TutorId == newRequest.TutorId &&
@@ -67,11 +67,11 @@ public class CreateRequestCommand : IRequest<int>
 
             //Перевірка перетинання часу    
             //aF > bT and bF > aT
-            if (await ApplicationDb.Lessons.CountAsync(x => x.From > newRequest.To && newRequest.From > x.To) > 0)
+            if (await DatabaseContext.Lessons.CountAsync(x => x.From > newRequest.To && newRequest.From > x.To) > 0)
                 throw new Exception("Додавання неможливе, час перетинається");
 
-            await ApplicationDb.Requests.AddAsync(newRequest);
-            await ApplicationDb.SaveChangesAsync();
+            await DatabaseContext.Requests.AddAsync(newRequest);
+            await DatabaseContext.SaveChangesAsync();
             return newRequest.Id;
         }
     }

@@ -16,18 +16,18 @@ public class DeleteAssignmentCommand : IRequest<bool>
     {
         public override async Task<bool> Handle(DeleteAssignmentCommand r, CancellationToken token)
         {
-            var assignment = await ApplicationDb.Assignments
+            var assignment = await DatabaseContext.Assignments
                 .FirstOrDefaultAsync(x => x.TutorId == r.TutorId && x.Id == r.AssignmentId);
             if (assignment == null)
                 return false;
 
-            ApplicationDb.Remove(assignment);
-            await ApplicationDb.SaveChangesAsync();
+            DatabaseContext.Remove(assignment);
+            await DatabaseContext.SaveChangesAsync();
             return true;
         }
 
-        public DeleteAssignmentCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public DeleteAssignmentCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

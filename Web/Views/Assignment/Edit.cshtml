@@ -8,53 +8,69 @@
 
 <hr/>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Assignment.Id"/>
-            <input asp-for="Assignment.TutorId" hidden/>
-            <div class="form-group">
-                <label asp-for="Assignment.Title" class="control-label"></label>
-                <input asp-for="Assignment.Title" class="form-control"/>
-                <span asp-validation-for="Assignment.Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Assignment.Description" class="control-label"></label>
-                <input asp-for="Assignment.Description" class="form-control"/>
-                <span asp-validation-for="Assignment.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Assignment.Deadline" class="control-label"></label>
-                <input asp-for="Assignment.Deadline" class="form-control"/>
-                <span asp-validation-for="Assignment.Deadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Assignment.SubjectId" class="form-check-label mt-2"></label>
-                <select asp-for="Assignment.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
-                <span asp-validation-for="Assignment.SubjectId" class="text-danger"></span>
-            </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Assignment.Id"/>
+        <input asp-for="Assignment.TutorId" hidden/>
+        <div class="form-group">
+            <label asp-for="Assignment.Title" class="control-label"></label>
+            <input asp-for="Assignment.Title" class="form-control"/>
+            <span asp-validation-for="Assignment.Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Assignment.Description" class="control-label"></label>
+            <input asp-for="Assignment.Description" class="form-control"/>
+            <span asp-validation-for="Assignment.Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Assignment.Deadline" class="control-label"></label>
+            <input asp-for="Assignment.Deadline" class="form-control"/>
+            <span asp-validation-for="Assignment.Deadline" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Assignment.SubjectId" class="form-check-label mt-2"></label>
+            <select asp-for="Assignment.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
+            <span asp-validation-for="Assignment.SubjectId" class="text-danger"></span>
+        </div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <label asp-for="Assignment.StudentsIds" class="form-check-label mt-2"></label>
-                    <select asp-for="Assignment.StudentsIds" asp-items="@Model.HisStudents" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
-                    <span asp-validation-for="Assignment.StudentsIds" class="text-danger"></span>
-                </div>
+        <div class="form-group">
+            <div class="input-group">
+                <label asp-for="Assignment.StudentsIds" class="form-check-label mt-2"></label>
+                <select asp-for="Assignment.StudentsIds" asp-items="@Model.HisStudents" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
+                <span asp-validation-for="Assignment.StudentsIds" class="text-danger"></span>
             </div>
-            <div class="form-group">
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-8"></div>
+            <div class="col-1">
                 <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
-        </form>
-    </div>
+            <div class="col-1">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Assignment.Id" name="id"/>
+                    <button type="submit" class="btn btn-warning">Видалити</button>
+                </form>
+            </div>
+            <div class="col-2">
+                <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
+            </div>
+        </div>
+
+    </form>
 </div>
-<div class="mt-4 row">
-    <div class="col">
-        <form asp-action="Delete">
-            <input type="hidden" asp-for="Assignment.Id" name="id"/>
-            <button type="submit" class="btn btn-warning">Видалити</button>
-        </form>
-    </div>
-    <div class="col">
-        <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
-    </div>
+
+<div class="row">
+    <partial name="FilesForm" model="@Model.Assignment.FileNames"/>
+    <form id="uploadform" asp-controller="Files" asp-action="Upload" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Assignment.Id" name="assignmentId"/>
+        <div class="row">
+            <div class="col col-md-6">
+                <input class="form-control form-control-sm" name="FormFile" type="file">
+            </div>
+
+            <div class="col col-md-2">
+                <button type="submit" class="btn btn-primary ">Завантажити файл</button>
+            </div>
+        </div>
+    </form>
 </div>

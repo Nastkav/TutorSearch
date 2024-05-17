@@ -15,26 +15,26 @@ public class CheckFavoriteCommand : IRequest<bool>
 
     public class CheckFavoriteCommandHandler : BaseMediatrHandler<CheckFavoriteCommand, bool>
     {
-        public CheckFavoriteCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public CheckFavoriteCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
         public override async Task<bool> Handle(CheckFavoriteCommand r, CancellationToken token)
         {
-            var tutorSaved = ApplicationDb.FavoriteTutors.Where(x =>
+            var tutorSaved = DatabaseContext.FavoriteTutors.Where(x =>
                     x.UserId == r.UserId
                     && x.ProfileId == r.TutorId)
                 .FirstOrDefault();
             if (r.Status && tutorSaved == null)
-                ApplicationDb.FavoriteTutors.Add(new FavoriteTutorModel
+                DatabaseContext.FavoriteTutors.Add(new FavoriteTutorModel
                 {
                     ProfileId = r.TutorId,
                     UserId = r.UserId
                 });
             else if (!r.Status && tutorSaved != null)
-                ApplicationDb.FavoriteTutors.Remove(tutorSaved);
-            await ApplicationDb.SaveChangesAsync();
+                DatabaseContext.FavoriteTutors.Remove(tutorSaved);
+            await DatabaseContext.SaveChangesAsync();
             return true;
         }
     }

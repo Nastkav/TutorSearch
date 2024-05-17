@@ -5,7 +5,7 @@ namespace Domain.Models;
 
 public class UserFile
 {
-    [MaxLength(36)] public string Id { get; set; } = string.Empty;
+    [MaxLength(36)] public Guid Id { get; set; }
     [MaxLength(100)] public string FileName { get; set; } = string.Empty;
 
     public int OwnerId { get; set; }

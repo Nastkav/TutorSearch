@@ -23,19 +23,19 @@ namespace Domain.Commands;
 public class SaveAvatarCommand : IRequest<bool>
 {
     public int UserId { get; set; }
-    public IFormFile FormFile { get; set; }
+    public IFormFile FormFile { get; set; } = null!;
 
     public class SaveAvatarCommandHandler : BaseMediatrHandler<SaveAvatarCommand, bool>
     {
         private readonly IHostingEnvironment _environment;
 
-        public SaveAvatarCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper,
+        public SaveAvatarCommandHandler(AppDbContext dbContext, IMapper mapper,
             IHostingEnvironment environment)
-            : base(loggerFactory, dbContext, mapper) =>
+            : base(dbContext, mapper) =>
             _environment = environment;
 
         //https://blog.elmah.io/upload-and-resize-an-image-with-asp-net-core-and-imagesharp/
-        public override async Task<bool> Handle(SaveAvatarCommand r, CancellationToken token)
+        public override Task<bool> Handle(SaveAvatarCommand r, CancellationToken token)
         {
             using (var fs = new FileStream(Path.Combine(_environment.WebRootPath, "avatars", $"{r.UserId}.png"),
                        FileMode.Create))
@@ -45,7 +45,7 @@ public class SaveAvatarCommand : IRequest<bool>
                 image.Save(fs, new PngEncoder());
             }
 
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

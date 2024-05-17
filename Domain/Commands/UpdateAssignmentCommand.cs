@@ -26,7 +26,7 @@ public class UpdateAssignmentCommand : IRequest<Assignment>
     {
         public override async Task<Assignment> Handle(UpdateAssignmentCommand r, CancellationToken token)
         {
-            var dbAssignment = ApplicationDb.Assignments
+            var dbAssignment = DatabaseContext.Assignments
                 .Include(x => x.Solutions)
                 .FirstOrDefault(x => x.Id == r.AssignmentId);
             if (dbAssignment == null)
@@ -47,7 +47,7 @@ public class UpdateAssignmentCommand : IRequest<Assignment>
             //Видалити рішення які ще не виконані та їх немає у списку 
             foreach (var s in dbAssignment.Solutions)
                 if (!r.StudentIds.Contains(s.StudentId) && s.Status == SolutionStatus.Todo)
-                    ApplicationDb.Solutions.Remove(s);
+                    DatabaseContext.Solutions.Remove(s);
 
             var studentsIds = dbAssignment.Solutions.Select(x => x.StudentId).ToList();
             //Видалення існуючих рішень студентів зі списку вставки
@@ -64,15 +64,15 @@ public class UpdateAssignmentCommand : IRequest<Assignment>
                 });
 
             //Зберегти
-            ApplicationDb.Assignments.Update(dbAssignment);
-            await ApplicationDb.SaveChangesAsync();
+            DatabaseContext.Assignments.Update(dbAssignment);
+            await DatabaseContext.SaveChangesAsync();
             //Повернути оновлене завдання
             var task = Mapper.Map<Assignment>(dbAssignment);
             return task;
         }
 
-        public UpdateAssignmentCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public UpdateAssignmentCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

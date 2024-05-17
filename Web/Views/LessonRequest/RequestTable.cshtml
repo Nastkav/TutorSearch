@@ -64,7 +64,7 @@
             <td>
                 @if (item.IsTutor && item.Status == LessonRequestStatus.New)
                 {
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateStatus" data-item="@item.ToJson()">Відповісти</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatus" data-item="@item.ToJson()">Відповісти</button>
                 }
             </td>
         </tr>

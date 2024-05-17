@@ -26,9 +26,9 @@ public class DomainMappingProfile : Profile
 
         //Files
         CreateMap<UserFileModel, UserFile>()
-            // .ForMember(d => d.Id, o => o.MapFrom(x => x.Id)) //TODO: Check this convert!
             .ForMember(d => d.OwnerName, o => o.MapFrom(x => x.Owner.Name));
-        CreateMap<UserFile, UserFileModel>();
+        CreateMap<UserFile, UserFileModel>(); //TODO check string-> Guid 
+
 
         //Requests
         CreateMap<LessonRequest, RequestModel>();
@@ -76,12 +76,12 @@ public class DomainMappingProfile : Profile
 
         CreateMap<SolutionModel, Solution>()
             .ForMember(d => d.StudentName, o => o.MapFrom(x => x.Student.FullName()))
+            .ForMember(d => d.SolutionFiles, opt => opt.MapFrom(s => s.Files))
             .ForMember(d => d.TutorId, opt => opt.MapFrom(s => s.Assignment.Tutor.Id))
             .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Assignment.Tutor.User.FullName()))
             .ForMember(d => d.AssignmentTitle, o => o.MapFrom(x => x.Assignment.Title))
             .ForMember(d => d.Description, o => o.MapFrom(x => x.Assignment.Description))
             .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Assignment.Subject.Name))
-            .ForMember(d => d.SolutionFiles, opt => opt.MapFrom(s => s.Files))
-            ;
+            .ForMember(d => d.AssignmentFiles, opt => opt.MapFrom(s => s.Assignment.Files));
     }
 }

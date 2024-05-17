@@ -17,8 +17,8 @@ public class CreateAssignmentCommand : IRequest<int>
 
     public class CreateAssignmentCommandHandler : BaseMediatrHandler<CreateAssignmentCommand, int>
     {
-        public CreateAssignmentCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public CreateAssignmentCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -26,10 +26,10 @@ public class CreateAssignmentCommand : IRequest<int>
         {
             if (r.CreatedId != r.Assignment.TutorId)
                 throw new Exception("Лише репетитор може додати завдання");
-            if (!ApplicationDb.Tutor.Any(x => x.Id == r.Assignment.TutorId))
+            if (!DatabaseContext.Tutor.Any(x => x.Id == r.Assignment.TutorId))
                 throw new Exception("Репетитор вказан невірно");
 
-            var dbSubject = await ApplicationDb.Subjects
+            var dbSubject = await DatabaseContext.Subjects
                 .FirstOrDefaultAsync(x => x.Id == r.Assignment.SubjectId || x.Name == r.Assignment.SubjectName);
             if (dbSubject == null)
                 throw new Exception($"Предмету '{r.Assignment.SubjectId}:{r.Assignment.SubjectName}' не знайдено.");
@@ -49,8 +49,8 @@ public class CreateAssignmentCommand : IRequest<int>
 
             //Перевірка перетинання часу    
             //aF > bT and bF > aT
-            await ApplicationDb.Assignments.AddAsync(newAssignment);
-            await ApplicationDb.SaveChangesAsync();
+            await DatabaseContext.Assignments.AddAsync(newAssignment);
+            await DatabaseContext.SaveChangesAsync();
             return newAssignment.Id;
         }
     }

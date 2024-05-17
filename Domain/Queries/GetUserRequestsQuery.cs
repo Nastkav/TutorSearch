@@ -22,7 +22,7 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
         public override async Task<List<LessonRequest>> Handle(GetUserRequestsQuery r, CancellationToken token)
         {
             List<LessonRequest> listRequest = new();
-            var q = ApplicationDb.Requests
+            var q = DatabaseContext.Requests
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Subject)
@@ -46,8 +46,8 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
             return listRequest;
         }
 
-        public GetUserRequestsQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetUserRequestsQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

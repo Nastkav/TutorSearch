@@ -21,8 +21,8 @@ public class CreateSessionCommand : IRequest<int>
 
     public class CreateSessionCommandHandler : BaseMediatrHandler<CreateSessionCommand, int>
     {
-        public CreateSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public CreateSessionCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
@@ -39,7 +39,7 @@ public class CreateSessionCommand : IRequest<int>
             switch (r.Type)
             {
                 case TimeType.Available: //Встановлення робочого часу репетитора у кабінеті
-                    var dbTimes = ApplicationDb.AvailableTimes
+                    var dbTimes = DatabaseContext.AvailableTimes
                         .Where(x => x.ProfileId == r.CreatedBy && x.DayOfWeek == weekday)
                         .OrderBy(x => x.StartTime)
                         .ToList();
@@ -59,11 +59,11 @@ public class CreateSessionCommand : IRequest<int>
                         ProfileId = r.CreatedBy,
                         CreatedId = r.CreatedBy
                     };
-                    ApplicationDb.AvailableTimes.Add(availableTime);
-                    await ApplicationDb.SaveChangesAsync();
+                    DatabaseContext.AvailableTimes.Add(availableTime);
+                    await DatabaseContext.SaveChangesAsync();
                     return availableTime.Id;
                 case TimeType.Busy: //Додавання нового заняття
-                    var dbStudents = ApplicationDb.Users.Where(x => r.Students.Contains(x.Id)).ToList();
+                    var dbStudents = DatabaseContext.Users.Where(x => r.Students.Contains(x.Id)).ToList();
                     if (dbStudents.Count == 0)
                     {
                         throw new Exception("Відсутні учні");
@@ -76,7 +76,7 @@ public class CreateSessionCommand : IRequest<int>
 
 
                     //Перевірка що входить до одного з доступних діапазонів
-                    var availableRange = ApplicationDb.AvailableTimes
+                    var availableRange = DatabaseContext.AvailableTimes
                         .Where(x => x.StartTime <= start && end <= x.EndTime && x.DayOfWeek == weekday)
                         .FirstOrDefault();
                     if (availableRange == null)
@@ -84,7 +84,7 @@ public class CreateSessionCommand : IRequest<int>
 
                     //Перевірка перетинання часу
                     //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
-                    var lessonOnRange = ApplicationDb.Lessons
+                    var lessonOnRange = DatabaseContext.Lessons
                         .Where(x => x.From > r.To || r.From > x.To).ToList();
                     if (lessonOnRange.Count > 0)
                         throw new Exception("Додавання неможливе, час перетинається");
@@ -96,8 +96,8 @@ public class CreateSessionCommand : IRequest<int>
                         Students = dbStudents
                     };
 
-                    ApplicationDb.Lessons.Add(newLesson);
-                    await ApplicationDb.SaveChangesAsync();
+                    DatabaseContext.Lessons.Add(newLesson);
+                    await DatabaseContext.SaveChangesAsync();
                     return newLesson.Id;
                 default:
                     throw new ArgumentOutOfRangeException("Неможливо додати подію типу: " + r.Type.ToString());

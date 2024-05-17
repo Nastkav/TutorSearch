@@ -19,10 +19,11 @@ public class GetOneAssignmentQuery : IRequest<Assignment?>
         public override async Task<Assignment?> Handle(GetOneAssignmentQuery r, CancellationToken token)
         {
             //Запит
-            var dbTask = await ApplicationDb.Assignments
+            var dbTask = await DatabaseContext.Assignments
                 .Include(x => x.Subject)
                 .Include(x => x.Solutions)
                 .Include(x => x.Files)
+                .ThenInclude(x => x.Owner)
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
                 .Where(x => x.TutorId == r.UserId || x.Solutions.Any(y => y.StudentId == r.UserId))
@@ -35,8 +36,8 @@ public class GetOneAssignmentQuery : IRequest<Assignment?>
             return assignment;
         }
 
-        public GetOneAssignmentQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetOneAssignmentQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

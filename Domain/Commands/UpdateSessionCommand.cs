@@ -31,14 +31,14 @@ public class UpdateSessionCommand : IRequest<int>
             var start = TimeOnly.FromDateTime(r.From);
             var end = TimeOnly.FromDateTime(r.To);
 
-            var dbLesson = ApplicationDb.Lessons
+            var dbLesson = DatabaseContext.Lessons
                 .Include(x => x.Students)
                 .FirstOrDefault(x => x.Id == r.EventId);
             if (dbLesson == null)
                 throw new Exception("Подію не знайдено");
 
             //Перевірка що входить до одного з доступних діапазонів
-            var availableRange = ApplicationDb.AvailableTimes
+            var availableRange = DatabaseContext.AvailableTimes
                 .Where(x => x.StartTime <= start && end <= x.EndTime && x.DayOfWeek == weekday)
                 .FirstOrDefault();
             if (availableRange == null)
@@ -46,7 +46,7 @@ public class UpdateSessionCommand : IRequest<int>
 
             //Перевірка перетинання часу
             //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
-            if (ApplicationDb.Lessons.Any(x => x.From > r.To && r.From > x.To))
+            if (DatabaseContext.Lessons.Any(x => x.From > r.To && r.From > x.To))
                 throw new Exception("Оновлення неможливе, час перетинається");
 
             //Time params
@@ -57,7 +57,7 @@ public class UpdateSessionCommand : IRequest<int>
             if (r.SubjectId != null) dbLesson.SubjectId = r.SubjectId.Value;
             if (r.Subject != null)
             {
-                var dbSubject = ApplicationDb.Subjects.FirstOrDefault(x => x.Name == r.Subject);
+                var dbSubject = DatabaseContext.Subjects.FirstOrDefault(x => x.Name == r.Subject);
                 if (dbSubject == null)
                     throw new Exception("Предмет не знайдено");
                 dbLesson.Subject = dbSubject;
@@ -76,7 +76,7 @@ public class UpdateSessionCommand : IRequest<int>
                     r.StudentIds.Remove(studId);
 
                 //Додати новіх студентів яких не було у базі 
-                var newStuds = await ApplicationDb.Users
+                var newStuds = await DatabaseContext.Users
                     .Where(x => r.StudentIds.Contains(x.Id))
                     .ToListAsync();
                 dbLesson.Students.AddRange(newStuds);
@@ -85,13 +85,13 @@ public class UpdateSessionCommand : IRequest<int>
             //Comment
             if (r.Comment != null) dbLesson.Comment = r.Comment;
 
-            ApplicationDb.Lessons.Update(dbLesson);
-            await ApplicationDb.SaveChangesAsync();
+            DatabaseContext.Lessons.Update(dbLesson);
+            await DatabaseContext.SaveChangesAsync();
             return dbLesson.Id;
         }
 
-        public UpdateSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public UpdateSessionCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

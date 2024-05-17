@@ -23,7 +23,7 @@ public class UpdateSolutionCommand : IRequest<int>
     {
         public override async Task<int> Handle(UpdateSolutionCommand r, CancellationToken token)
         {
-            var dbSolution = ApplicationDb.Solutions
+            var dbSolution = DatabaseContext.Solutions
                 .Include(x => x.Assignment)
                 .FirstOrDefault(x => x.Id == r.SolutionId);
             if (dbSolution == null)
@@ -60,13 +60,13 @@ public class UpdateSolutionCommand : IRequest<int>
 
 
             //Зберегти
-            ApplicationDb.Solutions.Update(dbSolution);
-            await ApplicationDb.SaveChangesAsync();
+            DatabaseContext.Solutions.Update(dbSolution);
+            await DatabaseContext.SaveChangesAsync();
             return dbSolution.Id;
         }
 
-        public UpdateSolutionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public UpdateSolutionCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

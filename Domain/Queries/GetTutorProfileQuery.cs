@@ -18,14 +18,14 @@ public class GetTutorProfileQuery : IRequest<Tutor>
     {
         public override async Task<Tutor> Handle(GetTutorProfileQuery r, CancellationToken token)
         {
-            var dbProfile = await ApplicationDb.Tutor
+            var dbProfile = await DatabaseContext.Tutor
                 .Include(x => x.About)
                 .Include(x => x.Subjects)
                 .FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  профілю
             if (dbProfile == null)
-                if (await ApplicationDb.Users.AnyAsync(x => x.Id == r.ProfileId))
+                if (await DatabaseContext.Users.AnyAsync(x => x.Id == r.ProfileId))
                     return new Tutor(); //Новий профіль
                 else
                     throw new Exception("Профіль вчителя не знайдено");
@@ -34,8 +34,8 @@ public class GetTutorProfileQuery : IRequest<Tutor>
             return profile;
         }
 
-        public GetTutorProfileQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetTutorProfileQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

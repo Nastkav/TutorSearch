@@ -19,7 +19,7 @@ public class UserModel : IdentityUser<int>
     public virtual List<LessonModel> Lessons { get; set; } = [];
     public virtual List<RequestModel> Requests { get; set; } = [];
     public virtual List<SolutionModel> Solutions { get; set; } = [];
-    public virtual List<TutorReviewModel> Reviews { get; set; } = [];
+    public virtual List<ReviewModel> Reviews { get; set; } = [];
 
     public virtual List<UserFileModel> Files { get; set; } = [];
 

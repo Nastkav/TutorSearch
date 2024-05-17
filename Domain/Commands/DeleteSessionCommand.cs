@@ -20,26 +20,26 @@ public class DeleteSessionCommand : IRequest<bool>
         {
             if (r.Type == TimeType.Available)
             {
-                var lesson = ApplicationDb.AvailableTimes.Where(x => x.Id == r.EventId).FirstOrDefault();
+                var lesson = DatabaseContext.AvailableTimes.Where(x => x.Id == r.EventId).FirstOrDefault();
                 if (lesson == null)
                     throw new ArgumentNullException("Помилка в номері події");
-                ApplicationDb.Remove(lesson);
+                DatabaseContext.Remove(lesson);
             }
             else
             {
-                var lesson = ApplicationDb.Lessons.Where(x => x.Id == r.EventId).FirstOrDefault();
+                var lesson = DatabaseContext.Lessons.Where(x => x.Id == r.EventId).FirstOrDefault();
 
                 if (lesson == null)
                     throw new ArgumentNullException("Помилка в номері події");
-                ApplicationDb.Remove(lesson);
+                DatabaseContext.Remove(lesson);
             }
 
-            await ApplicationDb.SaveChangesAsync();
+            await DatabaseContext.SaveChangesAsync();
             return true;
         }
 
-        public DeleteSessionCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public DeleteSessionCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

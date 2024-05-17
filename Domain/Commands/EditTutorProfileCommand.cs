@@ -18,19 +18,19 @@ public class UpdateTutorCommand : IRequest<bool>
 
     public class EditTutorProfileCommandHandler : BaseMediatrHandler<UpdateTutorCommand, bool>
     {
-        public EditTutorProfileCommandHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public EditTutorProfileCommandHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
 
         public override async Task<bool> Handle(UpdateTutorCommand r, CancellationToken token)
         {
             //Check exist
-            if (!ApplicationDb.Users.Any(x => x.Id == r.Profile.Id && x.ProfileEnabled))
+            if (!DatabaseContext.Users.Any(x => x.Id == r.Profile.Id && x.ProfileEnabled))
                 throw new Exception("Ідентіфікатор вчителя не знайдено.");
 
             //Select from database
-            var dbProfile = await ApplicationDb.Tutor
+            var dbProfile = await DatabaseContext.Tutor
                                 .Include(x => x.About)
                                 .Include(x => x.Subjects)
                                 .FirstOrDefaultAsync(x => x.Id == r.Profile.Id)
@@ -41,16 +41,16 @@ public class UpdateTutorCommand : IRequest<bool>
             Mapper.Map(r.Profile, dbProfile);
 
             //Subjects
-            dbProfile.Subjects = await ApplicationDb.Subjects
+            dbProfile.Subjects = await DatabaseContext.Subjects
                 .Where(x => r.Profile.SubjectIds.Contains(x.Id))
                 .ToListAsync();
 
             if (newObject)
-                ApplicationDb.Add(dbProfile);
+                DatabaseContext.Add(dbProfile);
             else
-                ApplicationDb.Update(dbProfile);
+                DatabaseContext.Update(dbProfile);
 
-            await ApplicationDb.SaveChangesAsync(token);
+            await DatabaseContext.SaveChangesAsync(token);
             return true;
         }
     }

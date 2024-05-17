@@ -16,7 +16,7 @@ public class GetUserProfileQuery : IRequest<User>
     {
         public override async Task<User> Handle(GetUserProfileQuery r, CancellationToken token)
         {
-            var dbProfile = await ApplicationDb.Users.FirstOrDefaultAsync(x => x.Id == r.ProfileId);
+            var dbProfile = await DatabaseContext.Users.FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  користувача
             if (dbProfile == null)
@@ -26,8 +26,8 @@ public class GetUserProfileQuery : IRequest<User>
             return profile;
         }
 
-        public GetUserProfileQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetUserProfileQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

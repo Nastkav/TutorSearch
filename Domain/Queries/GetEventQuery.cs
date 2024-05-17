@@ -24,12 +24,12 @@ public class GetEventQuery : IRequest<List<LessonSession>>
             if (!r.To.HasValue) r.To = DateTime.MaxValue;
 
             List<LessonSession> events = new();
-            var dbLessons = await ApplicationDb.Lessons
+            var dbLessons = await DatabaseContext.Lessons
                 .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorId == r.UserId)
                 .Where(x => r.From <= x.To && x.From <= r.To)
                 .ToListAsync();
 
-            var dbAvailableTime = await ApplicationDb.AvailableTimes
+            var dbAvailableTime = await DatabaseContext.AvailableTimes
                 .Where(x => x.ProfileId == r.UserId)
                 .OrderBy(x => x.DayOfWeek)
                 .ThenBy(x => x.StartTime)
@@ -92,8 +92,8 @@ public class GetEventQuery : IRequest<List<LessonSession>>
             return events.ToList();
         }
 
-        public GetEventQueryHandler(ILoggerFactory loggerFactory, AppDbContext dbContext, IMapper mapper)
-            : base(loggerFactory, dbContext, mapper)
+        public GetEventQueryHandler(AppDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
         }
     }

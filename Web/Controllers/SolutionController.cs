@@ -2,9 +2,11 @@ using System.Security.Claims;
 using Domain.Commands;
 using Domain.Helpers;
 using Domain.Queries;
+using Infra.DatabaseAdapter.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Web.Helpers;
 using Web.Models.Assignments;
 
 namespace Web.Controllers;
@@ -30,6 +32,14 @@ public class SolutionController : Controller
 
         filter.UserId = IdentityId;
         model.Solutions = await _mediator.Send(filter);
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery());
+        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
+        model.HisTutors = await _helper.GetSelectList(new GetStudentTutorsQuery() { StudentId = IdentityId });
+        model.Assignments = await _helper.GetSelectList(new GetAssignmentNamesQuery()
+        {
+            TutorId = IdentityId,
+            StudentId = IdentityId
+        });
         return View(model);
     }
 
@@ -61,6 +71,10 @@ public class SolutionController : Controller
 
         if (ModelState.IsValid)
         {
+            //Оновити статус рішення якщо учень відправив відповідь
+            if (!model.IsTutor && model.Solution.Answer != null && model.Solution.Answer.Length > 0)
+                model.Solution.Status = SolutionStatus.Review;
+
             await _mediator.Send(new UpdateSolutionCommand()
             {
                 UpdatedBy = IdentityId,
