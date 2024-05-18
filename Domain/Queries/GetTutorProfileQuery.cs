@@ -18,7 +18,7 @@ public class GetTutorProfileQuery : IRequest<Tutor>
     {
         public override async Task<Tutor> Handle(GetTutorProfileQuery r, CancellationToken token)
         {
-            var dbProfile = await DatabaseContext.Tutor
+            var dbProfile = await DatabaseContext.Tutors
                 .Include(x => x.About)
                 .Include(x => x.Subjects)
                 .FirstOrDefaultAsync(x => x.Id == r.ProfileId);

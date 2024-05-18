@@ -30,6 +30,8 @@ public class TutorModel : ITrackable
     public virtual List<RequestModel> Requests { get; set; } = [];
     public virtual List<LessonModel> TeachingLessons { get; set; } = [];
 
+    public virtual List<ReviewModel> Reviews { get; set; } = [];
+
     //ITrackable
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

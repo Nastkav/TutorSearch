@@ -22,7 +22,6 @@ services.AddDefaultIdentity<UserModel>(o => o.SignIn.RequireConfirmedEmail = fal
     .AddEntityFrameworkStores<AppDbContext>();
 services.AddScoped<IStorage, LocalFileStorage>();
 services.AddDatabaseDeveloperPageExceptionFilter();
-services.AddDbContext<TemplateDbContext>(options => options.UseMySQL(connectionString)); //TODO: Remove DEBUG
 
 //Domain
 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(BaseMediatrHandler<,>).Assembly));

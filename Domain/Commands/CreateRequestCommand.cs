@@ -42,7 +42,7 @@ public class CreateRequestCommand : IRequest<int>
         {
             if (r.CreatedId == r.TutorId)
                 throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
-            if (!DatabaseContext.Tutor.Any(x => x.Id == r.TutorId))
+            if (!DatabaseContext.Tutors.Any(x => x.Id == r.TutorId))
                 throw new Exception("Репетитор вказан невірно");
             if (!DatabaseContext.Users.Any(x => x.Id == r.CreatedId))
                 throw new Exception("Ученик вказан невірно");

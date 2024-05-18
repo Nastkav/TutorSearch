@@ -83,5 +83,12 @@ public class DomainMappingProfile : Profile
             .ForMember(d => d.Description, o => o.MapFrom(x => x.Assignment.Description))
             .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Assignment.Subject.Name))
             .ForMember(d => d.AssignmentFiles, opt => opt.MapFrom(s => s.Assignment.Files));
+
+
+        //Review and Feedbacks
+        CreateMap<Review, ReviewModel>();
+        CreateMap<ReviewModel, Review>()
+            .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()))
+            .ForMember(d => d.AuthorName, o => o.MapFrom(x => x.Author.FullName()));
     }
 }

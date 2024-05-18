@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.DatabaseAdapter._Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240423000155_RESTORE12")]
-    partial class RESTORE12
+    [Migration("20240424135856_ReviewSize")]
+    partial class ReviewSize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,9 +138,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CreatedId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -154,9 +151,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UpdatedId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
@@ -166,7 +160,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Авдіївка",
                             Region = "Донецька область"
                         },
@@ -174,7 +167,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Алмазна",
                             Region = "Луганська область"
                         },
@@ -182,7 +174,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Алупка",
                             Region = "Автономна Республіка Крим"
                         },
@@ -190,7 +181,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Алушта",
                             Region = "Автономна Республіка Крим"
                         },
@@ -198,7 +188,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 5,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Алчевськ",
                             Region = "Луганська область"
                         },
@@ -206,7 +195,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 6,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Амвросіївка",
                             Region = "Донецька область"
                         },
@@ -214,7 +202,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 7,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ананьїв",
                             Region = "Одеська область"
                         },
@@ -222,7 +209,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 8,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Андрушівка",
                             Region = "Житомирська область"
                         },
@@ -230,7 +216,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 9,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Антрацит",
                             Region = "Луганська область"
                         },
@@ -238,7 +223,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 10,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Апостолове",
                             Region = "Дніпропетровська область"
                         },
@@ -246,7 +230,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 11,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Армянськ",
                             Region = "Автономна Республіка Крим"
                         },
@@ -254,7 +237,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 12,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Арциз",
                             Region = "Одеська область"
                         },
@@ -262,7 +244,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 13,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Балаклія",
                             Region = "Харківська область"
                         },
@@ -270,7 +251,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 14,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Балта",
                             Region = "Одеська область"
                         },
@@ -278,7 +258,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 15,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бар",
                             Region = "Вінницька область"
                         },
@@ -286,7 +265,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 16,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Баранівка",
                             Region = "Житомирська область"
                         },
@@ -294,7 +272,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 17,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Барвінкове",
                             Region = "Харківська область"
                         },
@@ -302,7 +279,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 18,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Батурин",
                             Region = "Чернігівська область"
                         },
@@ -310,7 +286,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 19,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бахмач",
                             Region = "Чернігівська область"
                         },
@@ -318,7 +293,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 20,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бахмут",
                             Region = "Донецька область"
                         },
@@ -326,7 +300,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 21,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бахчисарай",
                             Region = "Автономна Республіка Крим"
                         },
@@ -334,7 +307,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 22,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Баштанка",
                             Region = "Миколаївська область"
                         },
@@ -342,7 +314,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 23,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Белз",
                             Region = "Львівська область"
                         },
@@ -350,7 +321,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 24,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бердичів",
                             Region = "Житомирська область"
                         },
@@ -358,7 +328,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 25,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бердянськ",
                             Region = "Запорізька область"
                         },
@@ -366,7 +335,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 26,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Берегове",
                             Region = "Закарпатська область"
                         },
@@ -374,7 +342,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 27,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бережани",
                             Region = "Тернопільська область"
                         },
@@ -382,7 +349,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 28,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Березань",
                             Region = "Київська область"
                         },
@@ -390,7 +356,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 29,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Березівка",
                             Region = "Одеська область"
                         },
@@ -398,7 +363,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 30,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Березне",
                             Region = "Рівненська область"
                         },
@@ -406,7 +370,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 31,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Берестечко",
                             Region = "Волинська область"
                         },
@@ -414,7 +377,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 32,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Берислав",
                             Region = "Херсонська область"
                         },
@@ -422,7 +384,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 33,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бершадь",
                             Region = "Вінницька область"
                         },
@@ -430,7 +391,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 34,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бібрка",
                             Region = "Львівська область"
                         },
@@ -438,7 +398,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 35,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Біла Церква",
                             Region = "Київська область"
                         },
@@ -446,7 +405,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 36,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Білгород-Дністровський",
                             Region = "Одеська область"
                         },
@@ -454,7 +412,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 37,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Білицьке",
                             Region = "Донецька область"
                         },
@@ -462,7 +419,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 38,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Білогірськ",
                             Region = "Автономна Республіка Крим"
                         },
@@ -470,7 +426,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 39,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Білозерське",
                             Region = "Донецька область"
                         },
@@ -478,7 +433,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 40,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Білопілля",
                             Region = "Сумська область"
                         },
@@ -486,7 +440,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 41,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Біляївка",
                             Region = "Одеська область"
                         },
@@ -494,7 +447,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 42,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Благовіщенське",
                             Region = "Кіровоградська область"
                         },
@@ -502,7 +454,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 43,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бобринець",
                             Region = "Кіровоградська область"
                         },
@@ -510,7 +461,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 44,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бобровиця",
                             Region = "Чернігівська область"
                         },
@@ -518,7 +468,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 45,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Богодухів",
                             Region = "Харківська область"
                         },
@@ -526,7 +475,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 46,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Богуслав",
                             Region = "Київська область"
                         },
@@ -534,7 +482,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 47,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Боково-Хрустальне",
                             Region = "Луганська область"
                         },
@@ -542,7 +489,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 48,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Болград",
                             Region = "Одеська область"
                         },
@@ -550,7 +496,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 49,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Болехів",
                             Region = "Івано-Франківська область"
                         },
@@ -558,7 +503,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 50,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Борзна",
                             Region = "Чернігівська область"
                         },
@@ -566,7 +510,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 51,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Борислав",
                             Region = "Львівська область"
                         },
@@ -574,7 +517,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 52,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бориспіль",
                             Region = "Київська область"
                         },
@@ -582,7 +524,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 53,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Борщів",
                             Region = "Тернопільська область"
                         },
@@ -590,7 +531,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 54,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Боярка",
                             Region = "Київська область"
                         },
@@ -598,7 +538,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 55,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бровари",
                             Region = "Київська область"
                         },
@@ -606,7 +545,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 56,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Броди",
                             Region = "Львівська область"
                         },
@@ -614,7 +552,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 57,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Брянка",
                             Region = "Луганська область"
                         },
@@ -622,7 +559,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 58,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бунге",
                             Region = "Донецька область"
                         },
@@ -630,7 +566,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 59,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Буринь",
                             Region = "Сумська область"
                         },
@@ -638,7 +573,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 60,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бурштин",
                             Region = "Івано-Франківська область"
                         },
@@ -646,7 +580,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 61,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Буськ",
                             Region = "Львівська область"
                         },
@@ -654,7 +587,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 62,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Буча",
                             Region = "Київська область"
                         },
@@ -662,7 +594,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 63,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Бучач",
                             Region = "Тернопільська область"
                         },
@@ -670,7 +601,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 64,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Валки",
                             Region = "Харківська область"
                         },
@@ -678,7 +608,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 65,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вараш",
                             Region = "Рівненська область"
                         },
@@ -686,7 +615,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 66,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Василівка",
                             Region = "Запорізька область"
                         },
@@ -694,7 +622,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 67,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Васильків",
                             Region = "Київська область"
                         },
@@ -702,7 +629,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 68,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ватутіне",
                             Region = "Черкаська область"
                         },
@@ -710,7 +636,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 69,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вашківці",
                             Region = "Чернівецька область"
                         },
@@ -718,7 +643,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 70,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Великі Мости",
                             Region = "Львівська область"
                         },
@@ -726,7 +650,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 71,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Верхівцеве",
                             Region = "Дніпропетровська область"
                         },
@@ -734,7 +657,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 72,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Верхньодніпровськ",
                             Region = "Дніпропетровська область"
                         },
@@ -742,7 +664,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 73,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вижниця",
                             Region = "Чернівецька область"
                         },
@@ -750,7 +671,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 74,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вилкове",
                             Region = "Одеська область"
                         },
@@ -758,7 +678,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 75,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Винники",
                             Region = "Львівська область"
                         },
@@ -766,7 +685,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 76,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Виноградів",
                             Region = "Закарпатська область"
                         },
@@ -774,7 +692,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 77,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вишгород",
                             Region = "Київська область"
                         },
@@ -782,7 +699,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 78,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вишневе",
                             Region = "Київська область"
                         },
@@ -790,7 +706,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 79,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вільногірськ",
                             Region = "Дніпропетровська область"
                         },
@@ -798,7 +713,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 80,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вільнянськ",
                             Region = "Запорізька область"
                         },
@@ -806,7 +720,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 81,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вінниця",
                             Region = "Вінницька область"
                         },
@@ -814,7 +727,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 82,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вовчанськ",
                             Region = "Харківська область"
                         },
@@ -822,7 +734,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 83,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вознесенівка",
                             Region = "Луганська область"
                         },
@@ -830,7 +741,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 84,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вознесенськ",
                             Region = "Миколаївська область"
                         },
@@ -838,7 +748,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 85,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Волноваха",
                             Region = "Донецька область"
                         },
@@ -846,7 +755,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 86,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Володимир",
                             Region = "Волинська область"
                         },
@@ -854,7 +762,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 87,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Волочиськ",
                             Region = "Хмельницька область"
                         },
@@ -862,7 +769,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 88,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ворожба",
                             Region = "Сумська область"
                         },
@@ -870,7 +776,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 89,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вуглегірськ",
                             Region = "Донецька область"
                         },
@@ -878,7 +783,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 90,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Вугледар",
                             Region = "Донецька область"
                         },
@@ -886,7 +790,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 91,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гадяч",
                             Region = "Полтавська область"
                         },
@@ -894,7 +797,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 92,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гайворон",
                             Region = "Кіровоградська область"
                         },
@@ -902,7 +804,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 93,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гайсин",
                             Region = "Вінницька область"
                         },
@@ -910,7 +811,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 94,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Галич",
                             Region = "Івано-Франківська область"
                         },
@@ -918,7 +818,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 95,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Генічеськ",
                             Region = "Херсонська область"
                         },
@@ -926,7 +825,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 96,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Герца",
                             Region = "Чернівецька область"
                         },
@@ -934,7 +832,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 97,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гірник",
                             Region = "Донецька область"
                         },
@@ -942,7 +839,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 98,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гірське",
                             Region = "Луганська область"
                         },
@@ -950,7 +846,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 99,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Глиняни",
                             Region = "Львівська область"
                         },
@@ -958,7 +853,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 100,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Глобине",
                             Region = "Полтавська область"
                         },
@@ -966,7 +860,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 101,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Глухів",
                             Region = "Сумська область"
                         },
@@ -974,7 +867,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 102,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гнівань",
                             Region = "Вінницька область"
                         },
@@ -982,7 +874,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 103,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гола Пристань",
                             Region = "Херсонська область"
                         },
@@ -990,7 +881,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 104,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Голубівка",
                             Region = "Луганська область"
                         },
@@ -998,7 +888,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 105,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Горішні Плавні",
                             Region = "Полтавська область"
                         },
@@ -1006,7 +895,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 106,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Горлівка",
                             Region = "Донецька область"
                         },
@@ -1014,7 +902,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 107,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Городенка",
                             Region = "Івано-Франківська область"
                         },
@@ -1022,7 +909,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 108,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Городище",
                             Region = "Черкаська область"
                         },
@@ -1030,7 +916,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 109,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Городня",
                             Region = "Чернігівська область"
                         },
@@ -1038,7 +923,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 110,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Городок",
                             Region = "Львівська область"
                         },
@@ -1046,7 +930,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 111,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Городок",
                             Region = "Хмельницька область"
                         },
@@ -1054,7 +937,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 112,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Горохів",
                             Region = "Волинська область"
                         },
@@ -1062,7 +944,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 113,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гребінка",
                             Region = "Полтавська область"
                         },
@@ -1070,7 +951,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 114,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Гуляйполе",
                             Region = "Запорізька область"
                         },
@@ -1078,7 +958,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 115,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дебальцеве",
                             Region = "Донецька область"
                         },
@@ -1086,7 +965,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 116,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Деражня",
                             Region = "Хмельницька область"
                         },
@@ -1094,7 +972,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 117,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дергачі",
                             Region = "Харківська область"
                         },
@@ -1102,7 +979,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 118,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Джанкой",
                             Region = "Автономна Республіка Крим"
                         },
@@ -1110,7 +986,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 119,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дніпро",
                             Region = "Дніпропетровська область"
                         },
@@ -1118,7 +993,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 120,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дніпрорудне",
                             Region = "Запорізька область"
                         },
@@ -1126,7 +1000,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 121,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Добромиль",
                             Region = "Львівська область"
                         },
@@ -1134,7 +1007,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 122,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Добропілля",
                             Region = "Донецька область"
                         },
@@ -1142,7 +1014,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 123,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Довжанськ",
                             Region = "Луганська область"
                         },
@@ -1150,7 +1021,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 124,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Докучаєвськ",
                             Region = "Донецька область"
                         },
@@ -1158,7 +1028,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 125,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Долина",
                             Region = "Івано-Франківська область"
                         },
@@ -1166,7 +1035,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 126,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Долинська",
                             Region = "Кіровоградська область"
                         },
@@ -1174,7 +1042,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 127,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Донецьк",
                             Region = "Донецька область"
                         },
@@ -1182,7 +1049,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 128,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дрогобич",
                             Region = "Львівська область"
                         },
@@ -1190,7 +1056,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 129,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дружба",
                             Region = "Сумська область"
                         },
@@ -1198,7 +1063,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 130,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дружківка",
                             Region = "Донецька область"
                         },
@@ -1206,7 +1070,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 131,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дубляни",
                             Region = "Львівська область"
                         },
@@ -1214,7 +1077,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 132,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дубно",
                             Region = "Рівненська область"
                         },
@@ -1222,7 +1084,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 133,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дубровиця",
                             Region = "Рівненська область"
                         },
@@ -1230,7 +1091,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 134,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Дунаївці",
                             Region = "Хмельницька область"
                         },
@@ -1238,7 +1098,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 135,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Енергодар",
                             Region = "Запорізька область"
                         },
@@ -1246,7 +1105,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 136,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Євпаторія",
                             Region = "Автономна Республіка Крим"
                         },
@@ -1254,7 +1112,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 137,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Єнакієве",
                             Region = "Донецька область"
                         },
@@ -1262,7 +1119,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 138,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жашків",
                             Region = "Черкаська область"
                         },
@@ -1270,7 +1126,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 139,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жданівка",
                             Region = "Донецька область"
                         },
@@ -1278,7 +1133,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 140,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жидачів",
                             Region = "Львівська область"
                         },
@@ -1286,7 +1140,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 141,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Житомир",
                             Region = "Житомирська область"
                         },
@@ -1294,7 +1147,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 142,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жмеринка",
                             Region = "Вінницька область"
                         },
@@ -1302,7 +1154,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 143,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жовква",
                             Region = "Львівська область"
                         },
@@ -1310,7 +1161,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 144,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Жовті Води",
                             Region = "Дніпропетровська область"
                         },
@@ -1318,7 +1168,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 145,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Заводське",
                             Region = "Полтавська область"
                         },
@@ -1326,7 +1175,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 146,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Залізне",
                             Region = "Донецька область"
                         },
@@ -1334,7 +1182,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 147,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Заліщики",
                             Region = "Тернопільська область"
                         },
@@ -1342,7 +1189,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 148,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Запоріжжя",
                             Region = "Запорізька область"
                         },
@@ -1350,7 +1196,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 149,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Заставна",
                             Region = "Чернівецька область"
                         },
@@ -1358,7 +1203,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 150,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Збараж",
                             Region = "Тернопільська область"
                         },
@@ -1366,7 +1210,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 151,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зборів",
                             Region = "Тернопільська область"
                         },
@@ -1374,7 +1217,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 152,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Звенигородка",
                             Region = "Черкаська область"
                         },
@@ -1382,7 +1224,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 153,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Звягель",
                             Region = "Житомирська область"
                         },
@@ -1390,7 +1231,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 154,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Здолбунів",
                             Region = "Рівненська область"
                         },
@@ -1398,7 +1238,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 155,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зеленодольськ",
                             Region = "Дніпропетровська область"
                         },
@@ -1406,7 +1245,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 156,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зимогір'я",
                             Region = "Луганська область"
                         },
@@ -1414,7 +1252,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 157,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зіньків",
                             Region = "Полтавська область"
                         },
@@ -1422,7 +1259,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 158,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зміїв",
                             Region = "Харківська область"
                         },
@@ -1430,7 +1266,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 159,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Знам'янка",
                             Region = "Кіровоградська область"
                         },
@@ -1438,7 +1273,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 160,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Золоте",
                             Region = "Луганська область"
                         },
@@ -1446,7 +1280,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 161,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Золотоноша",
                             Region = "Черкаська область"
                         },
@@ -1454,7 +1287,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 162,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Золочів",
                             Region = "Львівська область"
                         },
@@ -1462,7 +1294,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 163,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зоринськ",
                             Region = "Луганська область"
                         },
@@ -1470,7 +1301,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 164,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Зугрес",
                             Region = "Донецька область"
                         },
@@ -1478,7 +1308,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 165,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Івано-Франківськ",
                             Region = "Івано-Франківська область"
                         },
@@ -1486,7 +1315,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 166,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ізмаїл",
                             Region = "Одеська область"
                         },
@@ -1494,7 +1322,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 167,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ізюм",
                             Region = "Харківська область"
                         },
@@ -1502,7 +1329,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 168,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ізяслав",
                             Region = "Хмельницька область"
                         },
@@ -1510,7 +1336,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 169,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Іллінці",
                             Region = "Вінницька область"
                         },
@@ -1518,7 +1343,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 170,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Іловайськ",
                             Region = "Донецька область"
                         },
@@ -1526,7 +1350,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 171,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Інкерман",
                             Region = "Автономна Республіка Крим"
                         },
@@ -1534,7 +1357,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 172,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ірміно",
                             Region = "Луганська область"
                         },
@@ -1542,7 +1364,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 173,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ірпінь",
                             Region = "Київська область"
                         },
@@ -1550,7 +1371,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 174,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Іршава",
                             Region = "Закарпатська область"
                         },
@@ -1558,7 +1378,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 175,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ічня",
                             Region = "Чернігівська область"
                         },
@@ -1566,7 +1385,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 176,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кагарлик",
                             Region = "Київська область"
                         },
@@ -1574,7 +1392,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 177,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кадіївка",
                             Region = "Луганська область"
                         },
@@ -1582,7 +1399,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 178,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Калинівка",
                             Region = "Вінницька область"
                         },
@@ -1590,7 +1406,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 179,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Калуш",
                             Region = "Івано-Франківська область"
                         },
@@ -1598,7 +1413,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 180,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кальміуське",
                             Region = "Донецька область"
                         },
@@ -1606,7 +1420,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 181,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Камінь-Каширський",
                             Region = "Волинська область"
                         },
@@ -1614,7 +1427,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 182,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кам'янець-Подільський",
                             Region = "Хмельницька область"
                         },
@@ -1622,7 +1434,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 183,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кам'янка",
                             Region = "Черкаська область"
                         },
@@ -1630,7 +1441,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 184,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кам'янка-Бузька",
                             Region = "Львівська область"
                         },
@@ -1638,7 +1448,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 185,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кам'янка-Дніпровська",
                             Region = "Запорізька область"
                         },
@@ -1646,7 +1455,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 186,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кам'янське",
                             Region = "Дніпропетровська область"
                         },
@@ -1654,7 +1462,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 187,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Канів",
                             Region = "Черкаська область"
                         },
@@ -1662,7 +1469,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 188,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Карлівка",
                             Region = "Полтавська область"
                         },
@@ -1670,7 +1476,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 189,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Каховка",
                             Region = "Херсонська область"
                         },
@@ -1678,7 +1483,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 190,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Керч",
                             Region = "Автономна Республіка Крим"
                         },
@@ -1686,7 +1490,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 191,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Київ",
                             Region = "Київ"
                         },
@@ -1694,7 +1497,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 192,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кипуче",
                             Region = "Луганська область"
                         },
@@ -1702,7 +1504,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 193,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ківерці",
                             Region = "Волинська область"
                         },
@@ -1710,7 +1511,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 194,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кілія",
                             Region = "Одеська область"
                         },
@@ -1718,7 +1518,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 195,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кіцмань",
                             Region = "Чернівецька область"
                         },
@@ -1726,7 +1525,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 196,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кобеляки",
                             Region = "Полтавська область"
                         },
@@ -1734,7 +1532,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 197,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ковель",
                             Region = "Волинська область"
                         },
@@ -1742,7 +1539,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 198,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кодима",
                             Region = "Одеська область"
                         },
@@ -1750,7 +1546,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 199,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Козятин",
                             Region = "Вінницька область"
                         },
@@ -1758,7 +1553,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 200,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Коломия",
                             Region = "Івано-Франківська область"
                         },
@@ -1766,7 +1560,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 201,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Комарно",
                             Region = "Львівська область"
                         },
@@ -1774,7 +1567,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 202,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Конотоп",
                             Region = "Сумська область"
                         },
@@ -1782,7 +1574,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 203,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Копичинці",
                             Region = "Тернопільська область"
                         },
@@ -1790,7 +1581,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 204,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Корець",
                             Region = "Рівненська область"
                         },
@@ -1798,7 +1588,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 205,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Коростень",
                             Region = "Житомирська область"
                         },
@@ -1806,7 +1595,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 206,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Коростишів",
                             Region = "Житомирська область"
                         },
@@ -1814,7 +1602,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 207,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Корсунь-Шевченківський",
                             Region = "Черкаська область"
                         },
@@ -1822,7 +1609,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 208,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Корюківка",
                             Region = "Чернігівська область"
                         },
@@ -1830,7 +1616,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 209,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Косів",
                             Region = "Івано-Франківська область"
                         },
@@ -1838,7 +1623,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 210,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Костопіль",
                             Region = "Рівненська область"
                         },
@@ -1846,7 +1630,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 211,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Костянтинівка",
                             Region = "Донецька область"
                         },
@@ -1854,7 +1637,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 212,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Краматорськ",
                             Region = "Донецька область"
                         },
@@ -1862,7 +1644,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 213,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Красилів",
                             Region = "Хмельницька область"
                         },
@@ -1870,7 +1651,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 214,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Красногорівка",
                             Region = "Донецька область"
                         },
@@ -1878,7 +1658,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 215,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Красноград",
                             Region = "Харківська область"
                         },
@@ -1886,7 +1665,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 216,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кременець",
                             Region = "Тернопільська область"
                         },
@@ -1894,7 +1672,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 217,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кременчук",
                             Region = "Полтавська область"
                         },
@@ -1902,7 +1679,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 218,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кремінна",
                             Region = "Луганська область"
                         },
@@ -1910,7 +1686,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 219,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кривий Ріг",
                             Region = "Дніпропетровська область"
                         },
@@ -1918,7 +1693,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 220,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кролевець",
                             Region = "Сумська область"
                         },
@@ -1926,7 +1700,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 221,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Кропивницький",
                             Region = "Кіровоградська область"
                         },
@@ -1934,7 +1707,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 222,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Куп'янськ",
                             Region = "Харківська область"
                         },
@@ -1942,7 +1714,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 223,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Курахове",
                             Region = "Донецька область"
                         },
@@ -1950,7 +1721,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 224,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ладижин",
                             Region = "Вінницька область"
                         },
@@ -1958,7 +1728,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 225,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ланівці",
                             Region = "Тернопільська область"
                         },
@@ -1966,7 +1735,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 226,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лебедин",
                             Region = "Сумська область"
                         },
@@ -1974,7 +1742,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 227,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лиман",
                             Region = "Донецька область"
                         },
@@ -1982,7 +1749,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 228,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Липовець",
                             Region = "Вінницька область"
                         },
@@ -1990,7 +1756,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 229,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лисичанськ",
                             Region = "Луганська область"
                         },
@@ -1998,7 +1763,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 230,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лозова",
                             Region = "Харківська область"
                         },
@@ -2006,7 +1770,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 231,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лохвиця",
                             Region = "Полтавська область"
                         },
@@ -2014,7 +1777,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 232,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лубни",
                             Region = "Полтавська область"
                         },
@@ -2022,7 +1784,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 233,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Луганськ",
                             Region = "Луганська область"
                         },
@@ -2030,7 +1791,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 234,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Лутугине",
                             Region = "Луганська область"
                         },
@@ -2038,7 +1798,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 235,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Луцьк",
                             Region = "Волинська область"
                         },
@@ -2046,7 +1805,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 236,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Львів",
                             Region = "Львівська область"
                         },
@@ -2054,7 +1812,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 237,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Любомль",
                             Region = "Волинська область"
                         },
@@ -2062,7 +1819,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 238,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Люботин",
                             Region = "Харківська область"
                         },
@@ -2070,7 +1826,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 239,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Макіївка",
                             Region = "Донецька область"
                         },
@@ -2078,7 +1833,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 240,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мала Виска",
                             Region = "Кіровоградська область"
                         },
@@ -2086,7 +1840,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 241,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Малин",
                             Region = "Житомирська область"
                         },
@@ -2094,7 +1847,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 242,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Марганець",
                             Region = "Дніпропетровська область"
                         },
@@ -2102,7 +1854,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 243,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Маріуполь",
                             Region = "Донецька область"
                         },
@@ -2110,7 +1861,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 244,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мар'їнка",
                             Region = "Донецька область"
                         },
@@ -2118,7 +1868,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 245,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мелітополь",
                             Region = "Запорізька область"
                         },
@@ -2126,7 +1875,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 246,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мена",
                             Region = "Чернігівська область"
                         },
@@ -2134,7 +1882,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 247,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мерефа",
                             Region = "Харківська область"
                         },
@@ -2142,7 +1889,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 248,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Миколаїв",
                             Region = "Львівська область"
                         },
@@ -2150,7 +1896,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 249,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Миколаїв",
                             Region = "Миколаївська область"
                         },
@@ -2158,7 +1903,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 250,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Миколаївка",
                             Region = "Донецька область"
                         },
@@ -2166,7 +1910,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 251,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Миргород",
                             Region = "Полтавська область"
                         },
@@ -2174,7 +1917,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 252,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мирноград",
                             Region = "Донецька область"
                         },
@@ -2182,7 +1924,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 253,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Миронівка",
                             Region = "Київська область"
                         },
@@ -2190,7 +1931,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 254,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Міусинськ",
                             Region = "Луганська область"
                         },
@@ -2198,7 +1938,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 255,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Могилів-Подільський",
                             Region = "Вінницька область"
                         },
@@ -2206,7 +1945,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 256,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Молодогвардійськ",
                             Region = "Луганська область"
                         },
@@ -2214,7 +1952,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 257,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Молочанськ",
                             Region = "Запорізька область"
                         },
@@ -2222,7 +1959,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 258,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Монастириська",
                             Region = "Тернопільська область"
                         },
@@ -2230,7 +1966,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 259,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Монастирище",
                             Region = "Черкаська область"
                         },
@@ -2238,7 +1973,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 260,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Моршин",
                             Region = "Львівська область"
                         },
@@ -2246,7 +1980,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 261,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Моспине",
                             Region = "Донецька область"
                         },
@@ -2254,7 +1987,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 262,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мостиська",
                             Region = "Львівська область"
                         },
@@ -2262,7 +1994,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 263,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Мукачево",
                             Region = "Закарпатська область"
                         },
@@ -2270,7 +2001,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 264,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Надвірна",
                             Region = "Івано-Франківська область"
                         },
@@ -2278,7 +2008,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 265,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Немирів",
                             Region = "Вінницька область"
                         },
@@ -2286,7 +2015,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 266,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Нетішин",
                             Region = "Хмельницька область"
                         },
@@ -2294,7 +2022,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 267,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ніжин",
                             Region = "Чернігівська область"
                         },
@@ -2302,7 +2029,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 268,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Нікополь",
                             Region = "Дніпропетровська область"
                         },
@@ -2310,7 +2036,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 269,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Нова Каховка",
                             Region = "Херсонська область"
                         },
@@ -2318,7 +2043,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 270,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Нова Одеса",
                             Region = "Миколаївська область"
                         },
@@ -2326,7 +2050,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 271,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новгород-Сіверський",
                             Region = "Чернігівська область"
                         },
@@ -2334,7 +2057,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 272,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новий Буг",
                             Region = "Миколаївська область"
                         },
@@ -2342,7 +2064,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 273,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новий Калинів",
                             Region = "Львівська область"
                         },
@@ -2350,7 +2071,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 274,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новий Розділ",
                             Region = "Львівська область"
                         },
@@ -2358,7 +2078,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 275,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новоазовськ",
                             Region = "Донецька область"
                         },
@@ -2366,7 +2085,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 276,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Нововолинськ",
                             Region = "Волинська область"
                         },
@@ -2374,7 +2092,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 277,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новогродівка",
                             Region = "Донецька область"
                         },
@@ -2382,7 +2099,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 278,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новодністровськ",
                             Region = "Чернівецька область"
                         },
@@ -2390,7 +2106,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 279,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новодружеськ",
                             Region = "Луганська область"
                         },
@@ -2398,7 +2113,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 280,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новомиргород",
                             Region = "Кіровоградська область"
                         },
@@ -2406,7 +2120,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 281,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новомосковськ",
                             Region = "Дніпропетровська область"
                         },
@@ -2414,7 +2127,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 282,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новоселиця",
                             Region = "Чернівецька область"
                         },
@@ -2422,7 +2134,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 283,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новоукраїнка",
                             Region = "Кіровоградська область"
                         },
@@ -2430,7 +2141,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 284,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Новояворівськ",
                             Region = "Львівська область"
                         },
@@ -2438,7 +2148,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 285,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Носівка",
                             Region = "Чернігівська область"
                         },
@@ -2446,7 +2155,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 286,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Обухів",
                             Region = "Київська область"
                         },
@@ -2454,7 +2162,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 287,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Овруч",
                             Region = "Житомирська область"
                         },
@@ -2462,7 +2169,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 288,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Одеса",
                             Region = "Одеська область"
                         },
@@ -2470,7 +2176,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 289,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Олевськ",
                             Region = "Житомирська область"
                         },
@@ -2478,7 +2183,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 290,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Олександрівськ",
                             Region = "Луганська область"
                         },
@@ -2486,7 +2190,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 291,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Олександрія",
                             Region = "Кіровоградська область"
                         },
@@ -2494,7 +2197,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 292,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Олешки",
                             Region = "Херсонська область"
                         },
@@ -2502,7 +2204,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 293,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Оріхів",
                             Region = "Запорізька область"
                         },
@@ -2510,7 +2211,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 294,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Остер",
                             Region = "Чернігівська область"
                         },
@@ -2518,7 +2218,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 295,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Острог",
                             Region = "Рівненська область"
                         },
@@ -2526,7 +2225,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 296,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Охтирка",
                             Region = "Сумська область"
                         },
@@ -2534,7 +2232,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 297,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Очаків",
                             Region = "Миколаївська область"
                         },
@@ -2542,7 +2239,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 298,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Павлоград",
                             Region = "Дніпропетровська область"
                         },
@@ -2550,7 +2246,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 299,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Первомайськ",
                             Region = "Луганська область"
                         },
@@ -2558,7 +2253,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 300,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Первомайськ",
                             Region = "Миколаївська область"
                         },
@@ -2566,7 +2260,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 301,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Первомайський",
                             Region = "Харківська область"
                         },
@@ -2574,7 +2267,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 302,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Перевальськ",
                             Region = "Луганська область"
                         },
@@ -2582,7 +2274,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 303,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Перемишляни",
                             Region = "Львівська область"
                         },
@@ -2590,7 +2281,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 304,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Перечин",
                             Region = "Закарпатська область"
                         },
@@ -2598,7 +2288,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 305,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Перещепине",
                             Region = "Дніпропетровська область"
                         },
@@ -2606,7 +2295,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 306,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Переяслав",
                             Region = "Київська область"
                         },
@@ -2614,7 +2302,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 307,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Першотравенськ",
                             Region = "Дніпропетровська область"
                         },
@@ -2622,7 +2309,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 308,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Петрово-Красносілля",
                             Region = "Луганська область"
                         },
@@ -2630,7 +2316,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 309,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Пирятин",
                             Region = "Полтавська область"
                         },
@@ -2638,7 +2323,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 310,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Південне",
                             Region = "Харківська область"
                         },
@@ -2646,7 +2330,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 311,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Підгайці",
                             Region = "Тернопільська область"
                         },
@@ -2654,7 +2337,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 312,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Підгородне",
                             Region = "Дніпропетровська область"
                         },
@@ -2662,7 +2344,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 313,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Погребище",
                             Region = "Вінницька область"
                         },
@@ -2670,7 +2351,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 314,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Подільськ",
                             Region = "Одеська область"
                         },
@@ -2678,7 +2358,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 315,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Покров",
                             Region = "Дніпропетровська область"
                         },
@@ -2686,7 +2365,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 316,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Покровськ",
                             Region = "Донецька область"
                         },
@@ -2694,7 +2372,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 317,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Пологи",
                             Region = "Запорізька область"
                         },
@@ -2702,7 +2379,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 318,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Полонне",
                             Region = "Хмельницька область"
                         },
@@ -2710,7 +2386,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 319,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Полтава",
                             Region = "Полтавська область"
                         },
@@ -2718,7 +2393,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 320,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Помічна",
                             Region = "Кіровоградська область"
                         },
@@ -2726,7 +2400,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 321,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Попасна",
                             Region = "Луганська область"
                         },
@@ -2734,7 +2407,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 322,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Почаїв",
                             Region = "Тернопільська область"
                         },
@@ -2742,7 +2414,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 323,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Привілля",
                             Region = "Луганська область"
                         },
@@ -2750,7 +2421,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 324,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Прилуки",
                             Region = "Чернігівська область"
                         },
@@ -2758,7 +2428,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 325,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Приморськ",
                             Region = "Запорізька область"
                         },
@@ -2766,7 +2435,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 326,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Прип'ять",
                             Region = "Київська область"
                         },
@@ -2774,7 +2442,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 327,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Пустомити",
                             Region = "Львівська область"
                         },
@@ -2782,7 +2449,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 328,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Путивль",
                             Region = "Сумська область"
                         },
@@ -2790,7 +2456,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 329,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "П'ятихатки",
                             Region = "Дніпропетровська область"
                         },
@@ -2798,7 +2463,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 330,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рава-Руська",
                             Region = "Львівська область"
                         },
@@ -2806,7 +2470,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 331,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Радехів",
                             Region = "Львівська область"
                         },
@@ -2814,7 +2477,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 332,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Радивилів",
                             Region = "Рівненська область"
                         },
@@ -2822,7 +2484,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 333,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Радомишль",
                             Region = "Житомирська область"
                         },
@@ -2830,7 +2491,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 334,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рахів",
                             Region = "Закарпатська область"
                         },
@@ -2838,7 +2498,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 335,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рені",
                             Region = "Одеська область"
                         },
@@ -2846,7 +2505,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 336,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Решетилівка",
                             Region = "Полтавська область"
                         },
@@ -2854,7 +2512,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 337,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ржищів",
                             Region = "Київська область"
                         },
@@ -2862,7 +2519,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 338,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рівне",
                             Region = "Рівненська область"
                         },
@@ -2870,7 +2526,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 339,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ровеньки",
                             Region = "Луганська область"
                         },
@@ -2878,7 +2533,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 340,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рогатин",
                             Region = "Івано-Франківська область"
                         },
@@ -2886,7 +2540,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 341,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Родинське",
                             Region = "Донецька область"
                         },
@@ -2894,7 +2547,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 342,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рожище",
                             Region = "Волинська область"
                         },
@@ -2902,7 +2554,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 343,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Роздільна",
                             Region = "Одеська область"
                         },
@@ -2910,7 +2561,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 344,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ромни",
                             Region = "Сумська область"
                         },
@@ -2918,7 +2568,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 345,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рубіжне",
                             Region = "Луганська область"
                         },
@@ -2926,7 +2575,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 346,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Рудки",
                             Region = "Львівська область"
                         },
@@ -2934,7 +2582,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 347,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Саки",
                             Region = "Автономна Республіка Крим"
                         },
@@ -2942,7 +2589,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 348,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Самбір",
                             Region = "Львівська область"
                         },
@@ -2950,7 +2596,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 349,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сарни",
                             Region = "Рівненська область"
                         },
@@ -2958,7 +2603,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 350,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Свалява",
                             Region = "Закарпатська область"
                         },
@@ -2966,7 +2610,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 351,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сватове",
                             Region = "Луганська область"
                         },
@@ -2974,7 +2617,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 352,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Світловодськ",
                             Region = "Кіровоградська область"
                         },
@@ -2982,7 +2624,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 353,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Світлодарськ",
                             Region = "Донецька область"
                         },
@@ -2990,7 +2631,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 354,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Святогірськ",
                             Region = "Донецька область"
                         },
@@ -2998,7 +2638,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 355,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Севастополь",
                             Region = "Севастополь"
                         },
@@ -3006,7 +2645,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 356,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Селидове",
                             Region = "Донецька область"
                         },
@@ -3014,7 +2652,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 357,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Семенівка",
                             Region = "Чернігівська область"
                         },
@@ -3022,7 +2659,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 358,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Середина-Буда",
                             Region = "Сумська область"
                         },
@@ -3030,7 +2666,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 359,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сєвєродонецьк",
                             Region = "Луганська область"
                         },
@@ -3038,7 +2673,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 360,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Синельникове",
                             Region = "Дніпропетровська область"
                         },
@@ -3046,7 +2680,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 361,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сіверськ",
                             Region = "Донецька область"
                         },
@@ -3054,7 +2687,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 362,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сімферополь",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3062,7 +2694,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 363,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Скадовськ",
                             Region = "Херсонська область"
                         },
@@ -3070,7 +2701,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 364,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Скалат",
                             Region = "Тернопільська область"
                         },
@@ -3078,7 +2708,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 365,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сквира",
                             Region = "Київська область"
                         },
@@ -3086,7 +2715,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 366,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сколе",
                             Region = "Львівська область"
                         },
@@ -3094,7 +2722,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 367,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Славута",
                             Region = "Хмельницька область"
                         },
@@ -3102,7 +2729,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 368,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Славутич",
                             Region = "Київська область"
                         },
@@ -3110,7 +2736,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 369,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Слов'янськ",
                             Region = "Донецька область"
                         },
@@ -3118,7 +2743,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 370,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сміла",
                             Region = "Черкаська область"
                         },
@@ -3126,7 +2750,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 371,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Снігурівка",
                             Region = "Миколаївська область"
                         },
@@ -3134,7 +2757,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 372,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сніжне",
                             Region = "Донецька область"
                         },
@@ -3142,7 +2764,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 373,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сновськ",
                             Region = "Чернігівська область"
                         },
@@ -3150,7 +2771,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 374,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Снятин",
                             Region = "Івано-Франківська область"
                         },
@@ -3158,7 +2778,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 375,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сокаль",
                             Region = "Львівська область"
                         },
@@ -3166,7 +2785,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 376,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сокиряни",
                             Region = "Чернівецька область"
                         },
@@ -3174,7 +2792,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 377,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Соледар",
                             Region = "Донецька область"
                         },
@@ -3182,7 +2799,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 378,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сорокине",
                             Region = "Луганська область"
                         },
@@ -3190,7 +2806,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 379,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Соснівка",
                             Region = "Львівська область"
                         },
@@ -3198,7 +2813,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 380,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Старий Крим",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3206,7 +2820,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 381,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Старий Самбір",
                             Region = "Львівська область"
                         },
@@ -3214,7 +2827,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 382,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Старобільськ",
                             Region = "Луганська область"
                         },
@@ -3222,7 +2834,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 383,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Старокостянтинів",
                             Region = "Хмельницька область"
                         },
@@ -3230,7 +2841,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 384,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Стебник",
                             Region = "Львівська область"
                         },
@@ -3238,7 +2848,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 385,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Сторожинець",
                             Region = "Чернівецька область"
                         },
@@ -3246,7 +2855,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 386,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Стрий",
                             Region = "Львівська область"
                         },
@@ -3254,7 +2862,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 387,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Судак",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3262,7 +2869,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 388,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Судова Вишня",
                             Region = "Львівська область"
                         },
@@ -3270,7 +2876,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 389,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Суми",
                             Region = "Сумська область"
                         },
@@ -3278,7 +2883,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 390,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Суходільськ",
                             Region = "Луганська область"
                         },
@@ -3286,7 +2890,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 391,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Таврійськ",
                             Region = "Херсонська область"
                         },
@@ -3294,7 +2897,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 392,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тальне",
                             Region = "Черкаська область"
                         },
@@ -3302,7 +2904,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 393,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тараща",
                             Region = "Київська область"
                         },
@@ -3310,7 +2911,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 394,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Татарбунари",
                             Region = "Одеська область"
                         },
@@ -3318,7 +2918,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 395,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Теплодар",
                             Region = "Одеська область"
                         },
@@ -3326,7 +2925,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 396,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Теребовля",
                             Region = "Тернопільська область"
                         },
@@ -3334,7 +2932,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 397,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тернівка",
                             Region = "Дніпропетровська область"
                         },
@@ -3342,7 +2939,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 398,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тернопіль",
                             Region = "Тернопільська область"
                         },
@@ -3350,7 +2946,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 399,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тетіїв",
                             Region = "Київська область"
                         },
@@ -3358,7 +2953,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 400,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тисмениця",
                             Region = "Івано-Франківська область"
                         },
@@ -3366,7 +2960,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 401,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тлумач",
                             Region = "Івано-Франківська область"
                         },
@@ -3374,7 +2967,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 402,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Токмак",
                             Region = "Запорізька область"
                         },
@@ -3382,7 +2974,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 403,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Торецьк",
                             Region = "Донецька область"
                         },
@@ -3390,7 +2981,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 404,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тростянець",
                             Region = "Сумська область"
                         },
@@ -3398,7 +2988,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 405,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Трускавець",
                             Region = "Львівська область"
                         },
@@ -3406,7 +2995,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 406,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тульчин",
                             Region = "Вінницька область"
                         },
@@ -3414,7 +3002,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 407,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Турка",
                             Region = "Львівська область"
                         },
@@ -3422,7 +3009,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 408,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Тячів",
                             Region = "Закарпатська область"
                         },
@@ -3430,7 +3016,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 409,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Угнів",
                             Region = "Львівська область"
                         },
@@ -3438,7 +3023,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 410,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ужгород",
                             Region = "Закарпатська область"
                         },
@@ -3446,7 +3030,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 411,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Узин",
                             Region = "Київська область"
                         },
@@ -3454,7 +3037,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 412,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Українка",
                             Region = "Київська область"
                         },
@@ -3462,7 +3044,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 413,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Українськ",
                             Region = "Донецька область"
                         },
@@ -3470,7 +3051,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 414,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Умань",
                             Region = "Черкаська область"
                         },
@@ -3478,7 +3058,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 415,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Устилуг",
                             Region = "Волинська область"
                         },
@@ -3486,7 +3065,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 416,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Фастів",
                             Region = "Київська область"
                         },
@@ -3494,7 +3072,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 417,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Феодосія",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3502,7 +3079,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 418,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Харків",
                             Region = "Харківська область"
                         },
@@ -3510,7 +3086,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 419,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Харцизьк",
                             Region = "Донецька область"
                         },
@@ -3518,7 +3093,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 420,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Херсон",
                             Region = "Херсонська область"
                         },
@@ -3526,7 +3100,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 421,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хирів",
                             Region = "Львівська область"
                         },
@@ -3534,7 +3107,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 422,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хмельницький",
                             Region = "Хмельницька область"
                         },
@@ -3542,7 +3114,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 423,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хмільник",
                             Region = "Вінницька область"
                         },
@@ -3550,7 +3121,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 424,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ходорів",
                             Region = "Львівська область"
                         },
@@ -3558,7 +3128,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 425,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хорол",
                             Region = "Полтавська область"
                         },
@@ -3566,7 +3135,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 426,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хоростків",
                             Region = "Тернопільська область"
                         },
@@ -3574,7 +3142,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 427,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хотин",
                             Region = "Чернівецька область"
                         },
@@ -3582,7 +3149,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 428,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хрестівка",
                             Region = "Донецька область"
                         },
@@ -3590,7 +3156,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 429,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Христинівка",
                             Region = "Черкаська область"
                         },
@@ -3598,7 +3163,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 430,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хрустальний",
                             Region = "Луганська область"
                         },
@@ -3606,7 +3170,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 431,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Хуст",
                             Region = "Закарпатська область"
                         },
@@ -3614,7 +3177,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 432,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Часів Яр",
                             Region = "Донецька область"
                         },
@@ -3622,7 +3184,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 433,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Червоноград",
                             Region = "Львівська область"
                         },
@@ -3630,7 +3191,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 434,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Черкаси",
                             Region = "Черкаська область"
                         },
@@ -3638,7 +3198,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 435,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чернівці",
                             Region = "Чернівецька область"
                         },
@@ -3646,7 +3205,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 436,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чернігів",
                             Region = "Чернігівська область"
                         },
@@ -3654,7 +3212,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 437,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чигирин",
                             Region = "Черкаська область"
                         },
@@ -3662,7 +3219,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 438,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чистякове",
                             Region = "Донецька область"
                         },
@@ -3670,7 +3226,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 439,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чоп",
                             Region = "Закарпатська область"
                         },
@@ -3678,7 +3233,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 440,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чорнобиль",
                             Region = "Київська область"
                         },
@@ -3686,7 +3240,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 441,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чорноморськ",
                             Region = "Одеська область"
                         },
@@ -3694,7 +3247,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 442,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чортків",
                             Region = "Тернопільська область"
                         },
@@ -3702,7 +3254,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 443,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чугуїв",
                             Region = "Харківська область"
                         },
@@ -3710,7 +3261,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 444,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Чуднів",
                             Region = "Житомирська область"
                         },
@@ -3718,7 +3268,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 445,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шаргород",
                             Region = "Вінницька область"
                         },
@@ -3726,7 +3275,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 446,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шахтарськ",
                             Region = "Донецька область"
                         },
@@ -3734,7 +3282,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 447,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шепетівка",
                             Region = "Хмельницька область"
                         },
@@ -3742,7 +3289,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 448,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шостка",
                             Region = "Сумська область"
                         },
@@ -3750,7 +3296,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 449,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шпола",
                             Region = "Черкаська область"
                         },
@@ -3758,7 +3303,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 450,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Шумськ",
                             Region = "Тернопільська область"
                         },
@@ -3766,7 +3310,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 451,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Щастя",
                             Region = "Луганська область"
                         },
@@ -3774,7 +3317,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 452,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Щолкіне",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3782,7 +3324,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 453,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Южне",
                             Region = "Одеська область"
                         },
@@ -3790,7 +3331,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 454,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Южноукраїнськ",
                             Region = "Миколаївська область"
                         },
@@ -3798,7 +3338,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 455,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Яворів",
                             Region = "Львівська область"
                         },
@@ -3806,7 +3345,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 456,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Яготин",
                             Region = "Київська область"
                         },
@@ -3814,7 +3352,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 457,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ялта",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3822,7 +3359,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 458,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ямпіль",
                             Region = "Вінницька область"
                         },
@@ -3830,7 +3366,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 459,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Яремче",
                             Region = "Івано-Франківська область"
                         },
@@ -3838,7 +3373,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 460,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Яни Капу",
                             Region = "Автономна Республіка Крим"
                         },
@@ -3846,7 +3380,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 461,
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedId = 0,
                             Name = "Ясинувата",
                             Region = "Донецька область"
                         });
@@ -3964,6 +3497,41 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.HasIndex("TutorId");
 
                     b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.ReviewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TutorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("TutorId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.SolutionModel", b =>
@@ -4914,42 +4482,7 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tutor");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.TutorReviewModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CreatedId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TutorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedId");
-
-                    b.HasIndex("TutorId");
-
-                    b.ToTable("TutorReviewModel");
+                    b.ToTable("Tutors");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserFileModel", b =>
@@ -4968,6 +4501,11 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ServerName")
+                        .IsRequired()
+                        .HasMaxLength(350)
+                        .HasColumnType("varchar(350)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -5074,8 +4612,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(2004, 4, 23, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "0830988b-8b2e-438d-af74-4af2b28c7ce2",
+                            BirthDate = new DateTime(2004, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "bdac24fc-29aa-4740-8023-10c59e0e4e23",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5095,8 +4633,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            BirthDate = new DateTime(1999, 4, 23, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "94a0ab4c-a3eb-4ecb-bd80-bf23a8a704c3",
+                            BirthDate = new DateTime(1999, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
+                            ConcurrencyStamp = "a9fc8738-b8a9-4213-83c0-5ec7a52e293b",
                             Email = "tutor@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -5440,6 +4978,25 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Navigation("Tutor");
                 });
 
+            modelBuilder.Entity("Infra.DatabaseAdapter.Models.ReviewModel", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Author")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Tutor")
+                        .WithMany("Reviews")
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Tutor");
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.SolutionModel", b =>
                 {
                     b.HasOne("Infra.DatabaseAdapter.Models.AssignmentModel", "Assignment")
@@ -5468,25 +5025,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.TutorReviewModel", b =>
-                {
-                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Created")
-                        .WithMany("Reviews")
-                        .HasForeignKey("CreatedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Tutor")
-                        .WithMany()
-                        .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Created");
-
-                    b.Navigation("Tutor");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserFileModel", b =>
@@ -5618,6 +5156,8 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Navigation("AvailableTimes");
 
                     b.Navigation("Requests");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("TeachingLessons");
                 });

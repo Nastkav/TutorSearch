@@ -26,7 +26,7 @@ public class CreateLessonCommand : IRequest<int>
         {
             if (r.CreatedId != r.Lesson.TutorId)
                 throw new Exception("Лише репетитор може створити зустріч");
-            if (!DatabaseContext.Tutor.Any(x => x.Id == r.Lesson.TutorId))
+            if (!DatabaseContext.Tutors.Any(x => x.Id == r.Lesson.TutorId))
                 throw new Exception("Репетитор вказан невірно");
 
             var dbSubject = await DatabaseContext.Subjects
@@ -37,7 +37,7 @@ public class CreateLessonCommand : IRequest<int>
             var newLesson = Mapper.Map<LessonModel>(r.Lesson);
             newLesson.Subject = dbSubject;
 
-            //Дадання учнів
+            //Додання учнів
             newLesson.Students = DatabaseContext.Users.Where(x => r.Lesson.StudentsIds.Contains(x.Id)).ToList();
 
             //Перевірка перетинання часу    

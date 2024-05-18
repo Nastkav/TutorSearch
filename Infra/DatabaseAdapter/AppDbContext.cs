@@ -16,7 +16,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     // public virtual DbSet<UserModel> Users { get; set; } = null!;
     public virtual DbSet<CityModel> Cities { get; set; } = null!;
     public virtual DbSet<SubjectModel> Subjects { get; set; } = null!;
-    public virtual DbSet<TutorModel> Tutor { get; set; } = null!;
+    public virtual DbSet<TutorModel> Tutors { get; set; } = null!;
     public virtual DbSet<AvailableTimeModel> AvailableTimes { get; set; } = null!;
     public virtual DbSet<LessonModel> Lessons { get; set; } = null!;
     public virtual DbSet<AssignmentModel> Assignments { get; set; } = null!;
@@ -24,6 +24,7 @@ public class AppDbContext : IdentityDbContext<UserModel, IdentityRole<int>, int>
     public virtual DbSet<UserFileModel> Files { get; set; } = null!;
     public virtual DbSet<RequestModel> Requests { get; set; } = null!;
     public virtual DbSet<FavoriteTutorModel> FavoriteTutors { get; set; } = null!;
+    public virtual DbSet<ReviewModel> Reviews { get; set; } = null!;
 
     private void InitialSeed(ModelBuilder builder)
     {

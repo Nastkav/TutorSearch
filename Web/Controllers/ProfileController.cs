@@ -62,6 +62,7 @@ public class ProfileController : Controller
             id = IdentityId;
 
         var model = await GetUserModel(id);
+        model.Reviews = await _mediator.Send(new GetTutorReviewsQuery() { TutorId = id });
         model.CreateRequestCommand.CreatedId = IdentityId;
         return View(model);
     }

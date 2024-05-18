@@ -30,7 +30,7 @@ public class UpdateTutorCommand : IRequest<bool>
                 throw new Exception("Ідентіфікатор вчителя не знайдено.");
 
             //Select from database
-            var dbProfile = await DatabaseContext.Tutor
+            var dbProfile = await DatabaseContext.Tutors
                                 .Include(x => x.About)
                                 .Include(x => x.Subjects)
                                 .FirstOrDefaultAsync(x => x.Id == r.Profile.Id)

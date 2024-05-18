@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.DatabaseAdapter._Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240423232626_Reviews")]
-    partial class Reviews
+    [Migration("20240424102526_RestoreV13")]
+    partial class RestoreV13
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -3505,11 +3505,11 @@ namespace Infra.DatabaseAdapter._Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("CreatedId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -3527,11 +3527,11 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("TutorId");
 
-                    b.ToTable("ReviewModel");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.SolutionModel", b =>
@@ -4482,7 +4482,7 @@ namespace Infra.DatabaseAdapter._Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tutor");
+                    b.ToTable("Tutors");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserFileModel", b =>
@@ -4613,7 +4613,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(2004, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "92188ba4-cf51-41a0-8604-253b96d0c4fe",
+                            ConcurrencyStamp = "f5cf9fcc-2b5d-416b-a975-f90185edbc02",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -4634,7 +4634,7 @@ namespace Infra.DatabaseAdapter._Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1999, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "2e9ffec5-4b9e-4c58-8667-304b505c1126",
+                            ConcurrencyStamp = "c7401443-5da2-417e-a4d6-c8c6a33c837b",
                             Email = "tutor@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
@@ -4980,19 +4980,19 @@ namespace Infra.DatabaseAdapter._Migrations
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.ReviewModel", b =>
                 {
-                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Created")
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "Author")
                         .WithMany("Reviews")
-                        .HasForeignKey("CreatedId")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Tutor")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Created");
+                    b.Navigation("Author");
 
                     b.Navigation("Tutor");
                 });
@@ -5156,6 +5156,8 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.Navigation("AvailableTimes");
 
                     b.Navigation("Requests");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("TeachingLessons");
                 });

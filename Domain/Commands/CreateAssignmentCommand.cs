@@ -26,7 +26,7 @@ public class CreateAssignmentCommand : IRequest<int>
         {
             if (r.CreatedId != r.Assignment.TutorId)
                 throw new Exception("Лише репетитор може додати завдання");
-            if (!DatabaseContext.Tutor.Any(x => x.Id == r.Assignment.TutorId))
+            if (!DatabaseContext.Tutors.Any(x => x.Id == r.Assignment.TutorId))
                 throw new Exception("Репетитор вказан невірно");
 
             var dbSubject = await DatabaseContext.Subjects
@@ -37,7 +37,7 @@ public class CreateAssignmentCommand : IRequest<int>
             var newAssignment = Mapper.Map<AssignmentModel>(r.Assignment);
             newAssignment.Subject = dbSubject;
 
-            //Дадання рішень
+            //Додання рішень
             foreach (var studentId in r.Assignment.StudentsIds)
                 newAssignment.Solutions.Add(new SolutionModel()
                 {

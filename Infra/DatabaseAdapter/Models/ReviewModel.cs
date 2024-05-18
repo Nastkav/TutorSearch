@@ -11,11 +11,11 @@ public class ReviewModel : ITrackable
     public int Id { get; set; }
     public int TutorId { get; set; }
     public TutorModel Tutor { get; set; } = null!;
-    [Range(0, 5)] public int Rating { get; set; }
-    [MaxLength(300)] public string Description { get; set; } = string.Empty;
+    [Range(0, 10)] public int Rating { get; set; }
+    [MaxLength(1000)] public string Description { get; set; } = string.Empty;
 
-    public int CreatedId { get; set; }
-    public UserModel Created { get; set; } = null!;
+    public int AuthorId { get; set; }
+    public UserModel Author { get; set; } = null!;
 
     //ITrackable
     public DateTime CreatedAt { get; set; }

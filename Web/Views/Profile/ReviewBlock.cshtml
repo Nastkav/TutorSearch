@@ -1,0 +1,31 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Domain.Models.Review 
+
+<div class="reviews-members pt-4 pb-4">
+    <div class="media">
+        <img alt="Generic placeholder image" src="@Model.Avatar" class="mr-3 rounded-pill">
+        <div class="media-body">
+            <div class="reviews-members-header">
+                <span class="star-rating float-right">
+                    <input asp-for="Rating" class="rating" min="1" max="10" data-size="md" data-show-clear="false" data-show-caption="false" disabled>
+                </span>
+                <h6 class="mb-1">
+                    <a class="text-black" href="#">@Model.AuthorName</a>
+                </h6>
+                <p class="text-gray">
+                    @Model.UpdatedAt
+                    @if (Model.CreatedAt != Model.UpdatedAt)
+                    {
+                        <span class="text-secondary">( Створено: @Model.CreatedAt )</span>
+                    }
+                </p>
+            </div>
+            <div class="reviews-members-body">
+                <p>@Model.Description</p>
+            </div>
+            <div class="reviews-members-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<hr>

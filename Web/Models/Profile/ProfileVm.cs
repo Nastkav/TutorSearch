@@ -17,4 +17,6 @@ public class ProfileVm
 
     [DisplayName("Завантажити новий аватар")]
     public IFormFile? NewAvatar { get; set; }
+
+    public List<Review> Reviews { get; set; } = [];
 }
