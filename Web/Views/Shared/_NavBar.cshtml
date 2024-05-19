@@ -1,46 +1,91 @@
-<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
-    <div class="container-fluid">
-        <a class="navbar-brand">Tutor Search MVC</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor03">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Profile" asp-action="Index">Пошук репетитора</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Profile" asp-action="Details">Профіль</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="LessonRequest" asp-action="Index">Запити</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Lesson" asp-action="Index">Уроки</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Assignment" asp-action="Index">Задачи</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Solution" asp-action="Index">Завдання</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        Адміністрування
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="nav-link text-dark" asp-controller="City" asp-action="Index">Список міст</a>
-                        <a class="nav-link text-dark" asp-controller="Subject" asp-action="Index">Список предметів</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="About">Про нас</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/swagger/index.html">Swagger</a>
-                </li>
-            </ul>
-            <partial name="_LoginPartial"/>
-        </div>
-    </div>
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+    <!-- Sidebar Toggle (Topbar) -->
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <!-- Topbar Navbar -->
+    <a class="navbar-brand" asp-controller="Profile" asp-action="Index">
+        <img src="~/img/logo.png" width="30" height="30" alt="">
+    </a>
+    <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Profile" asp-action="Index">Пошук репетиторів</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="LessonRequest" asp-action="Index">Запити</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Lesson" asp-action="Index">Уроки</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Assignment" asp-action="Index">Задачи</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Solution" asp-action="Index">Завдання</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Home" asp-action="About">Про нас</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <!-- Nav Item - Alerts -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-info badge-counter">0</span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                    Центр оповіщення
+                </h6>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Показати всі сповіщення</a>
+            </div>
+        </li>
+
+        <!-- Nav Item - Messages -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-envelope fa-fw"></i>
+                <!-- Counter - Messages -->
+                <span class="badge badge-info badge-counter">0</span>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header">
+                    Центр повідомлень
+                </h6>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Читати більше повідомлень</a>
+            </div>
+        </li>
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <partial name="_SignedNavBar"/>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Зареєструватися</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Вхід</a>
+            </li>
+        }
+    </ul>
+
 </nav>
+<!-- End of Topbar -->

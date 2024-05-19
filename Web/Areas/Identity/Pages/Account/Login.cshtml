@@ -21,7 +21,7 @@
                     <label asp-for="Input.Password" class="form-label">Пароль</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
+                <div class="checkbox ml-4 mb-3">
                     <label asp-for="Input.RememberMe" class="form-label">
                         <input class="form-check-input" asp-for="Input.RememberMe"/>
                         @Html.DisplayNameFor(m => m.Input.RememberMe)
@@ -30,13 +30,13 @@
                 <div>
                     <button id="login-submit" type="submit" class="mb-4 w-100 btn btn-lg btn-primary">Авторизуватися</button>
                 </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Забули свій пароль?</a>
-                    </p>
-                    <p>
+                <div class="row">
+                    <dov class="col col-8">
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Зареєструватися як новий користувач</a>
-                    </p>
+                    </dov>
+                    <div class="col col-4">
+                        <a id="forgot-password" asp-page="./ForgotPassword">Забули свій пароль?</a>
+                    </div>
                 </div>
             </form>
         </section>

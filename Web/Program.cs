@@ -46,6 +46,8 @@ app.UseSwaggerUI();
 
 //wwwroot
 app.UseStaticFiles();
+//node_modules
+app.UseStaticFiles();
 //Додавання маршрутизації
 app.UseRouting();
 

@@ -1,0 +1,44 @@
+﻿@using System.Security.Claims
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+@{
+    ViewBag.Avatar = User.FindFirst(ClaimTypes.NameIdentifier)?.Value + ".png";
+}
+<!-- Nav Item - User Information -->
+<li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.Identity?.Name</span>
+        <img class="img-profile rounded-circle" src="~/avatars/@ViewBag.Avatar" alt="">
+    </a>
+    <!-- Dropdown - User Information -->
+    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+         aria-labelledby="userDropdown">
+        <a class="dropdown-item" asp-controller="Profile" asp-action="Details">
+            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+            Профіль
+        </a>
+        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+            Налаштування
+        </a>
+        <a class="dropdown-item" asp-controller="City" asp-action="Index">
+            <i class="fas fa-building fa-sm fa-fw mr-2 text-gray-400"></i>
+            Список міст
+        </a>
+        <a class="dropdown-item" asp-controller="Subject" asp-action="Index">
+            <i class="fas fa-list-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Список предметів
+        </a>
+        <a class="dropdown-item" href="/swagger/index.html">
+            <i class="fas  fa-external-link-square fa-sm fa-fw mr-2 text-gray-400"></i>
+            Swagger
+        </a>
+
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            Вийти з системи
+        </a>
+    </div>
+</li>
