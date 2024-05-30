@@ -27,19 +27,19 @@ public class UpdateSolutionCommand : IRequest<int>
                 .Include(x => x.Assignment)
                 .FirstOrDefault(x => x.Id == r.SolutionId);
             if (dbSolution == null)
-                throw new Exception("Задачу не знайдено");
+                throw new SolutionException("Задачу не знайдено");
             if (dbSolution.Status == SolutionStatus.Completed)
-                throw new Exception("Оновленя виконаної задачі неможливо");
+                throw new SolutionException("Оновленя виконаної задачі неможливо");
             var isStudent = r.UpdatedBy == dbSolution.StudentId;
             var isTutor = r.UpdatedBy == dbSolution.Assignment.TutorId;
-            if (isStudent && isTutor)
-                throw new Exception("Редагувати завдання може лише вчитель або учень");
+            if (!isStudent && !isTutor)
+                throw new AccessDeniedException("Редагувати завдання може лише вчитель або учень");
 
             //Status
             if (r.Status != null && dbSolution.Status != r.Status)
             {
                 if (isStudent && r.Status.Value == SolutionStatus.Completed)
-                    throw new Exception("Учень не може відзначити завдання як виконане");
+                    throw new AccessDeniedException("Учень не може відзначити завдання як виконане");
                 dbSolution.Status = r.Status.Value;
             }
 
@@ -48,7 +48,7 @@ public class UpdateSolutionCommand : IRequest<int>
                 if (isStudent)
                     dbSolution.Answer = r.Answer;
                 else
-                    throw new Exception("Вчитель не може написати відповідь");
+                    throw new AccessDeniedException("Вчитель не може написати відповідь");
 
 
             //TutorComment
@@ -56,7 +56,7 @@ public class UpdateSolutionCommand : IRequest<int>
                 if (isTutor)
                     dbSolution.TutorComment = r.TutorComment;
                 else
-                    throw new Exception("Учень не може написати коментар");
+                    throw new AccessDeniedException("Учень не може написати коментар");
 
 
             //Зберегти

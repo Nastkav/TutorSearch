@@ -1,36 +1,36 @@
 @model Web.Models.Profile.ProfileVm
 
 @{
-    ViewBag.Title = "Edit Tutor Profile";
+    ViewBag.Title = "Редагувати профіль";
     Layout = "_Layout";
 }
-<div class="row">
-    <div class="row m-3"></div>
-    <h1 class="text-center">@ViewData["Title"]</h1>
-</div>
 
-<div class="card bg-light mb-3" id="subjects">
-    <div class="card-body">
-        <partial name="EditUser"/>
-    </div>
-</div>
+
+<partial name="EditUser" model="Model"/>
+
 
 @if (Model.UserVm.ProfileEnabled && Model.TutorVm != null)
 {
     <!-- Calendar -->
-    <div class="card bg-light mt-3" id="schedule">
-        <div class="card-body">
-            <h5 class="card-title text-center">Графік робочого часу репетитора</h5>
-            <div class="container">
-                <div class="row justify-content-md-center">
-                    <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з учнями.</div>
+    <div class="tab-pane fade active show" id="schedule" role="tabpanel" aria-labelledby="pills-reviews-tab">
+        <div class="bg-white rounded shadow-sm p-4 mb-4">
+            <div class="container mt-4">
+                <div class="d-flex">
+                    <div class="p2">
+                        <h4 class="mb-1">Графік свободного часу репетитора</h4>
+                        <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-end">
                     <div id="calendar" data-tutorid="@Model.TutorVm.Id"></div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- End Calendar -->
     @section Scripts
     {
-        <script type="text/javascript" src="~/js/tutor-profile/edit-calendar.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/edit-calendar.js" asp-append-version="true"></script>
     }
+
 }

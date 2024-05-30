@@ -10,15 +10,22 @@ public class CityModel : ITrackable
 
     [DisplayName("Назва")]
     [MaxLength(100)]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     public string Name { get; set; } = string.Empty;
 
     [MaxLength(140)]
     [DisplayName("Область")]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     public string Region { get; set; } = string.Empty;
 
     //ITrackable
-    [DisplayName("Додано")] public DateTime CreatedAt { get; set; }
-    [DisplayName("Оновлено в")] public DateTime? UpdatedAt { get; set; }
+    [DisplayName("Додано")]
+    [DisplayFormat(DataFormatString = "{0:d}")]
+    public DateTime CreatedAt { get; set; }
+
+    [DisplayFormat(DataFormatString = "{0:d}")]
+    [DisplayName("Оновлено в")]
+    public DateTime? UpdatedAt { get; set; }
 
 
     public string FullName() => $"{Name},{Region}";

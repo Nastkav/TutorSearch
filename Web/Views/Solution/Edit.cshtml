@@ -2,122 +2,158 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Domain.Helpers
 @using Microsoft.OpenApi.Extensions
-@model Web.Models.Assignments.SolutionVm
+@model Web.Models.Solutions.SolutionVm
 
 @{
-    ViewData["Title"] = "Урок #" + Model.Solution.Id;
+    ViewData["Title"] = Model.Solution.SubjectName + " - " + Model.Solution.AssignmentTitle;
+    Layout = "_Layout";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container-sm">
+    <div class="row h-100 d-flex align-items-center justify-content-center">
+        <div class="col-lg-6">
+            <div class="bg-white rounded shadow-sm p-5 mb-4">
+                <h4 class="mb-1">@Model.Solution.AssignmentTitle</h4>
 
-<hr/>
+                <!-- Assignment -->
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Solution.SubjectName" class="col"></label>
+                    </div>
+                    <div class="col text-black">@Model.Solution.SubjectName</div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Solution.TutorName" class="col"></label>
+                    </div>
+                    <div class="col text-black">@Model.Solution.TutorName</div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Solution.Deadline" class="col"></label>
+                    </div>
+                    <div class="col text-black">@Model.Solution.Deadline</div>
+                </div>
+                @if (Model.Solution.Description != null && Model.Solution.Description.Length > 0)
+                {
+                    <div class="form-group">
+                        <h4 class="row">Опис завдання</h4>
+                        <p class="row text-wrap text-break w-100">@Model.Solution.Description</p>
+                    </div>
+                }
+                <!-- End Assignment -->
 
-<div class="row">
-    <h2>Завдання</h2>
-    <div class="form-group">
-        <label asp-for="Solution.AssignmentTitle" class="control-label"></label>
-        <input asp-for="Solution.AssignmentTitle" class="form-control" readonly/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Solution.Description" class="control-label"></label>
-        <input asp-for="Solution.Description" class="form-control" readonly/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Solution.TutorName" class="control-label"></label>
-        <input asp-for="Solution.TutorName" class="form-control" readonly/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Solution.Deadline" class="control-label"></label>
-        <input asp-for="Solution.Deadline" class="form-control" readonly/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Solution.SubjectName" class="control-label"></label>
-        <input asp-for="Solution.SubjectName" class="form-control" readonly/>
-    </div>
-</div>
-<partial name="FilesForm" model="@Model.Solution.AssignmentFiles"/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Solution.Id"/>
-
-            <div class="form-group">
-                <label asp-for="Solution.StudentName" class="control-label"></label>
-                <input asp-for="Solution.StudentName" class="form-control" readonly/>
-                <span asp-validation-for="Solution.StudentName" class="text-danger"></span>
+                <!-- Files -->
+                @if (Model.Solution.AssignmentFiles.Count > 0)
+                {
+                    <div class="upload mb-3">
+                        <h4 class="row mb-2">Матеріали до заняття</h4>
+                        @foreach (var item in Model.Solution.AssignmentFiles)
+                        {
+                            <div class="d-flex m-1">
+                                <div class=" mr-auto text-truncate pr-3">@item.FileName</div>
+                                <div class="ml-2">
+                                    <a type="button" class="btn btn-sm btn-outline-primary"
+                                       asp-controller="File" asp-action="Download" asp-route-id="@item.Id" target="_blank">
+                                        <i class="fa-solid fa-arrow-down"></i>
+                                        <!-- Завантажити файл -->
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                <!-- End Files -->
             </div>
-            <!-- Student Answer -->
-            <div class="form-group">
-                <label asp-for="Solution.Answer" class="control-label"></label>
-                @if (!Model.IsTutor && Model.Solution.Status == SolutionStatus.Todo)
-                {
-                    <input asp-for="Solution.Answer" class="form-control"/>
-                    <span asp-validation-for="Solution.Answer" class="text-danger"></span>
-                }
-                else
-                {
-                    <input asp-for="Solution.Answer" class="form-control" readonly/>
-                }
-            </div>
-            <!-- Tutor comment -->
-            <div class="form-group">
-                <label asp-for="Solution.TutorComment" class="control-label"></label>
-                @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
-                {
-                    <input asp-for="Solution.TutorComment" class="form-control"/>
-                    <span asp-validation-for="Solution.TutorComment" class="text-danger"></span>
-                }
-                else
-                {
-                    <input asp-for="Solution.TutorComment" class="form-control" readonly/>
-                }
-            </div>
-            <!-- Solution Status -->
-            <div class="form-group">
-                <label asp-for="Solution.Status" class="form-check-label mt-2"></label>
-                @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
-                {
-                    <select asp-for="Solution.Status" class="form-select" id="status" asp-items="Html.GetEnumSelectList<SolutionStatus>()"></select>
-                    <span asp-validation-for="Solution.Status" class="text-danger"></span>
-                }
-                else
-                {
-                    <label class="form-control" readonly>@Model.Solution.Status.GetDisplayName()</label>
-                }
-            </div>
-
-            <!-- Sumbin -->
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div class="mt-4 row">
-    <partial name="FilesForm" model="@Model.Solution.SolutionFiles"/>
-    <div class="row">
-        <form id="uploadform" asp-controller="Files" asp-action="Upload" enctype="multipart/form-data">
-            <div class="col col-md-8">
-                <input type="hidden" asp-for="Solution.Id" name="solutionId"/>
-                <label class="form-control" type="file" id="FormFile" name="FormFile"></label>
+<!-- Solution -->
+<div class="container-sm">
+    <div class="row h-100 d-flex align-items-center justify-content-center">
+        <div class="col-lg-6">
+            <div class="bg-white rounded shadow-sm p-5 mb-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Solution.Id"/>
+                    <input type="hidden" asp-for="IsTutor"/>
+
+                    <div class="form-group">
+                        <label asp-for="Solution.StudentName" class="control-label"></label>
+                        <input asp-for="Solution.StudentName" class="form-control nborder" readonly/>
+                        <span asp-validation-for="Solution.StudentName" class="text-danger"></span>
+                    </div>
+                    <!-- Student Answer -->
+                    <div class="form-group">
+                        <label asp-for="Solution.Answer" class="control-label"></label>
+                        @if (!Model.IsTutor && Model.Solution.Status == SolutionStatus.Todo)
+                        {
+                            <textarea asp-for="Solution.Answer" rows="4" class="form-control"></textarea>
+                            <span asp-validation-for="Solution.Answer" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <textarea asp-for="Solution.Answer" rows="4" class="form-control nborder" readonly></textarea>
+                        }
+                    </div>
+                    <!-- Tutor comment -->
+                    <div class="form-group">
+                        <label asp-for="Solution.TutorComment" class="control-label"></label>
+                        @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
+                        {
+                            <textarea asp-for="Solution.TutorComment" rows="4"  class="form-control"></textarea>
+                            <span asp-validation-for="Solution.TutorComment" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            if (Model.Solution.TutorComment?.Length > 0)
+                            {
+                                <input asp-for="Solution.TutorComment" class="form-control nborder" readonly/>
+                            }
+                        }
+                    </div>
+                    <!-- Solution Status -->
+                    <div class="form-group">
+                        <label asp-for="Solution.Status" class="form-check-label mt-2"></label>
+                        @if (Model.IsTutor && Model.Solution.Status != SolutionStatus.Completed)
+                        {
+                            <select asp-for="Solution.Status" class="form-select" id="status" asp-items="Html.GetEnumSelectList<SolutionStatus>()"></select>
+                            <span asp-validation-for="Solution.Status" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <select asp-for="Solution.Status" class="form-select nborder" id="status" asp-items="Html.GetEnumSelectList<SolutionStatus>()" disabled></select>
+                        }
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex">
+                        <div class="ml-auto px-2">
+                            <input type="submit" value="Зберегти" class="btn btn-primary"/>
+                        </div>
+                        <div>
+                            <a class="btn btn-secondary " asp-action="Index">Скасувати</a>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="col col-md-4">
-                <button type="submit" class="btn btn-primary ">Завантажити файл</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div class="mb-3">
-    <label for="formFileSm" class="form-label">Small file input example</label>
-    <input class="form-control form-control-sm" id="formFileSm" type="file">
-</div>
-
-
-<div class="mt-4 row">
-    <div class="col">
-        <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
+<!-- End Solution -->
+<!-- Solution Files -->
+<div class="container-sm">
+    <div class="row h-100 d-flex align-items-center justify-content-center">
+        <div class="col-lg-6">
+            <div class="bg-white rounded shadow-sm p-5 mb-4">
+                <partial name="FilesForm" model="@Model.Solution.SolutionFiles"/>
+                <form id="uploadform" asp-controller="File" asp-action="Upload" enctype="multipart/form-data">
+                    <input type="hidden" class="mt-3" asp-for="Solution.Id" name="SolutionId"/>
+                    <input class="form-control form-control-sm" id="uploadform-file" name="FormFile" type="file">
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+<!-- End Solution Files -->

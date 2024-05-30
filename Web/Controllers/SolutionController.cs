@@ -8,10 +8,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Web.Helpers;
 using Web.Models.Assignments;
+using Web.Models.Solutions;
 
 namespace Web.Controllers;
 
 [Authorize]
+[Route("/[controller]/[action]")]
 public class SolutionController : Controller
 {
     private readonly IMediator _mediator;
@@ -28,13 +30,19 @@ public class SolutionController : Controller
     public async Task<IActionResult> Index(GetSolutionsQuery? filter)
     {
         var model = new SolutionListVm();
+
+
         if (filter == null) filter = new GetSolutionsQuery();
 
         filter.UserId = IdentityId;
         model.Solutions = await _mediator.Send(filter);
         model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery());
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
+        _helper.UpdateSelf(model.HisStudents, IdentityId);
+
+
         model.HisTutors = await _helper.GetSelectList(new GetStudentTutorsQuery() { StudentId = IdentityId });
+        _helper.UpdateSelf(model.HisTutors, IdentityId);
         model.Assignments = await _helper.GetSelectList(new GetAssignmentNamesQuery()
         {
             TutorId = IdentityId,
@@ -45,6 +53,7 @@ public class SolutionController : Controller
 
 
     [HttpGet]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id)
     {
         var model = new SolutionVm();
@@ -62,6 +71,7 @@ public class SolutionController : Controller
     }
 
     [HttpPost]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id, SolutionVm model)
     {
         if (model.Solution.SolutionFiles.Count > 5)

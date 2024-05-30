@@ -1,17 +1,30 @@
+@using Web.Helpers
 @model Web.Models.Lessons.ListLessonVm
 
 @{
-    ViewData["Title"] = "Lessons";
+    ViewData["Title"] = "Уроки";
+    Layout = "_LayoutFilterTable";
 }
 
-<h1>Lessons</h1>
-@if (Model.IsTutor)
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-<table class="table">
+<!-- Head button -->
+
+<div class="d-flex mb-3">
+    <div class="p2">
+        <h4 class="mb-1">Уроки</h4>
+    </div>
+    @if (Model.IsTutor)
+    {
+        <div class="ml-auto">
+            <a asp-action="Create" class=" text-whitу">
+                Додати заняття
+                <i class="fas fa-plus btn btn-primary ml-1"></i>
+            </a>
+        </div>
+    }
+</div>
+<!-- End Head button -->
+<!-- Lesson table -->
+<table class=" table pretty-table">
     <thead>
     <tr>
         <th>
@@ -24,15 +37,17 @@
             @Html.DisplayNameFor(model => model.Lessons.First().StudentNames)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Lessons.First().LessonDate)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Lessons.First().From)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Lessons.First().To)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lessons.First().Comment)
+        <th nowrap="nowrap">
+            Дії
         </th>
-        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -46,7 +61,10 @@
                 @Html.DisplayFor(modelItem => item.TutorName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentNames)
+                @item.StudentNames.Truncate(15)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessonDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.From)
@@ -54,13 +72,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.To)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Перегляд</a>
+            <td class="text-right text-nowrap">
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-eye"></i>
+                </a>
             </td>
         </tr>
     }
     </tbody>
 </table>
+<!-- End Lesson table -->

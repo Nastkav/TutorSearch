@@ -3,7 +3,6 @@ using Domain.Helpers;
 using Infra.DatabaseAdapter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Domain.Queries;
 
@@ -21,12 +20,14 @@ public class GetStudentTutorsQuery : IRequest<Dictionary<int, string>>
         public override async Task<Dictionary<int, string>> Handle(GetStudentTutorsQuery r, CancellationToken token)
         {
             //Вибір вчителів у яких були уроки зі студентом 
-            var students = await DatabaseContext.Lessons
+            var students = await DatabaseContext.Lessons.AsNoTracking()
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Students.Any(s => s.Id == r.StudentId))
                 .GroupBy(x => x.TutorId)
-                .ToDictionaryAsync(g => g.Key, g => g.First().Tutor.User.FullName());
+                .Select(x => x.Key)
+                .Join(DatabaseContext.Users, x => x, u => u.Id, (_, u) => u)
+                .ToDictionaryAsync(g => g.Id, g => g.FullName());
             return students;
         }
     }

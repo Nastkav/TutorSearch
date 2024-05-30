@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Controllers.Admin;
 
-// [Authorize(Roles = "Administrator")]
+[Authorize(Roles = "Administrator")]
+[Route("/[controller]/[action]")]
+[Produces("text/html; charset=utf-8")]
 public class SubjectController : Controller
 {
     private readonly AppDbContext _context;
@@ -14,21 +16,11 @@ public class SubjectController : Controller
     public SubjectController(AppDbContext context) => _context = context;
 
     // GET: Subject
+    [HttpGet]
     public async Task<IActionResult> Index() => View(await _context.Subjects.ToListAsync());
 
-    // GET: Subject/Details/5
-    public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null) return NotFound();
-
-        var subjectModel = await _context.Subjects
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (subjectModel == null) return NotFound();
-
-        return View(subjectModel);
-    }
-
     // GET: Subject/Create
+    [HttpGet]
     public IActionResult Create() => View();
 
     // POST: Subject/Create
@@ -47,6 +39,8 @@ public class SubjectController : Controller
     }
 
     // GET: Subject/Edit/5
+    [HttpGet]
+    [Route("{id?}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -59,6 +53,7 @@ public class SubjectController : Controller
     // POST: Subject/Edit/5
 
     [HttpPost]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] SubjectModel subjectModel)
     {
         if (id != subjectModel.Id) return NotFound();
@@ -85,6 +80,8 @@ public class SubjectController : Controller
     }
 
     // GET: Subject/Delete/5
+    [HttpGet]
+    [Route("{id?}")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -97,7 +94,9 @@ public class SubjectController : Controller
     }
 
     // POST: Subject/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
+    [ActionName("Delete")]
+    [Route("{id}")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var subjectModel = await _context.Subjects.FindAsync(id);

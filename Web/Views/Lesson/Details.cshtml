@@ -2,52 +2,49 @@
 
 @{
     ViewData["Title"] = "Урок #" + Model.Lesson.Id;
+    Layout = "_LayoutFormSm";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<hr/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Details">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Lesson.Id"/>
-            <div class="form-group">
-                <label asp-for="Lesson.TutorName" class="control-label"></label>
-                <input asp-for="Lesson.TutorName" class="form-control" readonly></input>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.From" class="control-label"></label>
-                <input asp-for="Lesson.From" class="form-control" readonly/>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.To" class="control-label"></label>
-                <input asp-for="Lesson.To" class="form-control" readonly/>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.Comment" class="control-label"></label>
-                <input asp-for="Lesson.Comment" class="form-control" readonly/>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.SubjectName" class="form-check-label mt-2"></label>
-                <input asp-for="Lesson.SubjectName" class="form-control" readonly></input>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Lesson.StudentNames" class="control-label"></label>
-                <input asp-for="Lesson.StudentNames" class="form-control" readonly/>
-            </div>
-        </form>
+<form asp-action="Details">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Lesson.Id"/>
+    <div class="form-group">
+        <label asp-for="Lesson.TutorName" class="control-label"></label>
+        <input asp-for="Lesson.TutorName" class="form-control" readonly></input>
     </div>
-</div>
-<div class="row">
-    @if (Model.IsTutor)
-    {
-        <div class="col">
-            <a asp-action="Edit" asp-route-id="@Model.Lesson.Id" class="btn btn-primary" role="button">Оновити зустріч</a>
+    <div class="form-group">
+        <label asp-for="Lesson.From" class="control-label"></label>
+        <input asp-for="Lesson.From" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.To" class="control-label"></label>
+        <input asp-for="Lesson.To" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.Comment" class="control-label"></label>
+        <input asp-for="Lesson.Comment" class="form-control" readonly/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.SubjectName" class="form-check-label mt-2"></label>
+        <input asp-for="Lesson.SubjectName" class="form-control" readonly></input>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Lesson.StudentNames" class="control-label"></label>
+        <select asp-for="Lesson.StudentsIds" class="form-control" asp-items="@Model.HisStudents" readonly></select>
+    </div>
+
+    <div class="d-flex">
+        @if (Model.IsTutor)
+        {
+            <div class="pr-2">
+                <a asp-action="Delete" asp-route-id="@Model.Lesson.Id" class="btn btn-outline-danger">
+                    <i class="fa-solid fa-trash-can"></i>
+                </a>
+            </div>
+        }
+        <div class="ml-auto">
+            <a class="btn btn-secondary " asp-action="Index">Скасувати</a>
         </div>
-    }
-    <div class="col">
-        <a asp-action="Index" class="btn btn-secondary" role="button">Назад до списку</a>
     </div>
-</div>
+</form>

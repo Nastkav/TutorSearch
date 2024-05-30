@@ -15,7 +15,7 @@ public class Assignment
     [Range(1, int.MaxValue, ErrorMessage = "Оберіть предмет")]
     public int SubjectId { get; set; }
 
-    public string? SubjectName { get; set; } = null;
+    [DisplayName("Предмет")] public string? SubjectName { get; set; } = null;
 
     [DisplayName("Назва завдання")]
     [StringLength(50, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.", MinimumLength = 3)]
@@ -25,21 +25,20 @@ public class Assignment
     [StringLength(500, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.", MinimumLength = 0)]
     public string? Description { get; set; } = string.Empty;
 
-    [DisplayName("Термін сдачі")]
-    public DateOnly Deadline { get; set; } = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+    [DisplayName("Термін здачі")] public DateTime Deadline { get; set; } = DateTime.Today.AddDays(7).Date;
 
 
     /// <summary>
     /// string - File name
     /// string - File path
     /// </summary>
-    [DisplayName("Додані файли")]
+    [DisplayName("Файли до завданню")]
     public List<UserFile> FileNames { get; set; } = [];
 
 
     [DisplayName("Учні")] public List<int> StudentsIds { get; set; } = [];
 
     [DisplayName("Учні")] public string StudentNames { get; set; } = string.Empty;
-    [DisplayName("Створено")] public DateTime CreatedAt { get; set; }
+    [DisplayName("Додано")] public DateTime CreatedAt { get; set; }
     [DisplayName("Оновлено")] public DateTime? UpdatedAt { get; set; }
 }

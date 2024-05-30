@@ -3,7 +3,7 @@
 
 <div class="reviews-members pt-4 pb-4">
     <div class="media">
-        <img alt="Generic placeholder image" src="@Model.Avatar" class="mr-3 rounded-pill">
+        <img alt="Generic placeholder image" src="@Model.Avatar" class="mr-3 rounded-pill img-load-control">
         <div class="media-body">
             <div class="reviews-members-header">
                 <span class="star-rating float-right">
@@ -21,7 +21,7 @@
                 </p>
             </div>
             <div class="reviews-members-body">
-                <p>@Model.Description</p>
+                <p class="text-wrap text-break w-100">@Model.Description</p>
             </div>
             <div class="reviews-members-footer">
             </div>

@@ -2,55 +2,52 @@
 
 @{
     ViewData["Title"] = "Додати нову зустріч";
+    Layout = "_LayoutFormSm";
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Lesson.TutorId" hidden/>
-            <div class="form-group">
-                <label asp-for="Lesson.TutorName" class="control-label"></label>
-                <input asp-for="Lesson.TutorName" class="form-control" readonly></input>
-                <span asp-validation-for="Lesson.TutorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.From" class="control-label"></label>
-                <input asp-for="Lesson.From" class="form-control"/>
-                <span asp-validation-for="Lesson.From" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.To" class="control-label"></label>
-                <input asp-for="Lesson.To" class="form-control"/>
-                <span asp-validation-for="Lesson.To" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.Comment" class="control-label"></label>
-                <input asp-for="Lesson.Comment" class="form-control"/>
-                <span asp-validation-for="Lesson.Comment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lesson.SubjectId" class="form-check-label mt-2"></label>
-                <select asp-for="Lesson.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
-                <span asp-validation-for="Lesson.SubjectId" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <label asp-for="Lesson.StudentsIds" class="form-check-label mt-2"></label>
-                    <select asp-for="Lesson.StudentsIds" asp-items="@Model.HisStudents" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
-                    <span asp-validation-for="Lesson.StudentsIds" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Додати заняття до календаря" class="btn btn-primary"/>
-            </div>
-        </form>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Lesson.TutorId" hidden/>
+    <div class="form-group">
+        <label asp-for="Lesson.TutorName" class="control-label"></label>
+        <input asp-for="Lesson.TutorName" class="form-control" readonly></input>
+        <span asp-validation-for="Lesson.TutorId" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group">
+        <label asp-for="Lesson.From" class="control-label"></label>
+        <input asp-for="Lesson.From" class="form-control"/>
+        <span asp-validation-for="Lesson.From" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.To" class="control-label"></label>
+        <input asp-for="Lesson.To" class="form-control"/>
+        <span asp-validation-for="Lesson.To" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.Comment" class="control-label"></label>
+        <input asp-for="Lesson.Comment" class="form-control"/>
+        <span asp-validation-for="Lesson.Comment" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lesson.SubjectId" class="form-check-label mt-2"></label>
+        <select asp-for="Lesson.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
+        <span asp-validation-for="Lesson.SubjectId" class="text-danger"></span>
+    </div>
 
-<div>
-    <a asp-action="Index">Назад до списку</a>
-</div>
+    <div class="form-group">
+        <div class="input-group">
+            <label asp-for="Lesson.StudentsIds" class="form-check-label mt-2"></label>
+            <select asp-for="Lesson.StudentsIds" asp-items="@Model.HisStudents" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
+            <span asp-validation-for="Lesson.StudentsIds" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="d-flex">
+        <div class="ml-auto px-2">
+            <input type="submit" value="Зберегти" class="btn btn-primary"/>
+        </div>
+        <div>
+            <a class="btn btn-secondary " asp-action="Index">Скасувати</a>
+        </div>
+    </div>
+</form>

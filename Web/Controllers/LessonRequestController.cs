@@ -6,6 +6,8 @@ using Web.Controllers;
 using Domain.Queries;
 using Domain.Commands;
 using Domain.Helpers;
+using Domain.Models;
+using Infra.DatabaseAdapter.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Web.Helpers;
 using Web.Models.LessonRequest;
@@ -13,6 +15,7 @@ using Web.Models.LessonRequest;
 namespace Web.Controllers;
 
 [Authorize]
+[Route("/[controller]/[action]")]
 public class LessonRequestController : Controller
 {
     private readonly IMediator _mediator;
@@ -43,6 +46,20 @@ public class LessonRequestController : Controller
     {
         try
         {
+            if (!command.From.HasValue || !command.To.HasValue)
+            {
+                ModelState.AddModelError("From", "Треба обрати час");
+            }
+            else
+            {
+                if (command.From.Value < DateTime.Now.AddHours(-1))
+                    ModelState.AddModelError("From", " Ви не можете створити подію в минулому");
+                if (command.From.Value.Date != command.To.Value.Date)
+                    ModelState.AddModelError("Lesson.To", "Зустріч має проходити протягом дня");
+                if (command.From.Value.Date > command.To.Value.Date)
+                    ModelState.AddModelError("Lesson.To", "Можливо ви переплутали час місцями");
+            }
+
             if (command.CreatedId == 0)
                 command.CreatedId = IdentityId;
             else if (command.CreatedId != IdentityId)
@@ -66,13 +83,34 @@ public class LessonRequestController : Controller
         return StatusCode(500, errList);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Update(UpdateRequestCommand command)
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
     {
-        if (command.UpdatedBy == 0)
-            command.UpdatedBy = IdentityId;
-        else if (command.UpdatedBy != IdentityId)
-            throw new Exception($"command.UpdatedBy={command.UpdatedBy},app.UserId={IdentityId}");
+        if (IdentityId == 0)
+            return NotFound();
+
+        var requestsForMe = await _mediator.Send(new GetUserRequestsQuery { UserId = IdentityId, IsTutor = true });
+        var model = requestsForMe.Where(x => x.Id == id).FirstOrDefault();
+        if (model == null)
+            return RedirectToAction(nameof(Index));
+        else
+            return View(model);
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Update(LessonRequest model)
+    {
+        var command = new UpdateRequestCommand()
+        {
+            Id = model.Id,
+            UpdatedBy = IdentityId,
+            TutorId = model.TutorId,
+            Status = (LessonRequestStatus)int.Parse(Request.Form["Status"][1]),
+            TutorComment = model.TutorComment,
+            From = model.From,
+            To = model.To
+        };
         await _mediator.Send(command);
         return RedirectToAction(nameof(Index));
     }

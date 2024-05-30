@@ -4,189 +4,187 @@
     ViewBag.Title = Model.UserVm.FullName;
     Layout = "_Layout";
 }
-<div class="row">
-    <div class="row mb-2"></div>
-    <div class="m-2">
-        <div class="col-8"></div>
-        <div class="col-4">
-            @if (@Model.IdentityId == Model.UserVm.Id)
-            {
-                <a type="button" class="btn btn-info" asp-action="Edit">
-                    Оновити свою анкету
-                </a>
-            }
-            else if (@Model.TutorVm != null)
-            {
-                <a type="button" class="btn btn-info"
-                   asp-controller="Review" asp-action="Edit" asp-route-tutorId="@Model.TutorVm.Id">
-                    Залишити відгук
-                </a>
-            }
 
-        </div>
-    </div>
+
+<!-- Profile header-->
+
+<div class="d-sm-flex align-items-end justify-content-end  mb-4">
+
+    @if (@Model.IdentityId == Model.UserVm.Id)
+    {
+        <a asp-action="Edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i
+                class="fas fa-user fa-sm text-white-50 pr-2">
+            </i> Оновити профіль
+        </a>
+    }
+    else
+    {
+        <input type="checkbox" class="btn-check" id="btn-favorite" autocomplete="off"
+               data-userid="@Model.IdentityId" data-tutorid="@Model.UserVm.Id">
+        <label class="d-none d-sm-inline-block btn btn-sm btn-outline-pink shadow-sm" for="btn-favorite">
+            <i class="fa-solid fa-heart"></i> Улюблені репетитори
+        </label>
+    }
 </div>
+<!-- End Profile header -->
 
-<div class="card card-flex align-items-center bg-light mb-3">
-    <div class="row g-0">
-        <div class="col-4">
-            <img class="img-fluid rounded-start"
-                 src="@Model.UserVm.Avatar"
-                 id="avatar"
-                 alt="..."/>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card-body">
-            <div class="row card-title">
-                <div class="col lead">
-                    <a>@Model.UserVm.FullName</a>
+<!-- User card -->
+<partial name="_TutorCard" model="Model"/>
+<!-- End User card -->
 
-                    @if (Model.TutorVm != null && Model.TutorVm.ReviewCount > 0)
-                    {
-                        <i class="fa fa-star"></i>
-                        @Model.TutorVm.ReviewValue //TODO: ReviewValue + Count
-                    }
-                </div>
-                @if (Model.TutorVm != null)
-                {
-                    <div class="col text-end">
-                        <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorVm.HourRate грн/час</span>
-                    </div>
-                }
-            </div>
-            <p class="card-text">@Model.TutorVm?.Descriptions</p>
-            @if (Model.UserVm.CityId != "0")
-            {
-                <small class="text-muted">
-                    <i class="fa-solid fa-location-dot"></i> @Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CityId)?.Text
-                </small>
-            }
-        </div>
-    </div>
-</div>
 @if (@Model.TutorVm != null)
 {
-    <div class="row justify-content-center mb-3">
-        <div class="btn-group col-md-8 col-sm" role="group" aria-label="Select Tutor Part">
-            <input type="radio" class="btn-check" name="select_part" id="select_part1" autocomplete="off" checked="">
-            <label class="btn btn-outline-primary" for="select_part1" onclick="window.location='#subjects';">Subjects</label>
-            <input type="radio" class="btn-check" name="select_part" id="select_part2" autocomplete="off" checked="">
-            <label class="btn btn-outline-primary" for="select_part2" onclick="window.location='#about_tutor';">About_tutor</label>
-            <input type="radio" class="btn-check" name="select_part" id="select_part3" autocomplete="off" checked="">
-            <label class="btn btn-outline-primary" for="select_part3" onclick="window.location='#schedule';">Schedule</label>
-            <input type="radio" class="btn-check" name="select_part" id="select_part4" autocomplete="off" checked="">
-            <label class="btn btn-outline-primary" for="select_part4" onclick="window.location='#reviews';">Reviews</label>
+    <!-- Anchor block-->
+    <div class="container d-flex justify-content-center sticky-top mb-4">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary" onclick="window.location='#subjects';" checked>Предмети</button>
+            <button type="button" class="btn btn-outline-primary" onclick="window.location='#about_tutor';">Про себе</button>
+            <button type="button" class="btn btn-outline-primary" onclick="window.location='#schedule';">Календар</button>
+            <button type="button" class="btn btn-outline-primary" onclick="window.location='#reviews';">Відгуки</button>
         </div>
     </div>
-    <!-- subjects -->
-    <div class="card bg-light mb-3" id="subjects">
-        <div class="card-body">
-            <h5 class="card-title mt-3">Subjects</h5>
-            @for (var i = 1; i < Model.TutorVm.SubjectIds.Count; i++)
+    <!-- Anchor block-->
+}
+
+@if (@Model.TutorVm != null)
+{
+    <!-- Subjects -->
+    <div class="tab-pane fade active show" id="subjects" role="tabpanel" aria-labelledby="pills-reviews-tab">
+        <div class="bg-white rounded shadow-sm p-4 mb-4">
+            <div class="container mt-4 h4-l h3">
+                <h4 class="mb-3 text-center">Предмети</h4>
+                <div class="container">
+                    @for (var i = 0; i < Model.TutorVm.SubjectIds.Count; i++)
+                    {
+                        <span class="badge bg-light text-black-50 m-2"> @Model.Subjects[Model.TutorVm.SubjectIds[i]].Text</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Subjects -->
+
+    <!-- About tutor -->
+    @if (Model.TutorVm.About.Length > 50)
+    {
+        <div class="tab-pane fade active show" id="about_tutor" role="tabpanel" aria-labelledby="pills-reviews-tab">
+            <div class="bg-white rounded shadow-sm p-4 mb-4">
+                <div class="container mt-4">
+                    <h4 class="mb-3 text-center">Про себе</h4>
+                    <p class="text-wrap text-break w-100">
+                        <span style="white-space: pre-line">@Model.TutorVm.About</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- End About tutor -->
+
+    <!-- Places -->
+    <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="pills-reviews-tab">
+        <div class="bg-white rounded shadow-sm p-4 mb-4">
+            <div class="container mt-4">
+                <!-- Type of lesson -->
+                <div class="row row-cols-auto">
+                    <div class="col col-lg-3 col-12">
+                        <h4 class="mb-3">Типи занять</h4>
+                    </div>
+                    <div class="col">
+                        <div href="#" class='btn btn-icon-split mx-auto @(@Model.TutorVm.OnlineAccess ? "btn-info" : "btn-secondary")'>
+                            <span class="icon text-white-50">
+                                <i class='fas @(@Model.TutorVm.OnlineAccess ? "fa-check" : "fa-x")'></i>
+                            </span>
+                            <span class="text">Онлайн</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div href="#" class='btn btn-icon-split mx-auto @(@Model.TutorVm.StudentHomeAccess ? "btn-info" : "btn-secondary")'>
+                            <span class="icon text-white-50">
+                                <i class='fas @(@Model.TutorVm.StudentHomeAccess ? "fa-check" : "fa-x")'></i>
+                            </span>
+                            <span class="text">В Учня</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div href="#" class='btn btn-icon-split mx-auto @(@Model.TutorVm.TutorHomeAccess ? "btn-info" : "btn-secondary")'>
+                            <span class="icon text-white-50">
+                                <i class='fas @(@Model.TutorVm.TutorHomeAccess ? "fa-check" : "fa-x")'></i>
+                            </span>
+                            <span class="text">У вчителя</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <!-- End Type of lesson -->
+                <div class="row row-cols-auto  mt-5">
+                    <div class="col col-lg-3">
+                        <h5 class="card-title">Місто</h5>
+                    </div>
+                    <div class="col col-lg-9 col-md-12">
+                        <span style="white-space: pre-line">@Model.Cities.FirstOrDefault(x => x.Value == Model.UserVm.CityId)?.Text</span>
+                    </div>
+                </div>
+                <!-- Address -->
+                <div class="row row-cols-auto  mt-5">
+                    <div class="col col-lg-3">
+                        <h5 class="card-title">Домашня адреса</h5>
+                    </div>
+                    <div class="col col-lg-9 col-md-12">
+                        <span style="white-space: pre-line">@Model.TutorVm.Address</span>
+                    </div>
+                </div>
+                <!-- End Address -->
+            </div>
+        </div>
+    </div>
+    <!-- End Places -->
+
+    <!-- Calendar -->
+    <div class="tab-pane fade active show" id="schedule" role="tabpanel" aria-labelledby="pills-reviews-tab">
+        <div class="bg-white rounded shadow-sm p-4 mb-4">
+            <div class="container mt-4">
+                <partial name="RequestForm" model="@Model.CreateRequestCommand"/>
+            </div>
+        </div>
+    </div>
+    <!-- End Calendar -->
+    <!-- Reviews -->
+    <div class="tab-pane fade active show" id="reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
+        <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
+            <div class="row row-cols-lg-2">
+                <div class="col">
+                    <h4 class="mb-1">Усі рейтинги та огляди</h4>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <a asp-controller="Review" asp-action="Edit" asp-route-tutorId="@Model.TutorVm.Id"
+                       class="btn btn-warning btn-icon-split">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="text">
+                            Залишити відгук
+                        </span>
+                    </a>
+                </div>
+            </div>
+            @foreach (var review in Model.Reviews)
             {
-                <span class="badge bg-info"> @Model.Subjects.FirstOrDefault(x => x.Value == i.ToString())?.Text</span>
+                <partial name="ReviewBlock" model="@review"/>
+            }
+            <!-- Without reviews -->
+            @if (Model.Reviews.Count == 0)
+            {
+                <h5 class="mt-5">Репетитор ще не має відгуків, але ви можете додати свій</h5>
             }
         </div>
     </div>
-
-    <div class="card bg-light mb-3">
-        <div class="card-body">
-            <h5 class="card-title mt-3">Places</h5>
-            <div class="row px-3">
-                <div class="col-md col-sm-12 mb-sm-2">
-                    Онлайн
-                    @if (Model.TutorVm.OnlineAccess)
-                    {
-                        <span class="badge bg-primary rounded-pill ms-2">
-                            <i class="bi bi-check"></i>
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger rounded-pill ms-2">
-                            <i class="bi bi-x"></i>
-                        </span>
-                    }
-                </div>
-                <div class="col-md col-sm-12 mb-sm-2">
-                    В Учня
-                    @if (Model.TutorVm.StudentHomeAccess)
-                    {
-                        <span class="badge bg-primary rounded-pill ms-2">
-                            <i class="bi-check"></i>
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger rounded-pill ms-2">
-                            <i class="bi bi-x"></i>
-                        </span>
-                    }
-                </div>
-                <div class="col-md col-sm-12 mb-sm-2">
-                    У вчителя
-                    @if (Model.TutorVm.TutorHomeAccess)
-                    {
-                        <span class="badge bg-primary rounded-pill ms-2">
-                            <i class="bi bi-check"></i>
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger rounded-pill ms-2">
-                            <i class="bi bi-x"></i>
-                        </span>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- about_tutor -->
-    <div class="card bg-light mb-3" id="about_tutor">
-        <div class="card-body">
-            <h5 class="card-title mt-3">Address</h5>
-            <p class="form-control" id="address-text">@Model.TutorVm.Address</p>
-            <h5 class="card-title mt-3">Descriptions</h5>
-            <p class="form-control">@Model.TutorVm.Descriptions</p>
-            <h5 class="card-title mt-3">About</h5>
-            <p class="form-control">@Model.TutorVm.About</p>
-        </div>
-    </div>
-    <!-- Calendar -->
-    <partial name="RequestForm" model="@Model.CreateRequestCommand"/>
-
-
+    <!-- End Reviews -->
     @section Scripts
     {
-        <script type="text/javascript" src="~/js/tutor-profile/details-calendar.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/details-calendar.js" asp-append-version="true"></script>
     }
-    <!-- Reviews -->
-    <link rel="stylesheet" href="~/css/bs4-reviews-page.css" asp-append-version="true"/>
-
-    <div class="container">
-        <div class="col-md-12">
-            <div class="offer-dedicated-body-left">
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade active show" id="pills-reviews" role="tabpanel" aria-labelledby="pills-reviews-tab">
-                        <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews">
-                            <h5 class="mb-1">Усі рейтинги та огляди</h5>
-                            @foreach (var review in Model.Reviews)
-                            {
-                                <partial name="ReviewBlock" model="@review"/>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @* <div class="bg-white rounded shadow-sm p-4 mb-4 restaurant-detailed-ratings-and-reviews"> *@
-    @*     <h5 class="mb-1">Усі рейтинги та огляди</h5> *@
-    @*     @foreach (var review in Model.Reviews) *@
-    @*     { *@
-    @*         $1$ <p>@review.AuthorName</p> #1# *@
-    @*         <partial name="ReviewBlock" model="@review"/> *@
-    @*     } *@
-    @* </div> *@
 }

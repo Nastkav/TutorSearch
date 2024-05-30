@@ -19,7 +19,7 @@ public class GetOneSolutionQuery : IRequest<Solution?>
         public override async Task<Solution?> Handle(GetOneSolutionQuery r, CancellationToken token)
         {
             //Запит
-            var dbTask = await DatabaseContext.Solutions
+            var dbTask = await DatabaseContext.Solutions.AsNoTracking()
                 .Include(x => x.Student)
                 .Include(x => x.Assignment)
                 .ThenInclude(x => x.Tutor)
@@ -32,7 +32,7 @@ public class GetOneSolutionQuery : IRequest<Solution?>
                 .FirstOrDefaultAsync(x => x.Id == r.SolutionId);
 
             if (dbTask == null)
-                throw new Exception("Задачу не знайдено");
+                throw new SolutionException("Задачу не знайдено");
 
             var solution = Mapper.Map<Solution>(dbTask);
             return solution;

@@ -10,14 +10,19 @@ public class DomainMappingProfile : Profile
     public DomainMappingProfile()
     {
         //User & Tutor Profiles
-        CreateMap<User, UserModel>();
+        CreateMap<User, UserModel>()
+            .ForMember(d => d.CityId, o => o.MapFrom(x => x.CityId == "0" ? null : x.CityId));
 
         CreateMap<UserModel, User>()
-            .ForMember(d => d.FullName, o => o.MapFrom(x => x.FullName()));
+            .ForMember(d => d.FullName, o => o.MapFrom(x => x.FullName()))
+            .ForMember(d => d.CityName, o => o.MapFrom(x => x.City == null ? "Не вказано" : x.City.Name));
 
         CreateMap<TutorModel, Tutor>()
             .ForMember(d => d.About, o => o.MapFrom(x => x.About.Content))
-            .ForMember(d => d.SubjectIds, o => o.MapFrom(x => x.Subjects.Select(o => o.Id).ToList()));
+            .ForMember(d => d.ReviewCount, o => o.MapFrom(x => x.Reviews.Count))
+            .ForMember(d => d.LessonCount, o => o.MapFrom(x => x.TeachingLessons.Count(l => l.To < DateTime.Now)))
+            .ForMember(d => d.SubjectIds, o => o.MapFrom(x => x.Subjects.Select(s => s.Id).ToList()));
+        //Нестабільна робота розрахунку середнього значення поля ReviewValue
 
         CreateMap<Tutor, TutorModel>()
             .ForPath(d => d.About.Content, o => o.MapFrom(x => x.About))
@@ -27,7 +32,7 @@ public class DomainMappingProfile : Profile
         //Files
         CreateMap<UserFileModel, UserFile>()
             .ForMember(d => d.OwnerName, o => o.MapFrom(x => x.Owner.Name));
-        CreateMap<UserFile, UserFileModel>(); //TODO check string-> Guid 
+        CreateMap<UserFile, UserFileModel>();
 
 
         //Requests
@@ -57,14 +62,14 @@ public class DomainMappingProfile : Profile
 
         //Assignments
         CreateMap<Assignment, AssignmentModel>()
-            .ForMember(d => d.Deadline, o => o.MapFrom(x => x.Deadline.ToDateTime(TimeOnly.MinValue)))
+            // .ForMember(d => d.Deadline, o => o.MapFrom(x => x.Deadline.ToDateTime(TimeOnly.MinValue)))
             .ForMember(d => d.Files, opt => opt.MapFrom(s => s.FileNames));
 
 
         CreateMap<AssignmentModel, Assignment>()
             .ForMember(d => d.TutorName, o => o.MapFrom(x => x.Tutor.User.FullName()))
             .ForMember(d => d.SubjectName, o => o.MapFrom(x => x.Subject.Name))
-            .ForMember(d => d.Deadline, o => o.MapFrom(x => DateOnly.FromDateTime(x.Deadline)))
+            .ForMember(d => d.Deadline, o => o.MapFrom(x => x.Deadline))
             .ForMember(d => d.FileNames, opt => opt.MapFrom(s => s.Files))
             .ForMember(d => d.StudentsIds, o => o.MapFrom(x => x.Solutions.Select(s => s.StudentId)))
             .ForMember(d => d.StudentNames, o => o.MapFrom(x =>

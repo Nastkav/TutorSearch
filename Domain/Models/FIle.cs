@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Infra.DatabaseAdapter.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Domain.Models;
 
@@ -10,4 +12,5 @@ public class UserFile
 
     public int OwnerId { get; set; }
     public string OwnerName { get; set; } = null!;
+    public bool IsOwner { get; set; }
 }

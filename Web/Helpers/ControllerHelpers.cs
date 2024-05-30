@@ -20,4 +20,21 @@ public class ControllerHelpers
             list.Insert(0, new SelectListItem(defaultText, "0"));
         return list;
     }
+
+    public void UpdateSelf(List<SelectListItem> inputs, int userId)
+    {
+        var sserIdStr = userId.ToString();
+        var item = inputs.FirstOrDefault(x => x.Value == sserIdStr);
+        if (item == null)
+            inputs.Insert(0, new SelectListItem { Value = sserIdStr, Text = "Мої" });
+        else
+            item.Text = "Мої";
+    }
+
+    public async Task<byte[]> BytesFromFormFile(IFormFile file)
+    {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        return ms.ToArray();
+    }
 }

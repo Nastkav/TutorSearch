@@ -1,85 +1,124 @@
 @model Web.Models.Profile.ProfileVm
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <!--User Data-->
-    <div class="list-group list-group-flush">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="UserVm.Id"/>
-        <label asp-for="UserVm.Name" class="form-check-label mt-2"></label>
-        <textarea class="form-control" rows="1" asp-for="UserVm.Name"></textarea>
-        <span asp-validation-for="UserVm.Name" class="text-danger"></span>
+    <div class="bg-white rounded shadow-sm p-4 mb-4">
+        <div class="container mt-4">
+            <div class="d-flex">
+                <div class="p2">
+                    <h4 class="mb-1">@ViewData["Title"]</h4>
+                </div>
+            </div>
+            <!--User Data-->
+            <div class="row row-cols-md-2">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="UserVm.Id"/>
+                <div class="form-group">
+                    <label asp-for="UserVm.Name" class="form-check-label mt-2"></label>
+                    <textarea class="form-control" rows="1" asp-for="UserVm.Name"></textarea>
+                    <span asp-validation-for="UserVm.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserVm.Surname" class="form-check-label mt-2"></label>
+                    <textarea class="form-control" rows="1" asp-for="UserVm.Surname"></textarea>
+                    <span asp-validation-for="UserVm.Surname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
 
-        <label asp-for="UserVm.Surname" class="form-check-label mt-2"></label>
-        <textarea class="form-control" rows="1" asp-for="UserVm.Surname"></textarea>
-        <span asp-validation-for="UserVm.Surname" class="text-danger"></span>
+                    <label asp-for="UserVm.Patronymic" class="form-check-label mt-2"></label>
+                    <textarea class="form-control" rows="1" asp-for="UserVm.Patronymic" id="-text"></textarea>
+                    <span asp-validation-for="UserVm.Patronymic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
 
-        <label asp-for="UserVm.Patronymic" class="form-check-label mt-2"></label>
-        <textarea class="form-control" rows="1" asp-for="UserVm.Patronymic" id="-text"></textarea>
-        <span asp-validation-for="UserVm.Patronymic" class="text-danger"></span>
+                    <label asp-for="UserVm.CityId" class="form-check-label mt-2"></label>
+                    <select asp-for="UserVm.CityId" class="form-select" asp-items="@Model.Cities"></select>
+                    <span asp-validation-for="UserVm.CityId" class="text-danger"></span>
+                </div>
 
-        <label asp-for="UserVm.CityId" class="form-check-label mt-2"></label>
-        <select asp-for="UserVm.CityId" class="form-select" asp-items="@Model.Cities"></select>
-        <span asp-validation-for="UserVm.CityId" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="NewAvatar" class="form-check-label mt-2"></label>
+                    <input asp-for="NewAvatar" type="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .webp"/>
+                    <span asp-validation-for="NewAvatar" class="text-danger"></span>
+                </div>
 
-        <div class="row mt-2">
-            <div class="col-12">
-                <label asp-for="NewAvatar" class="form-check-label mt-2"></label>
-                <input asp-for="NewAvatar" type="file" class="form-control" accept=".png, .jpg, .jpeg, .gif, .webp"/>
-                <span asp-validation-for="NewAvatar" class="text-danger"></span>
             </div>
         </div>
-
-        <div class="mt-4 col form-check form-switch">
-            <input class="form-check-input" type="checkbox" asp-for="UserVm.ProfileEnabled">
-            <label asp-for="UserVm.ProfileEnabled" class="form-check-label"></label>
-        </div>
-
+        <!-- End User Data-->
     </div>
     <!--Tutor Profile-->
     @if (Model.TutorVm != null && Model.UserVm.ProfileEnabled)
     {
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="@Model.TutorVm.Id"/>
-        <h5 class="card-title mt-3">Тематика</h5>
-        <div class="list-group list-group-flush">
-            <div class="input-group">
-                <select asp-for="@Model.TutorVm.SubjectIds" asp-items="@Model.Subjects" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
-            </div>
-        </div>
-        <h5 class="card-title mt-3">Готов проводити заняття</h5>
-        <div class="row ps-3">
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.TutorHomeAccess">
-                <label asp-for="@Model.TutorVm.TutorHomeAccess" class="form-check-label"></label>
-            </div>
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.StudentHomeAccess">
-                <label asp-for="@Model.TutorVm.StudentHomeAccess" class="form-check-label"></label>
-            </div>
-            <div class="col form-check form-switch">
-                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.OnlineAccess">
-                <label asp-for="@Model.TutorVm.OnlineAccess" class="form-check-label"></label>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="@Model.TutorVm.HourRate" class="control-label"></label>
-            <div>
-                <input asp-for="@Model.TutorVm.HourRate" class="form-control"/>
-                <span asp-validation-for="@Model.TutorVm.HourRate" class="text-danger"></span>
-            </div>
-        </div>
+        <div class="bg-white rounded shadow-sm p-4 mb-4">
+            <div class="container mt-4">
+                <div class="d-flex">
+                    <div class="p2">
+                        <h4 class="mb-2">@ViewData["Title"]</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="@Model.TutorVm.Id"/>
+                    <div class="form-group mb-2">
+                        <div class="list-group">
+                            <label asp-for="@Model.TutorVm.SubjectIds" class="control-label"></label>
+                            <div class="input-group">
+                                <select asp-for="@Model.TutorVm.SubjectIds" asp-items="@Model.Subjects" class="selectpicker  form-control" data-width="100%" data-live-search="true" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                    <row class="row row-cols-lg-2 row-cols-1 pr-0 mt-2">
+                        <div class="form-group mb-2 col col-md-8">
+                            <label class="control-label">Місце проведення занять</label>
+                            <br/>
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.TutorHomeAccess">
+                                <label asp-for="@Model.TutorVm.TutorHomeAccess" class="form-check-label"></label>
+                            </div>
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.StudentHomeAccess">
+                                <label asp-for="@Model.TutorVm.StudentHomeAccess" class="form-check-label"></label>
+                            </div>
+                            <div class="form-check form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="@Model.TutorVm.OnlineAccess">
+                                <label asp-for="@Model.TutorVm.OnlineAccess" class="form-check-label"></label>
+                            </div>
+                        </div>
+                        <div class="form-group col col-md-4 pr-0">
+                            <label asp-for="@Model.TutorVm.HourRate" class="control-label"></label>
+                            <input asp-for="@Model.TutorVm.HourRate" class="form-control"/>
+                            <span asp-validation-for="@Model.TutorVm.HourRate" class="text-danger"></span>
+                        </div>
+                    </row>
 
-        <label asp-for="@Model.TutorVm.Address" class="form-check-label mt-2"></label>
-        <textarea class="form-control" rows="1" asp-for="@Model.TutorVm.Address" id="address-text"></textarea>
-        <span asp-validation-for="@Model.TutorVm.Address" class="text-danger"></span>
-        <label asp-for="@Model.TutorVm.Descriptions" class="form-check-label  mt-2"></label>
-        <textarea class="form-control" rows="2" asp-for="@Model.TutorVm.Descriptions"></textarea>
-        <span asp-validation-for="@Model.TutorVm.Descriptions" class="text-danger"></span>
-        <label asp-for="@Model.TutorVm.About" class="form-check-label  mt-2"></label>
-        <textarea class="form-control" rows="10" asp-for="@Model.TutorVm.About"></textarea>
-        <span asp-validation-for="@Model.TutorVm.About" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="@Model.TutorVm.Address" class="form-check-label mt-2"></label>
+                        <textarea class="form-control" rows="2" asp-for="@Model.TutorVm.Address" id="address-text"></textarea>
+                        <span asp-validation-for="@Model.TutorVm.Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.TutorVm.Descriptions" class="form-check-label  mt-2"></label>
+                        <textarea class="form-control" rows="4" asp-for="@Model.TutorVm.Descriptions"></textarea>
+                        <span asp-validation-for="@Model.TutorVm.Descriptions" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.TutorVm.About" class="form-check-label  mt-2"></label>
+                        <textarea class="form-control" rows="16" asp-for="@Model.TutorVm.About"></textarea>
+                        <span asp-validation-for="@Model.TutorVm.About" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     }
-    <div class="row justify-content-end mt-3 end-50">
-        <button type="submit" class="w-25 btn btn-primary">Оновити</button>
+    <!--End Tutor Profile-->
+    <div class="d-sm-flex align-items-end justify-content-end mb-4">
+
+        <div class="form-check form-switch pr-md-5">
+            <input class="form-check-input" type="checkbox" asp-for="UserVm.ProfileEnabled">
+            <label class="form-check-label" asp-for="UserVm.ProfileEnabled"></label>
+        </div>
+        <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-floppy-disk text-white-50 pr-2"></i> Зберегти зміни в анкеті
+        </button>
     </div>
 </form>

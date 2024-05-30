@@ -19,10 +19,10 @@ public class GetReviewQuery : IRequest<Review>
         public override async Task<Review> Handle(GetReviewQuery r, CancellationToken token)
         {
             if (r.AuthorId == 0 || r.TutorId == 0)
-                throw new Exception("Ідентіфикатори невірні");
+                throw new CommandParameterException("Ідентіфикатори невірні");
 
             //Запит
-            var dbReview = await DatabaseContext.Reviews
+            var dbReview = await DatabaseContext.Reviews.AsNoTracking()
                 .Include(x => x.Author)
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
@@ -34,12 +34,14 @@ public class GetReviewQuery : IRequest<Review>
             {
                 review = new Review() { AuthorId = r.AuthorId, TutorId = r.TutorId };
                 review.Rating = 10;
-                review.TutorName = await DatabaseContext.Users
-                    .Where(x => x.Id == r.TutorId)
-                    .Select(x => x.FullName()).FirstAsync();
-                review.AuthorName = await DatabaseContext.Users
-                    .Where(x => x.Id == r.AuthorId)
-                    .Select(x => x.FullName()).FirstAsync();
+                review.TutorName = await DatabaseContext.Users.AsNoTracking()
+                                       .Where(x => x.Id == r.TutorId)
+                                       .Select(x => x.FullName()).FirstOrDefaultAsync() ??
+                                   throw new ReviewException("Ідентифікатор вчителя не знайдено", r.TutorId);
+                review.AuthorName = await DatabaseContext.Users.AsNoTracking()
+                                        .Where(x => x.Id == r.AuthorId)
+                                        .Select(x => x.FullName()).FirstOrDefaultAsync() ??
+                                    throw new ReviewException("Ідентифікатор автора не знайдено", r.AuthorId);
             }
             else
             {

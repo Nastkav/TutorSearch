@@ -1,15 +1,21 @@
 @model Domain.Commands.CreateRequestCommand
-<div class="card bg-light mt-3" id="schedule">
-    <div class="card-body">
-        <h5 class="card-title text-center">Графік свободного часу репетитора</h5>
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
-                <div id="calendar" data-tutorid="@Model.TutorId" data-userid="@Model.CreatedId"></div>
-            </div>
-        </div>
+
+<div class="d-flex">
+    <div class="p2">
+        <h4 class="mb-1">Графік свободного часу репетитора</h4>
+        <div><i class="fa fa-info "></i> Зображені години, у які є можливість займатися з новими учнями</div>
+    </div>
+    <div class="ml-auto">
+        <a onclick="addNewEvent(null);" class=" text-whitу">
+            Додати заявку на заняття
+            <i class="fas fa-plus btn btn-primary ml-1"></i>
+        </a>
     </div>
 </div>
+<div class="row d-flex justify-content-end">
+    <div id="calendar" data-tutorid="@Model.TutorId" data-userid="@Model.CreatedId"></div>
+</div>
+
 <div class="modal fade" id="requestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -36,7 +42,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Comment" class="form-label"></label>
-                            <textarea asp-for="Comment"  id="tutorComment" class="form-control"></textarea>
+                            <textarea asp-for="Comment" rows="6" id="tutorComment" class="form-control"></textarea>
                             <span asp-validation-for="Comment" class="text-danger"></span>
                         </div>
                     </div>

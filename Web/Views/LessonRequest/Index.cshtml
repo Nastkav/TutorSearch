@@ -6,22 +6,37 @@
     ViewData["Title"] = "Історія запитів";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1 class="mt-5">Історія запитів користувача</h1>
-<partial name="RequestTable" model="@Model.MyRequests"/>
-<h1 class="mt-5">Запити користувачів на заняття</h1>
-<partial name="RequestTable" model="@Model.RequestsForMe"/>
 
-<partial name="RequestUpdate" model="@Model.RequestUpdate"/>
+<div class="tab-pane fade active show" id="schedule" role="tabpanel" aria-labelledby="pills-reviews-tab">
+    <div class="bg-white rounded shadow-sm p-4 mb-4">
+        <div class="container mt-4">
+            <div class="d-flex">
+                <div class="p2">
+                    <h4 class="mb-1">Історія запитів користувача</h4>
+                </div>
+            </div>
+            <div class="row">
+                <partial name="RequestTable" model="@Model.MyRequests"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane fade active show" id="schedule" role="tabpanel" aria-labelledby="pills-reviews-tab">
+    <div class="bg-white rounded shadow-sm p-4 mb-4">
+        <div class="container mt-4">
+            <div class="d-flex">
+                <div class="p2">
+                    <h4 class="mb-1">Запити користувачів на заняття</h4>
+                </div>
+            </div>
+            <div class="row">
+                <partial name="RequestTable" model="@Model.RequestsForMe"/>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {
-    <script type="text/javascript">
-    $('#updateStatus').on('show.bs.modal', function (event) {
-        var item = $(event.relatedTarget).data('item') // Extract info from data-* attributes
-        document.updateRequest.tutorProfileId.value = item.TutorId
-        document.updateRequest.rId.value = item.Id
-        document.updateRequest.timeFrom.value = item.From.slice(0, -1)
-        document.updateRequest.timeTo.value = item.To.slice(0, -1)
-    })
-    </script>
+
 }

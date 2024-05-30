@@ -2,7 +2,7 @@ using Domain.Models;
 using Domain.Queries;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Web.Models.Assignments;
+namespace Web.Models.Solutions;
 
 public class SolutionListVm
 {

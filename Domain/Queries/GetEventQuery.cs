@@ -1,4 +1,5 @@
 using AutoMapper;
+using Bogus.DataSets;
 using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;
@@ -24,12 +25,12 @@ public class GetEventQuery : IRequest<List<LessonSession>>
             if (!r.To.HasValue) r.To = DateTime.MaxValue;
 
             List<LessonSession> events = new();
-            var dbLessons = await DatabaseContext.Lessons
+            var dbLessons = await DatabaseContext.Lessons.AsNoTracking()
                 .Where(x => x.Students.Any(y => y.Id == r.UserId) || x.TutorId == r.UserId)
                 .Where(x => r.From <= x.To && x.From <= r.To)
                 .ToListAsync();
 
-            var dbAvailableTime = await DatabaseContext.AvailableTimes
+            var dbAvailableTime = await DatabaseContext.AvailableTimes.AsNoTracking()
                 .Where(x => x.ProfileId == r.UserId)
                 .OrderBy(x => x.DayOfWeek)
                 .ThenBy(x => x.StartTime)
@@ -66,7 +67,8 @@ public class GetEventQuery : IRequest<List<LessonSession>>
             events.AddRange(availableTimes.Where(x => r.From < x.From && x.To < r.To));
 
             events = events.OrderBy(x => x.From).ToList();
-            //Unavailable Time //TODO: ИСПРАВИТЬ ОШИБКИ В РАСЧЁТЕ ДАТЫ
+
+            //Unavailable Time
             var unavailableTimes = new List<LessonSession>();
             var prevEventEnd = r.From.Value; // Фиксування почутку дня
             for (var i = 0; i < availableTimes.Count; i++)
@@ -82,6 +84,14 @@ public class GetEventQuery : IRequest<List<LessonSession>>
                     });
                 prevEventEnd = availableTimes[i].To;
             }
+
+            if (availableTimes.Count == 0)
+                unavailableTimes.Add(new LessonSession()
+                {
+                    Type = TimeType.Unavailable,
+                    From = r.From.Value,
+                    To = r.To.Value
+                });
 
             events.AddRange(unavailableTimes);
 

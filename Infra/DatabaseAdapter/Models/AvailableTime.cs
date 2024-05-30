@@ -2,7 +2,7 @@ using Infra.DatabaseAdapter.Helpers;
 
 namespace Infra.DatabaseAdapter.Models;
 
-public class AvailableTimeModel : ITrackable
+public class AvailableTimeModel : ITrackable, ICloneable
 {
     public int Id { get; set; }
     public int DayOfWeek { get; set; }
@@ -16,4 +16,5 @@ public class AvailableTimeModel : ITrackable
     public int CreatedId { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public int? UpdatedId { get; set; }
+    public object Clone() => MemberwiseClone();
 }

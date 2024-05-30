@@ -16,11 +16,13 @@ public class GetUserProfileQuery : IRequest<User>
     {
         public override async Task<User> Handle(GetUserProfileQuery r, CancellationToken token)
         {
-            var dbProfile = await DatabaseContext.Users.FirstOrDefaultAsync(x => x.Id == r.ProfileId);
+            var dbProfile = await DatabaseContext.Users.AsNoTracking()
+                .Include(x => x.City)
+                .FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  користувача
             if (dbProfile == null)
-                throw new Exception("Користувача не знайдено");
+                throw new UserNotFoundException("Користувача не знайдено");
 
             var profile = Mapper.Map<User>(dbProfile);
             return profile;

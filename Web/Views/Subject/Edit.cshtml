@@ -1,31 +1,30 @@
 @model Infra.DatabaseAdapter.Models.SubjectModel
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "_Layout";
+    ViewData["Title"] = "Редагування предметів";
+    Layout = "_LayoutFormSm";
 }
 
-<h1>Edit</h1>
-
-<h4>SubjectModel</h4>
-<hr/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id"/>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
-            </div>
-        </form>
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id"/>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="d-flex">
+        <div class="mr-auto">
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                <i class="fa-solid fa-trash-can"></i>
+            </a>
+        </div>
+        <div class="px-2">
+            <input type="submit" value="Зберегти" class="btn btn-primary"/>
+        </div>
+        <div>
+            <a class="btn btn-secondary " asp-action="Index">Скасувати</a>
+        </div>
+    </div>
+</form>

@@ -6,13 +6,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web.Models.Profile;
 
-public class ProfileVm
+public class ProfileVm : TutorCardVm
 {
     [Required] public int IdentityId { get; set; }
-    public User UserVm { get; set; } = null!;
-    public Tutor? TutorVm { get; set; }
     public List<SelectListItem> Cities { get; set; } = [];
-    public List<SelectListItem> Subjects { get; set; } = [];
+
     public CreateRequestCommand CreateRequestCommand { get; set; } = new();
 
     [DisplayName("Завантажити новий аватар")]

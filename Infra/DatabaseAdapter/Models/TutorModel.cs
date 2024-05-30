@@ -23,7 +23,7 @@ public class TutorModel : ITrackable
 
     [DataType(DataType.Currency)]
     [Range(10, 9999)]
-    public decimal HourRate { get; set; }
+    public int HourRate { get; set; }
 
     public virtual List<SubjectModel> Subjects { get; set; } = [];
     public virtual List<AvailableTimeModel> AvailableTimes { get; set; } = [];
@@ -31,6 +31,7 @@ public class TutorModel : ITrackable
     public virtual List<LessonModel> TeachingLessons { get; set; } = [];
 
     public virtual List<ReviewModel> Reviews { get; set; } = [];
+    public virtual List<UserModel> InFavorite { get; set; } = [];
 
     //ITrackable
     public DateTime CreatedAt { get; set; }

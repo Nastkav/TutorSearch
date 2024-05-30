@@ -36,16 +36,17 @@ public class UpdateRequestCommand : IRequest<int>
         public override async Task<int> Handle(UpdateRequestCommand r, CancellationToken token)
         {
             if (r.UpdatedBy != r.TutorId)
-                throw new Exception("Тільки репетитор може оновлювати запити");
+                throw new RequestException("Тільки репетитор може оновлювати запити");
 
             var dbRequest = DatabaseContext.Requests
-                                .Include(x => x.Subject)
-                                .Include(x => x.Created)
-                                .First(x => x.Id == r.Id && x.TutorId == r.TutorId)
-                            ?? throw new Exception("Потрібний запит не знайдено");
+                .Include(x => x.Subject)
+                .Include(x => x.Created)
+                .FirstOrDefault(x => x.Id == r.Id && x.TutorId == r.TutorId);
+            if (dbRequest is null)
+                throw new RequestException("Потрібний запит не знайдено");
 
             if (dbRequest.Status != LessonRequestStatus.New)
-                throw new Exception("Заявка вже закрита");
+                throw new RequestException("Заявка вже закрита");
 
             Mapper.Map(r, dbRequest);
             if (r.Subject != null)

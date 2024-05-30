@@ -22,12 +22,15 @@ public class AddOrUpdateReviewCommand : IRequest<Review>
         public override async Task<Review> Handle(AddOrUpdateReviewCommand r, CancellationToken token)
         {
             //Перевірка логіки
+            if (r.Review is null)
+                throw new CommandParameterException("Review is null");
+
             if (r.Review.AuthorId == r.Review.TutorId)
-                throw new Exception("Не можна залишити відгук самому собі");
+                throw new CommandParameterException("Не можна залишити відгук самому собі");
 
             var tutorExist = await DatabaseContext.Tutors.AnyAsync(x => x.Id == r.Review.TutorId);
             if (!tutorExist)
-                throw new Exception("Вчителя з таким профілем не знайдено");
+                throw new UserNotFoundException("Вчителя з таким профілем не знайдено");
 
             var dbReview = await DatabaseContext.Reviews
                 .Include(x => x.Author)
@@ -42,7 +45,7 @@ public class AddOrUpdateReviewCommand : IRequest<Review>
                     l.TutorId == r.Review.TutorId &&
                     l.Students.Any(s => s.Id == r.Review.AuthorId));
                 if (countLessons == 0)
-                    throw new Exception("У вас не було жодного уроку з цим викладачем");
+                    throw new LessonException("У вас не було жодного уроку з цим викладачем");
 
                 dbReview = Mapper.Map<ReviewModel>(r.Review);
                 await DatabaseContext.AddAsync(dbReview);

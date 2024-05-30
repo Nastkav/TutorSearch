@@ -11,6 +11,8 @@ using Web.Models.Assignments;
 namespace Web.Controllers;
 
 [Authorize]
+[Route("/[controller]/[action]")]
+[Produces("text/html; charset=utf-8")]
 public class AssignmentController : Controller
 {
     private readonly IMediator _mediator;
@@ -23,9 +25,10 @@ public class AssignmentController : Controller
         _helper = new ControllerHelpers(mediator);
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     public void AssignmentValidation(AssignmentVm model)
     {
-        if (DateTime.Now > model.Assignment.Deadline.ToDateTime(TimeOnly.MinValue))
+        if (DateTime.Now > model.Assignment.Deadline)
             ModelState.AddModelError("Assignment.Deadline", "Не можна встановити термін здачі у минулому");
         if (model.Assignment.StudentsIds.Count == 0)
             ModelState.AddModelError("Assignment.StudentsIds", "Треба вибирати хоча б одного учня");
@@ -42,6 +45,9 @@ public class AssignmentController : Controller
         filter.UserId = IdentityId;
 
         model.Assignments = await _mediator.Send(filter);
+        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery());
+        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
+        _helper.UpdateSelf(model.HisStudents, IdentityId);
         return View(model);
     }
 
@@ -55,7 +61,8 @@ public class AssignmentController : Controller
             return NotFound();
         //Отримання даних та наповнення моделі
         model.UserId = model.Assignment.TutorId = IdentityId;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Subjects =
+            await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
     }
@@ -67,6 +74,9 @@ public class AssignmentController : Controller
         AssignmentValidation(model);
         if (ModelState.IsValid)
         {
+            if (model.Assignment.Description == null) // fix empty description
+                model.Assignment.Description = "";
+
             var assignmentId = await _mediator.Send(new CreateAssignmentCommand()
             {
                 CreatedId = IdentityId,
@@ -76,12 +86,14 @@ public class AssignmentController : Controller
         }
 
         model.UserId = model.Assignment.TutorId = IdentityId;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Subjects =
+            await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
     }
 
     [HttpGet]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id)
     {
         var model = new AssignmentVm();
@@ -96,12 +108,14 @@ public class AssignmentController : Controller
 
         model.UserId = IdentityId;
         model.Assignment = curAssignment;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Subjects =
+            await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = IdentityId });
         return View(model);
     }
 
     [HttpPost]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id, AssignmentVm model)
     {
         AssignmentValidation(model);
@@ -128,6 +142,7 @@ public class AssignmentController : Controller
     }
 
     [HttpPost]
+    [Route("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
         Response.StatusCode = 400;
@@ -142,6 +157,6 @@ public class AssignmentController : Controller
                 return RedirectToAction(nameof(Index));
         }
 
-        return Content(id.ToString());
+        return NotFound();
     }
 }

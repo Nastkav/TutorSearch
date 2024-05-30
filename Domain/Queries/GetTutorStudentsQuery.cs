@@ -21,8 +21,11 @@ public class GetTutorStudentsQuery : IRequest<Dictionary<int, string>>
         public override async Task<Dictionary<int, string>> Handle(GetTutorStudentsQuery r, CancellationToken token)
         {
             //Вибір усіх студентів, у яких був хоча б один урок з репетитором
-            var students = await DatabaseContext.Users.Include(x => x.Requests)
-                .Where(x => x.Requests.Any(y => y.TutorId == r.TutorId))
+            var students = await DatabaseContext.Requests.AsNoTracking()
+                .Include(x => x.Created)
+                .Where(x => x.TutorId == r.TutorId)
+                .GroupBy(x => x.Created)
+                .Select(x => x.Key)
                 .ToDictionaryAsync(x => x.Id, x => x.FullName());
             return students;
         }

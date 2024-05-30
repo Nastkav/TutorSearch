@@ -27,7 +27,7 @@ public class UpdateTutorCommand : IRequest<bool>
         {
             //Check exist
             if (!DatabaseContext.Users.Any(x => x.Id == r.Profile.Id && x.ProfileEnabled))
-                throw new Exception("Ідентіфікатор вчителя не знайдено.");
+                throw new UserNotFoundException("Ідентіфікатор вчителя не знайдено.");
 
             //Select from database
             var dbProfile = await DatabaseContext.Tutors

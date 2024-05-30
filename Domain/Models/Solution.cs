@@ -37,16 +37,16 @@ public class Solution
 
     [DisplayName("Предмет")] public string SubjectName { get; set; } = string.Empty;
 
+    [DisplayFormat(DataFormatString = "{0,20}")]
     [MaxLength(50)]
-    [DisplayName("Вчитель")]
-
+    [DisplayName("Назва")]
     public string AssignmentTitle { get; set; } = string.Empty;
 
     [DisplayName("Опис завдання")]
     [StringLength(500, ErrorMessage = "{0} має містити принаймні {2} і не більше {1} символів.", MinimumLength = 0)]
     public string? Description { get; set; } = string.Empty;
 
-    [DisplayName("Термін сдачі")]
+    [DisplayName("Термін здачі")]
     public DateOnly Deadline { get; set; } = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
 
     [DisplayName("Файли відповіді")] public List<UserFile> AssignmentFiles { get; set; } = [];

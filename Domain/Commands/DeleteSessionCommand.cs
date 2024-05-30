@@ -20,15 +20,15 @@ public class DeleteSessionCommand : IRequest<bool>
         {
             if (r.Type == TimeType.Available)
             {
-                var lesson = DatabaseContext.AvailableTimes.Where(x => x.Id == r.EventId).FirstOrDefault();
+                var lesson = DatabaseContext.AvailableTimes
+                    .FirstOrDefault(x => x.Id == r.EventId && x.CreatedId == r.UpdatedBy);
                 if (lesson == null)
-                    throw new ArgumentNullException("Помилка в номері події");
+                    throw new ArgumentNullException("Помилка в номері події або користувач не має доступу");
                 DatabaseContext.Remove(lesson);
             }
             else
             {
-                var lesson = DatabaseContext.Lessons.Where(x => x.Id == r.EventId).FirstOrDefault();
-
+                var lesson = DatabaseContext.Lessons.FirstOrDefault(x => x.Id == r.EventId && x.TutorId == r.UpdatedBy);
                 if (lesson == null)
                     throw new ArgumentNullException("Помилка в номері події");
                 DatabaseContext.Remove(lesson);

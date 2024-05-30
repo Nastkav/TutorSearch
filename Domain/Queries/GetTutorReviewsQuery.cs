@@ -18,10 +18,10 @@ public class GetTutorReviewsQuery : IRequest<List<Review>>
         public override async Task<List<Review>> Handle(GetTutorReviewsQuery r, CancellationToken token)
         {
             if (r.TutorId == 0)
-                throw new Exception("Ідентіфикатори невірні");
+                throw new UserNotFoundException("Ідентіфикатори невірні");
 
             //Запит
-            var dbReview = await DatabaseContext.Reviews
+            var dbReview = await DatabaseContext.Reviews.AsNoTracking()
                 .Include(x => x.Tutor)
                 .Include(x => x.Author)
                 .Where(x => x.TutorId == r.TutorId).ToListAsync();

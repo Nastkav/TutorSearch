@@ -16,7 +16,6 @@ public class CreateSessionCommand : IRequest<int>
     public string Title { get; set; } = "";
     public DateTimeOffset From { get; set; }
     public DateTimeOffset To { get; set; }
-    public List<int> Students { get; set; } = [];
 
 
     public class CreateSessionCommandHandler : BaseMediatrHandler<CreateSessionCommand, int>
@@ -30,11 +29,13 @@ public class CreateSessionCommand : IRequest<int>
         {
             //On day event
             if (r.From.Date != r.To.Date)
-                throw new Exception("Подія має бути протягом дня.");
+                throw new TimeRangeException("Подія має бути протягом дня.");
+            else if (r.From > r.To || r.From == r.To)
+                throw new TimeRangeException("Обрано невірний час");
+
             var weekday = (int)r.From.DayOfWeek;
             var start = TimeOnly.FromDateTime(r.From.DateTime);
             var end = TimeOnly.FromDateTime(r.To.DateTime);
-
 
             switch (r.Type)
             {
@@ -47,9 +48,7 @@ public class CreateSessionCommand : IRequest<int>
                     //Перевірка перетинання часу
                     foreach (var timeRange in dbTimes)
                         if (timeRange.EndTime > start && timeRange.StartTime < end)
-                            throw new Exception("Додавання неможливе, час перетинається");
-                    //TODO: timeRange проверить проверку пересечения дат
-
+                            throw new TimeRangeException("Додавання неможливе, час перетинається");
 
                     var availableTime = new AvailableTimeModel()
                     {
@@ -62,43 +61,6 @@ public class CreateSessionCommand : IRequest<int>
                     DatabaseContext.AvailableTimes.Add(availableTime);
                     await DatabaseContext.SaveChangesAsync();
                     return availableTime.Id;
-                case TimeType.Busy: //Додавання нового заняття
-                    var dbStudents = DatabaseContext.Users.Where(x => r.Students.Contains(x.Id)).ToList();
-                    if (dbStudents.Count == 0)
-                    {
-                        throw new Exception("Відсутні учні");
-                    }
-                    else if (dbStudents.Count != r.Students.Count)
-                    {
-                        var unknownIds = dbStudents.Select(x => x.Id).Where(x => r.Students.Contains(x)).ToList();
-                        throw new Exception($"Не знайдені учні з номерами {string.Join(", ", unknownIds)}");
-                    }
-
-
-                    //Перевірка що входить до одного з доступних діапазонів
-                    var availableRange = DatabaseContext.AvailableTimes
-                        .Where(x => x.StartTime <= start && end <= x.EndTime && x.DayOfWeek == weekday)
-                        .FirstOrDefault();
-                    if (availableRange == null)
-                        throw new Exception("Вибрано поза робочий час");
-
-                    //Перевірка перетинання часу
-                    //https://scicomp.stackexchange.com/questions/26258/the-easiest-way-to-find-intersection-of-two-intervals
-                    var lessonOnRange = DatabaseContext.Lessons
-                        .Where(x => x.From > r.To || r.From > x.To).ToList();
-                    if (lessonOnRange.Count > 0)
-                        throw new Exception("Додавання неможливе, час перетинається");
-
-                    //Додання
-                    var newLesson = new LessonModel()
-                    {
-                        TutorId = r.CreatedBy,
-                        Students = dbStudents
-                    };
-
-                    DatabaseContext.Lessons.Add(newLesson);
-                    await DatabaseContext.SaveChangesAsync();
-                    return newLesson.Id;
                 default:
                     throw new ArgumentOutOfRangeException("Неможливо додати подію типу: " + r.Type.ToString());
             }

@@ -11,6 +11,9 @@ using Web.Models.Shared;
 
 namespace Web.Controllers;
 
+[Authorize]
+[Route("/[controller]/[action]")]
+[Produces("application/json")]
 public class SessionController : Controller
 {
     private readonly IMediator _mediator;
@@ -20,7 +23,6 @@ public class SessionController : Controller
 
 
     [HttpPost]
-    [Authorize]
     public async Task<ActionResult> Create(CreateSessionCommand command)
     {
         try
@@ -39,24 +41,6 @@ public class SessionController : Controller
     }
 
     [HttpPost]
-    [Authorize]
-    public async Task<ActionResult> Edit(int id, UpdateSessionCommand command)
-    {
-        try
-        {
-            command.UpdatedBy = IdentityId;
-            command.EventId = id;
-            await _mediator.Send(command);
-            return RedirectToAction(nameof(Edit));
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e);
-        }
-    }
-
-    [HttpPost]
-    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
         try

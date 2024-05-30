@@ -1,16 +1,18 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Net.Mime;
+using System.Text;
 using AutoMapper;
 using Domain.Helpers;
+using Infra;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
+using Infra.Storage;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,28 +25,22 @@ namespace Domain.Commands;
 public class SaveAvatarCommand : IRequest<bool>
 {
     public int UserId { get; set; }
-    public IFormFile FormFile { get; set; } = null!;
 
-    public class SaveAvatarCommandHandler : BaseMediatrHandler<SaveAvatarCommand, bool>
+    public byte[] ImageBytes { get; set; } = [];
+
+    public class SaveAvatarCommandHandler : IRequestHandler<SaveAvatarCommand, bool>
     {
-        private readonly IHostingEnvironment _environment;
+        private readonly IStorageRepository _storage;
 
-        public SaveAvatarCommandHandler(AppDbContext dbContext, IMapper mapper,
-            IHostingEnvironment environment)
-            : base(dbContext, mapper) =>
-            _environment = environment;
+        public SaveAvatarCommandHandler(IStorageRepository storage) =>
+            _storage = storage;
 
-        //https://blog.elmah.io/upload-and-resize-an-image-with-asp-net-core-and-imagesharp/
-        public override Task<bool> Handle(SaveAvatarCommand r, CancellationToken token)
+        public Task<bool> Handle(SaveAvatarCommand r, CancellationToken token)
         {
-            using (var fs = new FileStream(Path.Combine(_environment.WebRootPath, "avatars", $"{r.UserId}.png"),
-                       FileMode.Create))
-            using (var image = Image.Load(r.FormFile.OpenReadStream()))
-            {
-                image.Mutate(x => x.Resize(200, 200));
-                image.Save(fs, new PngEncoder());
-            }
+            if (r.ImageBytes.Length == 0)
+                throw new CommandParameterException("Файл не може бути пустим");
 
+            _storage.SaveAvatar(r.UserId.ToString(), r.ImageBytes);
             return Task.FromResult(true);
         }
     }

@@ -6,107 +6,114 @@
     ViewBag.Title = "Пошук репетитора";
     Layout = "_Layout";
 }
-<div class="row mb-5">
-    <div class="row mb-5"></div>
-    <h1 class="text-center">@ViewData["Title"]</h1>
-</div>
-<div class="container">
+
+<form method="get">
+    <!-- Search Input -->
+    <div class="row mb-5 d-flex justify-content-center">
+        <div class="input-group">
+            <input asp-for="Filters.SearchText" class="form-control border-left-primary" placeholder="Пошук ..."
+                   aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End Search Input -->
     <div class="row">
-        <aside class="col-sm-3">
-            <form method="get">
-                <div class="card mb-3">
-                    <article class="card-group-item">
-                        <header class="card-header">
-                            <h6 class="title">Вартість за годину</h6>
-                        </header>
-                        <div class="filter-content">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <label>Від</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text p-2">$</span>
-                                            <input asp-for="@Model.Filters.HourRateFrom" type="text" class="form-control" placeholder="0">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6 text-right">
-                                        <label>До</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text p-2">$</span>
-                                            <input asp-for="@Model.Filters.HourRateTo" type="text" class="form-control" placeholder="99999">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+        <div class="col col-lg-3 col-12">
+            <!-- Side - Rate -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Вартість за годину</h6>
                 </div>
+                <div class="list-wrap open p-2" style="">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Від </span>
+                        </div>
+                        <input asp-for="Filters.HourRateFrom" min="0" type="number" class="form-control" placeholder="0 грн">
+                        <div class="input-group-append">
+                            <span class="input-group-text">грн</span>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">До </span>
+                        </div>
+                        <input asp-for="Filters.HourRateTo" min="0" type="number" class="form-control" placeholder="0 грн">
+                        <div class="input-group-append">
+                            <span class="input-group-text">грн</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="card mb-3">
-                    <article class="card-group-item">
-                        <header class="card-header">
-                            <h6 class="title">Місто</h6>
-                        </header>
-                        <div class="filter-content">
-                            <div class="list-group list-group-flush">
-                                <div class="input-group">
-                                    <select asp-for="Filters.CityId" class="form-select" asp-items="@Model.Cities"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Місто</h6>
                 </div>
-                <div class="card mb-3">
-                    <article class="card-group-item">
-                        <header class="card-header">
-                            <h6 class="title">Тематика</h6>
-                        </header>
-                        <div class="filter-content">
-                            <div class="list-group list-group-flush">
-                                <div class="input-group">
-                                    <select asp-for="Filters.SubjectId" class="form-select" asp-items="@Model.Subjects"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+                <div class="list-wrap open p-2" style="">
+                    <select asp-for="Filters.CityId" asp-items="@Model.Cities" class="selectpicker  form-control" data-live-search="true"></select>
                 </div>
-                <div class="card mb-3">
-                    <article class="card-group-item">
-                        <header class="card-header">
-                            <h6 class="title">Тип заняття</h6>
-                        </header>
-                        <div class="filter-content">
-                            <div class="card-body">
-                                <div class="form-check">
-                                    <input asp-for="@Model.Filters.OnlineAccess" class="form-check-input" type="checkbox" id="check1">
-                                    <label class="form-check-label" for="check1">Онлайн</label>
-                                </div>
-                                <div class="form-check">
-                                    <input asp-for="@Model.Filters.TutorHomeAccess" class="form-check-input" type="checkbox" id="check2">
-                                    <label class="form-check-label" for="check2">У вчителя</label>
-                                </div>
-                                <div class="form-check">
-                                    <input asp-for="@Model.Filters.StudentHomeAccess" class="form-check-input" type="checkbox" id="check3">
-                                    <label class="form-check-label" for="check3">У студента</label>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="row pe-3 ps-3">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa-solid fa-magnifying-glass"></i> Шукати
-                    </button>
-                </div>
-            </form>
-        </aside>
+            </div>
 
-        <!-- TutorCards -->
-        <div class="col">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Предмет за годину</h6>
+                </div>
+                <div class="list-wrap open p-2" style="">
+                    <select asp-for="Filters.SubjectId" asp-items="@Model.Subjects" class="selectpicker  form-control" data-live-search="true"></select>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Тип заняття</h6>
+                </div>
+                <div class="list-wrap open p-2 ml-3" style="">
+
+                    <div class="form-check">
+                        <input asp-for="Filters.OnlineAccess" class="form-check-input" type="checkbox" id="check1">
+                        <label class="form-check-label" for="check1">Онлайн</label>
+                    </div>
+                    <div class="form-check">
+                        <input asp-for="Filters.TutorHomeAccess" class="form-check-input" type="checkbox" id="check2">
+                        <label class="form-check-label" for="check2">У вчителя</label>
+                    </div>
+                    <div class="form-check">
+                        <input asp-for="Filters.StudentHomeAccess" class="form-check-input" type="checkbox" id="check3">
+                        <label class="form-check-label" for="check3">У студента</label>
+                    </div>
+                </div>
+            </div>
+            <!-- Favorite -->
+
+            <div class="card shadow mb-4">
+                <input asp-for="Filters.OnlyFavorites" type="checkbox" class="btn-check" id="only-favorite">
+                <label class="d-none d-sm-inline-block btn btn-sm btn-outline-pink shadow-sm mb-0" for="only-favorite">
+                    <i class="fa-solid fa-heart"></i> Тільки улюблені репетитори
+                </label>
+            </div>
+            <!-- Submit -->
+            <div class="card shadow mb-4">
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i> Шукати
+                </button>
+            </div>
+
+
+        </div>
+        <div class="col col-lg-9 col-md-12">
+            <!-- TutorCard -->
             @foreach (var x in Model.TutorCards)
             {
                 <partial name="_TutorCard" model="@x"/>
             }
+            <!-- End TutorCard -->
         </div>
     </div>
-</div>
+</form>

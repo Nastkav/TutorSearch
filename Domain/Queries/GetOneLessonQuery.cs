@@ -19,7 +19,7 @@ public class GetOneLessonQuery : IRequest<Lesson?>
         public override async Task<Lesson?> Handle(GetOneLessonQuery r, CancellationToken token)
         {
             //Запит
-            var dbLesson = await DatabaseContext.Lessons
+            var dbLesson = await DatabaseContext.Lessons.AsNoTracking()
                 .Include(x => x.Students)
                 .Include(x => x.Subject)
                 .Include(x => x.Tutor)

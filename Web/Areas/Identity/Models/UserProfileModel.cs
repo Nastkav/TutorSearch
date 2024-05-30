@@ -4,9 +4,9 @@ namespace Web.Areas.Identity.Models;
 
 public class UserProfileModel
 {
-    public string? Username { get; set; }
+    [Display(Name = "Ім'я користувача")] public string? Username { get; set; }
 
     [Phone]
-    [Display(Name = "Phone number")]
+    [Display(Name = "Номер телефону")]
     public string? PhoneNumber { get; set; }
 }

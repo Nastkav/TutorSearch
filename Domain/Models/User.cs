@@ -10,30 +10,30 @@ public class User
 {
     public int Id { get; set; }
 
-    [DisplayName("Активувати профль викладача")]
+    [DisplayName("Активувати профіль викладача")]
     public bool ProfileEnabled { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     [Display(Name = "Ім'я")]
-    [StringLength(50, ErrorMessage = "Надто довгий текст у полі ім'я")]
+    [StringLength(50, ErrorMessage = "Надто довгий текст у полі ім'я", MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
 
     public string Avatar => "/avatars/" + Id + ".png";
 
-    [Required]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     [Display(Name = "Прізвище")]
-    [StringLength(50, ErrorMessage = "Надто довгий текст у полі прізвище")]
+    [StringLength(50, ErrorMessage = "Надто довгий текст у полі прізвище", MinimumLength = 3)]
     public string Surname { get; set; } = string.Empty;
 
     [MaxLength(50, ErrorMessage = "Надто довгий текст у полі по батькові")]
-    [MinLength(0)]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     [Display(Name = "По батькові")]
     public string Patronymic { get; set; } = string.Empty;
 
-    [Required]
-    [Range(1, int.MaxValue, ErrorMessage = "Оберіть місто")]
+    [Required(ErrorMessage = "Поле '{0}' є обов'язковим")]
     [Display(Name = "Місто")]
     public string CityId { get; set; } = "0";
 
     public string FullName { get; set; } = string.Empty;
+    public string CityName { get; set; } = string.Empty;
 }

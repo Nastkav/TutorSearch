@@ -1,12 +1,24 @@
 @using Infra.DatabaseAdapter.Helpers
-@model Web.Models.Assignments.SolutionListVm
+@using Web.Helpers
+@model Web.Models.Solutions.SolutionListVm
 
 @{
-    ViewData["Title"] = "Учень: Задачі";
+    ViewData["Title"] = "Завдання • Для виконання";
+    Layout = "_LayoutFilterTable";
 }
-<form asp-action="Index" method="get" xmlns="http://www.w3.org/1999/html">
-    <input asp-for="Filter.UserId" name="userid" hidden/>
-    <div class="row row-cols-md-6">
+<!-- Head button -->
+
+<div class="d-flex mb-3">
+    <div class="p2">
+        <h4 class="mb-1">@ViewData["Title"]</h4>
+    </div>
+</div>
+<!-- End Head button -->
+<!-- Head Filter-->
+<form asp-action="Index" method="get" class="my-3">
+
+    <div class="row d-flex row-cols-md-6 justify-content-start">
+        <input asp-for="Filter.UserId" name="userid" hidden/>
         <div class="col">
             <label asp-for="Filter.Status" class="form-check-label"></label>
             <select asp-for="Filter.Status" asp-items="@Html.GetEnumSelectList<SolutionStatus>()" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
@@ -27,43 +39,38 @@
             <label asp-for="Filter.AssignmentId" class="form-check-label"></label>
             <select asp-for="Filter.AssignmentId" asp-items="@Model.Assignments" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
         </div>
-        <div class="col justify-content-md-center">
+        <div class="col align-self-end">
             <button type="submit" class="btn btn-primary">
                 <i class="fa-solid fa-arrows-rotate"></i>
             </button>
         </div>
     </div>
-
 </form>
-<h1>Index</h1>
-<table class="table">
+<!-- End Head Filter-->
+
+
+<table class="table pretty-table stripe" style="white-space: nowrap;">
     <thead>
     <tr>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().Id)
         </th>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().SubjectName)
         </th>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().AssignmentTitle)
         </th>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().TutorName)
         </th>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().StudentName)
         </th>
-        <th>
+        <th scope="col">
             @Html.DisplayNameFor(model => model.Solutions.First().Status)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Solutions.First().CreatedAt)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Solutions.First().UpdatedAt)
-        </th>
-        <th></th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -77,25 +84,21 @@
                 @Html.DisplayFor(modelItem => item.SubjectName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AssignmentTitle)
+                @item.AssignmentTitle.Truncate(25)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TutorName)
+                @item.TutorName.Truncate(15)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
+                @item.StudentName.Truncate(15)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Детально</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn small-text small btn-outline-primary">
+                    <i class="small-text small fa-solid fa-pen-to-square"></i>
+                </a>
             </td>
         </tr>
     }

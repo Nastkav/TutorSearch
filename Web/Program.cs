@@ -6,22 +6,36 @@ using Infra;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Helpers;
 using Infra.DatabaseAdapter.Models;
-using Infra.StorageAdapter;
+using Infra.Storage;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using Web;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 var services = builder.Services;
+//Config
 //Infra
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (connectionString == null)
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 services.AddDbContext<AppDbContext>(options => options.UseMySQL(connectionString));
-services.AddDefaultIdentity<UserModel>(o => o.SignIn.RequireConfirmedEmail = false)
-    .AddEntityFrameworkStores<AppDbContext>();
-services.AddScoped<IStorage, LocalFileStorage>();
-services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddIdentity<UserModel, IdentityRole<int>>(o => o.SignIn.RequireConfirmedEmail = false)
+    .AddRoles<IdentityRole<int>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
+services.AddTransient<IStorageRepository, StorageRepository>();
+
+services.AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/Forbidden/";
+    });
 
 //Domain
 services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(BaseMediatrHandler<,>).Assembly));
@@ -36,17 +50,17 @@ services.AddControllersWithViews()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 services.AddRazorPages();
 
+
 //Запуск програми
 var app = builder.Build();
 //Оновлення бази даних
 app.UseMigrationsEndPoint();
+
 //Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
 //wwwroot
-app.UseStaticFiles();
-//node_modules
 app.UseStaticFiles();
 //Додавання маршрутизації
 app.UseRouting();
@@ -57,6 +71,6 @@ app.UseAuthorization();
 
 //Routing
 app.MapControllerRoute("default", "{controller=Profile}/{action=Index}/{id?}");
-app.MapRazorPages(); // Потреба в ідентифікації користувача
+app.MapRazorPages(); //UserIdentity  
 
 app.Run();

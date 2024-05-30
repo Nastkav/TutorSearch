@@ -25,14 +25,15 @@ public class CreateAssignmentCommand : IRequest<int>
         public override async Task<int> Handle(CreateAssignmentCommand r, CancellationToken token)
         {
             if (r.CreatedId != r.Assignment.TutorId)
-                throw new Exception("Лише репетитор може додати завдання");
+                throw new CommandParameterException("Лише репетитор може додати завдання");
             if (!DatabaseContext.Tutors.Any(x => x.Id == r.Assignment.TutorId))
-                throw new Exception("Репетитор вказан невірно");
+                throw new UserNotFoundException("Репетитор вказан невірно");
 
             var dbSubject = await DatabaseContext.Subjects
                 .FirstOrDefaultAsync(x => x.Id == r.Assignment.SubjectId || x.Name == r.Assignment.SubjectName);
             if (dbSubject == null)
-                throw new Exception($"Предмету '{r.Assignment.SubjectId}:{r.Assignment.SubjectName}' не знайдено.");
+                throw new SubjectNotFoundException(
+                    $"Предмету '{r.Assignment.SubjectId}:{r.Assignment.SubjectName}' не знайдено.");
 
             var newAssignment = Mapper.Map<AssignmentModel>(r.Assignment);
             newAssignment.Subject = dbSubject;
@@ -48,7 +49,6 @@ public class CreateAssignmentCommand : IRequest<int>
 
 
             //Перевірка перетинання часу    
-            //aF > bT and bF > aT
             await DatabaseContext.Assignments.AddAsync(newAssignment);
             await DatabaseContext.SaveChangesAsync();
             return newAssignment.Id;

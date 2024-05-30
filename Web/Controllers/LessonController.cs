@@ -13,6 +13,7 @@ using Web.Models.Lessons;
 namespace Web.Controllers;
 
 [Authorize]
+[Route("/[controller]/[action]")]
 public class LessonController : Controller
 {
     private readonly IMediator _mediator;
@@ -34,8 +35,8 @@ public class LessonController : Controller
             ModelState.AddModelError("Lesson.To", "Зустріч має проходити протягом дня");
         if (model.Lesson.From.Date > model.Lesson.To.Date)
             ModelState.AddModelError("Lesson.To", "Можливо ви переплутали час місцями");
-        if (model.Lesson.From < DateTime.Today.AddDays(-7))
-            ModelState.AddModelError("Lesson.To", "Занадто стара дата");
+        if (model.Lesson.From < DateTime.Now.AddHours(-1))
+            ModelState.AddModelError("Lesson.To", " Ви не можете створити подію в минулому");
         if (model.Lesson.StudentsIds.Count == 0)
             ModelState.AddModelError("Lesson.StudentsIds", "Треба вибирати хоча б одного учня");
     }
@@ -47,7 +48,7 @@ public class LessonController : Controller
         var lessons = new ListLessonVm();
         lessons.Lessons = await _mediator.Send(new GetLessonsQuery()
         {
-            UserId = IdentityId,
+            StudentId = IdentityId,
             TutorId = IdentityId
         });
         lessons.IsTutor = await _mediator.Send(new UserIsTutorQuery() { UserId = IdentityId });
@@ -68,7 +69,8 @@ public class LessonController : Controller
         model.Lesson.From = DateTime.Now;
         model.Lesson.To = DateTime.Now.AddHours(1);
         model.Lesson.TutorId = model.UserId = IdentityId;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Subjects =
+            await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
         return View(model);
     }
@@ -78,6 +80,7 @@ public class LessonController : Controller
     public async Task<IActionResult> Create(LessonVm model)
     {
         LessonValidation(model);
+
         if (ModelState.IsValid)
         {
             if (model.Lesson.Comment == null)
@@ -87,7 +90,8 @@ public class LessonController : Controller
         }
 
         model.Lesson.TutorId = model.UserId = IdentityId;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
+        model.Subjects =
+            await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");
         model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
         return View(model);
     }
@@ -115,55 +119,18 @@ public class LessonController : Controller
         return View(model);
     }
 
-
     [HttpGet]
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        var model = new LessonVm();
-
-        if (IdentityId == 0)
+        if (!id.HasValue)
             return NotFound();
 
-        var curLesson = await _mediator.Send(new GetOneLessonQuery { LessonId = id, UserId = IdentityId });
-
-        if (curLesson == null || curLesson.TutorId != IdentityId)
+        var tempLesson = await _mediator.Send(new GetOneLessonQuery { LessonId = id.Value, UserId = IdentityId });
+        if (tempLesson == null)
             return NotFound();
-
-        model.UserId = IdentityId;
-        model.Lesson = curLesson;
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
-        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
-        return View(model);
+        else
+            return View(new LessonVm() { Lesson = tempLesson });
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(int id, LessonVm model)
-    {
-        LessonValidation(model);
-        if (id != model.Lesson.Id) return NotFound();
-
-        if (ModelState.IsValid)
-        {
-            await _mediator.Send(new UpdateSessionCommand()
-            {
-                EventId = model.Lesson.Id,
-                UpdatedBy = IdentityId,
-                From = model.Lesson.From,
-                To = model.Lesson.To,
-                Comment = model.Lesson.Comment,
-                SubjectId = model.Lesson.SubjectId,
-                StudentIds = model.Lesson.StudentsIds
-            });
-            return RedirectToAction(nameof(Index));
-        }
-
-        model.Subjects = await _helper.GetSelectList(new GetAllSubjectsQuery(), "Оберіть тематику");
-        model.HisStudents = await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
-        // model.Lesson.StudentsIds =
-        // await _helper.GetSelectList(new GetTutorStudentsQuery() { TutorId = model.Lesson.TutorId });
-        return View(model);
-    }
-
 
     [HttpPost]
     public async Task<ActionResult> Delete(int id)
@@ -174,9 +141,9 @@ public class LessonController : Controller
             var success =
                 await _mediator.Send(new DeleteLessonCommand() { LessonId = id, TutorId = IdentityId });
             if (success)
-                RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
         }
 
-        return Content(id.ToString());
+        return RedirectToAction(nameof(Index));
     }
 }

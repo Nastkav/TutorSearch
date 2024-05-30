@@ -22,7 +22,7 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
         public override async Task<List<LessonRequest>> Handle(GetUserRequestsQuery r, CancellationToken token)
         {
             List<LessonRequest> listRequest = new();
-            var q = DatabaseContext.Requests
+            var q = DatabaseContext.Requests.AsNoTracking()
                 .Include(x => x.Tutor)
                 .ThenInclude(x => x.User)
                 .Include(x => x.Subject)
@@ -33,13 +33,15 @@ public class GetUserRequestsQuery : IRequest<List<LessonRequest>>
             else
                 q = q.Where(x => x.CreatedId == r.UserId);
 
+            q = q.OrderBy(x => x.Status); // Перші ті, що не оброблені
+
             foreach (var dbRequest in await q.ToArrayAsync())
             {
                 var req = Mapper.Map<LessonRequest>(dbRequest);
-                req.TutorName = dbRequest.Tutor.User.Name;
+                req.TutorName = dbRequest.Tutor.User.FullName();
                 req.Subject = dbRequest.Subject.Name;
                 req.IsTutor = r.IsTutor;
-                req.UserName = dbRequest.Created.Name;
+                req.UserName = dbRequest.Created.FullName();
                 listRequest.Add(req);
             }
 

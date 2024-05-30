@@ -26,5 +26,5 @@ public class Review
     [DisplayName("Створено")] public DateTime CreatedAt { get; set; }
     [DisplayName("Оновлено")] public DateTime? UpdatedAt { get; set; }
 
-    public string Avatar => "/avatars/" + Id + ".png";
+    public string Avatar => "/avatars/" + AuthorId + ".png";
 }

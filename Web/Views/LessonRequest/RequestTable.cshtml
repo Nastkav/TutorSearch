@@ -1,7 +1,9 @@
 @using Infra.DatabaseAdapter.Helpers
 @using NuGet.Protocol
+@using System.Globalization
+@using Web.Helpers
 @model IEnumerable<Domain.Models.LessonRequest>
-<table class="table">
+<table class="pretty-table">
     <thead>
     <tr>
         <th>
@@ -17,6 +19,9 @@
             @Html.DisplayNameFor(model => model.TutorName)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.LessonDate)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.From)
         </th>
         <th>
@@ -25,9 +30,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Status)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TutorComment)
-        </th>
+        @if (Model.Count() > 0 && !Model.First().IsTutor)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.TutorComment)
+            </th>
+        }
         <th>
             Доступні дії
         </th>
@@ -44,10 +52,13 @@
                 @Html.DisplayFor(modelItem => item.Subject)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @item.UserName.Truncate(7)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TutorName)
+                @item.TutorName.Truncate(7)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessonDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.From)
@@ -58,13 +69,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
+            @if (!item.IsTutor)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.TutorComment)
+                </td>
+            }
             <td>
-                @Html.DisplayFor(modelItem => item.TutorComment)
-            </td>
-            <td>
-                @if (item.IsTutor && item.Status == LessonRequestStatus.New)
+                @if (item.IsTutor)
                 {
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatus" data-item="@item.ToJson()">Відповісти</button>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
                 }
             </td>
         </tr>

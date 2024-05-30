@@ -18,19 +18,23 @@ public class GetTutorProfileQuery : IRequest<Tutor>
     {
         public override async Task<Tutor> Handle(GetTutorProfileQuery r, CancellationToken token)
         {
-            var dbProfile = await DatabaseContext.Tutors
+            var dbProfile = await DatabaseContext.Tutors.AsNoTracking()
                 .Include(x => x.About)
                 .Include(x => x.Subjects)
+                .Include(x => x.Reviews)
+                .Include(x => x.TeachingLessons)
                 .FirstOrDefaultAsync(x => x.Id == r.ProfileId);
 
             //Перевірка на існування  профілю
             if (dbProfile == null)
-                if (await DatabaseContext.Users.AnyAsync(x => x.Id == r.ProfileId))
+                if (await DatabaseContext.Users.AsNoTracking().AnyAsync(x => x.Id == r.ProfileId))
                     return new Tutor(); //Новий профіль
                 else
-                    throw new Exception("Профіль вчителя не знайдено");
+                    throw new UserNotFoundException("Профіль вчителя не знайдено");
 
             var profile = Mapper.Map<Tutor>(dbProfile);
+            if (dbProfile.Reviews.Count > 0)
+                profile.ReviewValue = (int)dbProfile.Reviews.Average(x => x.Rating);
             return profile;
         }
 

@@ -26,8 +26,7 @@ public class UpdateUserCommand : IRequest<bool>
             var dbUser = await DatabaseContext.Users.FirstOrDefaultAsync(x => x.Id == r.Profile.Id);
             //Check exist
             if (dbUser == null || dbUser.Id == 0 || !DatabaseContext.Users.Any(x => x.Id == dbUser.Id))
-                throw new Exception("Ідентіфікатор користувача не знайдено.");
-            //TODO: NewAvatarFileAvatar Load new Avatar
+                throw new UserNotFoundException("Ідентіфікатор користувача не знайдено.");
             Mapper.Map(r.Profile, dbUser);
             DatabaseContext.Users.Update(dbUser);
             await DatabaseContext.SaveChangesAsync(token);

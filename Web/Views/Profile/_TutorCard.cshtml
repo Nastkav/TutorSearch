@@ -1,37 +1,67 @@
 @model Web.Models.Profile.TutorCardVm
+<div class="tab-pane fade active show mb-4" role="tabpanel" aria-labelledby="pills-reviews-tab">
+    <div class="bg-white rounded shadow-sm">
+        <div class="container-md px-0">
+            <div class="row ">
+                <div class="col col-auto pr-0 col-12 col-md-auto">
+                    <img class="img-fluid rounded img-load-control wh-100" src="@Model.UserVm.Avatar" id="avatar" alt="..."/>
+                </div>
+                <div class="col m-2">
+                    @if (Model.TutorVm != null)
+                    {
+                        <span class="star-rating float-right">
+                            <input asp-for="TutorVm!.ReviewValue" class="rating" min="1" max="10" step="1" data-size="md" data-show-clear="false" data-show-caption="false">
+                        </span>
+                    }
+                    <div class="h4">
+                        <a class="stretched-link" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.UserVm.Id">
+                            @Model.UserVm.FullName
+                        </a>
+                    </div>
+                    @if (Model.TutorVm != null)
+                    {
+                        <div class="d-flex h-50 w-100">
+                            <span class="">
+                                @Model.TutorVm.Descriptions
+                            </span>
+                        </div>
+                    }
+                    <div class="ml-auto text-light bg-primary rounded-2 px-3 float-right">
+                        @Model.TutorVm?.HourRate грн/час
+                    </div>
+                    <small class="text-muted align-bottom">
+                        <i class="fa-solid fa-location-dot"></i> @Model.UserVm.CityName
+                    </small>
+                </div>
+            </div>
 
-<div class="card card-flex align-items-center bg-light mb-3">
-    <div class="row g-0">
-        <div class="col-4">
-            <img class="img-fluid rounded-start"
-                 id="avatar"
-                 src="@Model.UserData.Avatar"
-                 alt="..."/>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card-body">
-            <div class="row card-title">
-                <div class="col lead">
-                    <a class="stretched-link" asp-controller="Profile" asp-action="Details" asp-route-id="@Model.UserData.Id">
-                        @Model.UserData.Name @Model.UserData.Patronymic @Model.UserData.Surname
-                    </a>
-                    <i class="fa fa-star"></i> @Model.TutorData.ReviewValue (@Model.TutorData.ReviewCount reviews)
+            @if (Model.TutorVm != null)
+            {
+                <div class="row mx-0 w-100 card-header py-1">
+                    <div class="col-auto"><i class="fa-solid fa-comment-dots"></i> @Model.TutorVm.ReviewCount відгуків &emsp;<i class="fa-solid fa-people-line"></i> @Model.TutorVm.LessonCount занять </div>
+                    <div class="col">
+                        @for (var i = 0; i < Model.TutorVm.SubjectIds.Count; i++)
+                        {
+                            if (i < 6)
+                            {
+                                <div class="badge bg-secondary"> @Model.Subjects[Model.TutorVm.SubjectIds[i]].Text</div>
+                            }
+                            else
+                            {
+                                <div class="badge bg-gray-400">
+                                    <i class="fa-solid fa-circle-dot"></i>
+                                    &nbsp;
+                                    <i class="fa-solid fa-circle-dot"></i>
+                                    &nbsp;
+                                    <i class="fa-solid fa-circle-dot"></i>
+                                </div>
+                                break;
+                            }
+                        }
+                    </div>
                 </div>
-                <div class="col text-end">
-                    <span class="text-light bg-primary rounded-5 p-lg-2">@Model.TutorData.HourRate грн/година</span>
-                </div>
-            </div>
-            <p class="card-text">@Model.TutorData.Descriptions</p>
-            <small class="text-muted">
-                <i class="fa-solid fa-location-dot"></i> @Model.UserData.CityId)
-            </small>
-            <div class="card-footer">
-                @foreach (var subjectId in Model.TutorData.SubjectIds)
-                {
-                    <span class="badge bg-info"> @Model.Subjects[subjectId]</span>
-                }
-            </div>
+            }
         </div>
+
     </div>
 </div>

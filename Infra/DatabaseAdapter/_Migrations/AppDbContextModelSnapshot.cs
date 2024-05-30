@@ -34,6 +34,21 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.ToTable("AssignmentFiles");
                 });
 
+            modelBuilder.Entity("Favorites", b =>
+                {
+                    b.Property<int>("FavoriteTutorsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InFavoriteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FavoriteTutorsId", "InFavoriteId");
+
+                    b.HasIndex("InFavoriteId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AboutTutorModel", b =>
                 {
                     b.Property<int>("Id")
@@ -3382,21 +3397,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         });
                 });
 
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.FavoriteTutorModel", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ProfileId");
-
-                    b.HasIndex("ProfileId");
-
-                    b.ToTable("FavoriteTutors");
-                });
-
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.LessonModel", b =>
                 {
                     b.Property<int>("Id")
@@ -4462,8 +4462,8 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
-                    b.Property<decimal>("HourRate")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("HourRate")
+                        .HasColumnType("int");
 
                     b.Property<bool>("OnlineAccess")
                         .HasColumnType("tinyint(1)");
@@ -4551,6 +4551,10 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("NormalizeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -4603,50 +4607,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(2004, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "bdac24fc-29aa-4740-8023-10c59e0e4e23",
-                            Email = "admin@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Administrator",
-                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                            NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED/JcnGip5yrSrBHQH+LmlC7r6Pf1nzvsaAZgxa0Pc25cvBsvI1hAD7lJ+61BoGihQ==",
-                            Patronymic = "None",
-                            PhoneNumberConfirmed = false,
-                            ProfileEnabled = false,
-                            SecurityStamp = "482ea3c3-a1c3-4c83-aced-72e0e5b8808c",
-                            Surname = "None",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@example.com"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1999, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            ConcurrencyStamp = "a9fc8738-b8a9-4213-83c0-5ec7a52e293b",
-                            Email = "tutor@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Ірина",
-                            NormalizedEmail = "TUTOR@EXAMPLE.COM",
-                            NormalizedUserName = "TUTOR@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMfkHhl9MnIURCj0Kd8zbGKDK9t+NX29GB2ZJ7L2iwIYn7j1jbN2yDErYirY8PsRNA==",
-                            Patronymic = "Миколаївна",
-                            PhoneNumberConfirmed = false,
-                            ProfileEnabled = false,
-                            SecurityStamp = "9cbd20e0-3497-4bbb-95f7-da2f2710e420",
-                            Surname = "Мельник",
-                            TwoFactorEnabled = false,
-                            UserName = "tutor@example.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -4737,12 +4697,10 @@ namespace Infra.DatabaseAdapter._Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext");
@@ -4770,18 +4728,6 @@ namespace Infra.DatabaseAdapter._Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            RoleId = 2
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -4790,12 +4736,10 @@ namespace Infra.DatabaseAdapter._Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext");
@@ -4865,6 +4809,21 @@ namespace Infra.DatabaseAdapter._Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Favorites", b =>
+                {
+                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", null)
+                        .WithMany()
+                        .HasForeignKey("FavoriteTutorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", null)
+                        .WithMany()
+                        .HasForeignKey("InFavoriteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.AboutTutorModel", b =>
                 {
                     b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", null)
@@ -4902,25 +4861,6 @@ namespace Infra.DatabaseAdapter._Migrations
                         .IsRequired();
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("Infra.DatabaseAdapter.Models.FavoriteTutorModel", b =>
-                {
-                    b.HasOne("Infra.DatabaseAdapter.Models.TutorModel", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infra.DatabaseAdapter.Models.UserModel", "User")
-                        .WithMany("FavoriteTutors")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.LessonModel", b =>
@@ -5161,8 +5101,6 @@ namespace Infra.DatabaseAdapter._Migrations
 
             modelBuilder.Entity("Infra.DatabaseAdapter.Models.UserModel", b =>
                 {
-                    b.Navigation("FavoriteTutors");
-
                     b.Navigation("Files");
 
                     b.Navigation("Requests");

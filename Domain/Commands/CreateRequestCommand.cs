@@ -41,11 +41,11 @@ public class CreateRequestCommand : IRequest<int>
         public override async Task<int> Handle(CreateRequestCommand r, CancellationToken token)
         {
             if (r.CreatedId == r.TutorId)
-                throw new Exception("Користувач може надіслати запрошення лише іншому репетитору");
+                throw new AccessDeniedException("Користувач може надіслати запрошення лише іншому репетитору");
             if (!DatabaseContext.Tutors.Any(x => x.Id == r.TutorId))
-                throw new Exception("Репетитор вказан невірно");
+                throw new UserNotFoundException("Репетитор вказан невірно");
             if (!DatabaseContext.Users.Any(x => x.Id == r.CreatedId))
-                throw new Exception("Ученик вказан невірно");
+                throw new UserNotFoundException("Ученик вказан невірно");
 
             var dbSubject = await DatabaseContext.Subjects.FirstOrDefaultAsync(x => x.Id == r.SubjectId);
             if (dbSubject == null)
@@ -63,12 +63,12 @@ public class CreateRequestCommand : IRequest<int>
                 x.Subject.Id == newRequest.Subject.Id
             );
             if (requestExist)
-                throw new Exception("Ви вже маєте активний запит на курс для цього викладача");
+                throw new RequestException("Ви вже маєте активний запит на курс для цього викладача");
 
             //Перевірка перетинання часу    
             //aF > bT and bF > aT
             if (await DatabaseContext.Lessons.CountAsync(x => x.From > newRequest.To && newRequest.From > x.To) > 0)
-                throw new Exception("Додавання неможливе, час перетинається");
+                throw new RequestException("Додавання неможливе, час перетинається");
 
             await DatabaseContext.Requests.AddAsync(newRequest);
             await DatabaseContext.SaveChangesAsync();

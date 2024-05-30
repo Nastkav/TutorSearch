@@ -19,7 +19,7 @@ public class GetOneAssignmentQuery : IRequest<Assignment?>
         public override async Task<Assignment?> Handle(GetOneAssignmentQuery r, CancellationToken token)
         {
             //Запит
-            var dbTask = await DatabaseContext.Assignments
+            var dbTask = await DatabaseContext.Assignments.AsNoTracking()
                 .Include(x => x.Subject)
                 .Include(x => x.Solutions)
                 .Include(x => x.Files)
@@ -30,7 +30,7 @@ public class GetOneAssignmentQuery : IRequest<Assignment?>
                 .FirstOrDefaultAsync(x => x.Id == r.AssignmentId);
 
             if (dbTask == null)
-                throw new Exception("Задачу не знайдено");
+                throw new AssignmentException("Задачу не знайдено");
 
             var assignment = Mapper.Map<Assignment>(dbTask);
             return assignment;

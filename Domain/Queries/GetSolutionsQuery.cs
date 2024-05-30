@@ -29,7 +29,7 @@ public class GetSolutionsQuery : IRequest<List<Solution>>
         public override async Task<List<Solution>> Handle(GetSolutionsQuery r, CancellationToken token)
         {
             //Запит
-            var q = DatabaseContext.Solutions
+            var q = DatabaseContext.Solutions.AsNoTracking()
                 .Include(x => x.Student)
                 .Include(x => x.Assignment)
                 .ThenInclude(x => x.Tutor)
@@ -37,8 +37,9 @@ public class GetSolutionsQuery : IRequest<List<Solution>>
                 .Include(x => x.Assignment.Subject)
                 .Include(x => x.Files)
                 .ThenInclude(x => x.Owner)
+                .Where(x => x.StudentId == r.UserId || x.Assignment.TutorId == r.UserId)
                 .AsQueryable();
-
+            //Filters
             if (r.SubjectId.Count > 0)
                 q = q.Where(x => r.SubjectId.Contains(x.Assignment.SubjectId));
             if (r.Status.Count > 0)
@@ -50,6 +51,7 @@ public class GetSolutionsQuery : IRequest<List<Solution>>
             if (r.AssignmentId.Count > 0)
                 q = q.Where(x => r.AssignmentId.Contains(x.AssignmentId));
 
+            //Execute
             var dbSolutions = await q.ToListAsync();
             var solutions = Mapper.Map<List<Solution>>(dbSolutions);
             return solutions;

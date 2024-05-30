@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Controllers.Admin;
 
-// [Authorize(Roles = "ADMINISTRATOR")]
+[Authorize(Roles = "Administrator")]
+[Route("/[controller]/[action]")]
+[Produces("text/html; charset=utf-8")]
 public class CityController : Controller
 {
     private readonly AppDbContext _context;
@@ -14,29 +16,21 @@ public class CityController : Controller
     public CityController(AppDbContext context) => _context = context;
 
     // GET: City
+    [HttpGet]
     public async Task<IActionResult> Index() => View(await _context.Cities.ToListAsync());
 
-    // GET: City/Details/5
-    public async Task<IActionResult> Details(int? id)
-    {
-        if (id == null) return NotFound();
-
-        var cityModel = await _context.Cities
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (cityModel == null) return NotFound();
-
-        return View(cityModel);
-    }
 
     // GET: City/Create
+    [HttpGet]
     public IActionResult Create() => View();
 
     // POST: City/Create
     [HttpPost]
     public async Task<IActionResult> Create(
-        [Bind("Id,Name,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")]
+        [Bind("Id,Name,Region,CreatedAt,UpdatedAt")]
         CityModel cityModel)
     {
+        ModelState.Remove("Id");
         if (ModelState.IsValid)
         {
             _context.Add(cityModel);
@@ -48,6 +42,8 @@ public class CityController : Controller
     }
 
     // GET: City/Edit/5
+    [HttpGet]
+    [Route("{id?}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -59,8 +55,9 @@ public class CityController : Controller
 
     // POST: City/Edit/5
     [HttpPost]
+    [Route("{id}")]
     public async Task<IActionResult> Edit(int id,
-        [Bind("Id,Name,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")]
+        [Bind("Id,Name,Region,CreatedAt,UpdatedAt")]
         CityModel cityModel)
     {
         if (id != cityModel.Id) return NotFound();
@@ -87,6 +84,8 @@ public class CityController : Controller
     }
 
     // GET: City/Delete/5
+    [HttpGet]
+    [Route("{id?}")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -99,7 +98,9 @@ public class CityController : Controller
     }
 
     // POST: City/Delete/5
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
+    [Route("{id}")]
+    [ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var cityModel = await _context.Cities.FindAsync(id);

@@ -14,6 +14,7 @@ using ZstdSharp.Unsafe;
 namespace Web.Controllers;
 
 [Authorize]
+[Route("/[controller]/[action]")]
 public class ReviewController : Controller
 {
     private readonly IMediator _mediator;
@@ -28,8 +29,7 @@ public class ReviewController : Controller
 
 
     [HttpGet]
-    // [Route("{tutorId}")]
-    [Route("[controller]/[action]/{tutorId}")]
+    [Route("{tutorId}")]
     public async Task<IActionResult> Edit(int tutorId)
     {
         if (IdentityId == 0)
@@ -40,8 +40,10 @@ public class ReviewController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Review model)
+    [Route("{tutorId}")]
+    public async Task<IActionResult> Edit(int tutorId, Review model)
     {
+        model.TutorId = tutorId;
         if (model.AuthorId != IdentityId)
             ModelState.AddModelError("AuthorId", "Автор вказаний невірно");
         if (model.Rating == 0) ModelState.AddModelError("Rating", "Оцінка обов'язкова");

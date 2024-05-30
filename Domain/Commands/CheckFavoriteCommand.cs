@@ -1,16 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using Infra.DatabaseAdapter;
 using Infra.DatabaseAdapter.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using AutoMapper.Internal;
 using Domain.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Commands;
 
 public class CheckFavoriteCommand : IRequest<bool>
 {
-    public int UserId { get; set; }
-    public int TutorId { get; set; }
+    [Range(1, int.MaxValue)] public int UserId { get; set; }
+    [Range(1, int.MaxValue)] public int TutorId { get; set; }
     public bool Status { get; set; }
 
     public class CheckFavoriteCommandHandler : BaseMediatrHandler<CheckFavoriteCommand, bool>
@@ -20,22 +23,28 @@ public class CheckFavoriteCommand : IRequest<bool>
         {
         }
 
+
         public override async Task<bool> Handle(CheckFavoriteCommand r, CancellationToken token)
         {
-            var tutorSaved = DatabaseContext.FavoriteTutors.Where(x =>
-                    x.UserId == r.UserId
-                    && x.ProfileId == r.TutorId)
-                .FirstOrDefault();
-            if (r.Status && tutorSaved == null)
-                DatabaseContext.FavoriteTutors.Add(new FavoriteTutorModel
-                {
-                    ProfileId = r.TutorId,
-                    UserId = r.UserId
-                });
-            else if (!r.Status && tutorSaved != null)
-                DatabaseContext.FavoriteTutors.Remove(tutorSaved);
+            var dbUser = await DatabaseContext.Users
+                .Include(x => x.FavoriteTutors)
+                .FirstOrDefaultAsync(x => x.Id == r.UserId);
+            if (dbUser == null)
+                throw new UserNotFoundException("Неправильний ідентифікатор користувача");
+
+            var dbTutor = await DatabaseContext.Tutors.FirstOrDefaultAsync(x => x.Id == r.TutorId);
+            if (dbTutor == null)
+                throw new UserNotFoundException("Неправильний ідентифікатор вчителя");
+
+            var dbFav = dbUser.FavoriteTutors.FirstOrDefault(x => x.Id == r.TutorId);
+            if (dbFav == null && r.Status)
+                dbUser.FavoriteTutors.Add(dbTutor);
+            else if (dbFav != null && !r.Status)
+                dbUser.FavoriteTutors.Remove(dbFav);
+
+
             await DatabaseContext.SaveChangesAsync();
-            return true;
+            return r.Status;
         }
     }
 }

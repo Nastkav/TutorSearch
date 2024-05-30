@@ -1,60 +1,98 @@
+@using Domain.Queries
+@using Web.Helpers
 @model Web.Models.Assignments.AssignmentListVm
 
 @{
-    ViewData["Title"] = "Вчитель: Завдання";
+    ViewData["Title"] = "Мої завдання";
+    Layout = "_LayoutFilterTable";
 }
 
-<h1>Index</h1>
+<!-- Head button -->
 
-<p>
-    <a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i>Додати завдання</a>
-</p>
-<div class="row">
-    <table class="table table-hover table-light">
-        <thead>
-        <tr>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Assignments.First().Id)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Assignments.First().Title)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Assignments.First().SubjectName)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Assignments.First().CreatedAt)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Assignments.First().Deadline)
-            </th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.Assignments)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubjectName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Deadline)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Детально</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<div class="d-flex mb-3">
+    <div class="p2">
+        <h4 class="mb-1">@ViewData["Title"]</h4>
+    </div>
+    <div class="ml-auto">
+        <a asp-action="Create" class=" text-whitу">
+            Додати завдання
+            <i class="fas fa-plus btn btn-primary ml-1"></i>
+        </a>
+    </div>
 </div>
+<!-- End Head button -->
+
+<!-- Head Filter-->
+<form asp-action="Index" method="get" class="my-3">
+
+    <div class="row d-flex row-cols-md-6 justify-content-start">
+        <input asp-for="Filter.UserId" name="userid" hidden/>
+        <div class="col">
+            <label asp-for="Filter.SubjectId" class="form-check-label"></label>
+            <select asp-for="Filter.SubjectId" asp-items="@Model.Subjects" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col">
+            <label asp-for="Filter.StudentId" class="form-check-label"></label>
+            <select asp-for="Filter.StudentId" asp-items="@Model.HisStudents" class="selectpicker form-control" data-width="100%" data-live-search="true" multiple></select>
+        </div>
+        <div class="col align-self-end">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+        </div>
+    </div>
+</form>
+<!-- End Head Filter-->
+
+<!-- Table-->
+<table class=" table pretty-table">
+    <thead>
+    <tr>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Assignments.First().Id)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Assignments.First().Title)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Assignments.First().SubjectName)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Assignments.First().Deadline)
+        </th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Assignments)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @item.Title.Truncate(25)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                @{
+                    var filter = new Dictionary<string, string> { { "Filter.AssignmentId", item.Id.ToString() } };
+                }
+                <a asp-controller="Solution" asp-action="Index"
+                   asp-all-route-data="filter" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<!-- End Table-->

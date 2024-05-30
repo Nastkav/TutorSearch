@@ -12,8 +12,13 @@ public class Lesson
 
     [DisplayName("Вчитель")] public string TutorName { get; set; } = string.Empty;
 
-    [DisplayName("Початок")] public DateTime From { get; set; }
-    [DisplayName("Кінець")] public DateTime To { get; set; }
+    [DisplayName("Початок")]
+    [DisplayFormat(DataFormatString = "{0:HH:mm}")]
+    public DateTime From { get; set; }
+
+    [DisplayName("Кінець")]
+    [DisplayFormat(DataFormatString = "{0:HH:mm}")]
+    public DateTime To { get; set; }
 
     [StringLength(254, ErrorMessage = "{0} має містити не більше {1} символів.")]
     [DisplayName("Коментар")]
@@ -29,5 +34,7 @@ public class Lesson
 
     [DisplayName("Учні")] public string StudentNames { get; set; } = string.Empty;
 
-    // [DisplayName("Учні")] public string StudentNames => string.Join(", ", StudentsIds.Values);
+    [DisplayName("Дата")]
+    [DisplayFormat(DataFormatString = "{0:d}")]
+    public DateOnly LessonDate => DateOnly.FromDateTime(From);
 }

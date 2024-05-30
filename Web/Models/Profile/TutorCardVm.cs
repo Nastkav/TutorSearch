@@ -1,10 +1,11 @@
 using Domain.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web.Models.Profile;
 
 public class TutorCardVm
 {
-    public User UserData { get; set; } = null!;
-    public Tutor TutorData { get; set; } = null!;
-    public Dictionary<int, string> Subjects { get; set; } = [];
+    public User UserVm { get; set; } = null!;
+    public Tutor? TutorVm { get; set; } = null!;
+    public List<SelectListItem> Subjects { get; set; } = [];
 }
