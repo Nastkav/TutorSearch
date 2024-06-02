@@ -13,8 +13,6 @@ namespace Web.Controllers.Admin;
 
 public class RemoveUserController : Controller
 {
-    private const string REM_NAME = "REMOVED";
-
     private int IdentityId => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
     private readonly AppDbContext _context;
     private readonly SignInManager<UserModel> _signInManager;
@@ -44,7 +42,6 @@ public class RemoveUserController : Controller
         {
             var userList = _context.Users
                 .AsNoTracking()
-                .Where(x => x.NormalizeName != REM_NAME)
                 .Where(x => x.Id != IdentityId)
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = $"{x.Id},{x.NormalizeName}" })
                 .ToList();
@@ -63,6 +60,9 @@ public class RemoveUserController : Controller
 
         return View(model);
     }
+
+    [Authorize(Roles = "Removed")]
+    public IActionResult Removed() => View();
 
 
     [HttpPost]
@@ -86,26 +86,6 @@ public class RemoveUserController : Controller
 
         return Redirect(nameof(Index));
     }
-
-
-    [HttpPost]
-    [Authorize(Roles = "Removed")]
-    public async Task<IActionResult> ReactivateMe()
-    {
-        var role = await _context.UserRoles
-            .Where(x => x.UserId == IdentityId && x.RoleId == RemoveRoleId)
-            .FirstOrDefaultAsync();
-
-        if (role != null)
-        {
-            _context.Remove(role);
-            await _context.SaveChangesAsync();
-        }
-
-        await _signInManager.SignOutAsync();
-        return Redirect("/");
-    }
-
 
     [HttpPost]
     [Authorize(Roles = "Removed")]
@@ -178,7 +158,4 @@ public class RemoveUserController : Controller
         await _signInManager.SignOutAsync();
         return Redirect("/");
     }
-
-    [Authorize(Roles = "Removed")]
-    public IActionResult Removed() => View();
 }
