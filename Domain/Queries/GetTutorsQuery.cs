@@ -39,9 +39,9 @@ public class GetTutorsQuery : IRequest<List<int>>
                 .Where(x => x.ProfileEnabled);
 
             if (r.HourRateFrom != null)
-                q = q.Where(x => x.Tutor.HourRate > r.HourRateFrom);
+                q = q.Where(x => x.Tutor.HourRate >= r.HourRateFrom);
             if (r.HourRateTo != null)
-                q = q.Where(x => x.Tutor.HourRate < r.HourRateTo);
+                q = q.Where(x => x.Tutor.HourRate <= r.HourRateTo);
             if (r.CityId != "0")
                 q = q.Where(x => x.CityId == int.Parse(r.CityId));
             if (r.SubjectId != "0")

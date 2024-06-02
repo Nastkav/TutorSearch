@@ -66,8 +66,8 @@ public class LessonController : Controller
 
         var userData = await _mediator.Send(new GetUserProfileQuery() { ProfileId = IdentityId });
         model.Lesson.TutorName = userData.FullName;
-        model.Lesson.From = DateTime.Now;
-        model.Lesson.To = DateTime.Now.AddHours(1);
+        model.Lesson.From = DateTime.Now.Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute);
+        model.Lesson.To = model.Lesson.From.AddHours(1);
         model.Lesson.TutorId = model.UserId = IdentityId;
         model.Subjects =
             await _helper.GetSelectList(new GetAllSubjectsQuery() { TutorId = IdentityId }, "Оберіть тематику");

@@ -24,6 +24,22 @@
         <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.2"/>
         <PackageReference Include="MySql.Data" Version="8.3.0"/>
         <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Helpers\ukr_cities.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Helpers\subjects_list.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\subjects_list.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\ukr_cities.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

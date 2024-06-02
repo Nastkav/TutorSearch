@@ -26,10 +26,14 @@ if (uploadForm !== null && uploadForm !== undefined)
                 appendAlert('Файл успішно завантажено на  сервер', 'success')
             },
             error: function (request, status, error) {
-
                 var msg = "Помилка під час завантаження файлу, спробуйте надіслати інший файл"
-                if (request !== null && request.responseJSON !== null && request.responseJSON.message !== null)
-                    msg += ": " + request.responseJSON.message;
+                if (request !== undefined) {
+                    if (request.responseJSON !== undefined && request.responseJSON.message !== undefined)
+                        msg += ": " + request.responseJSON.message
+                    else (request.responseText !== undefined)
+                    msg += ": " + request.responseText
+
+                }
 
                 appendAlert(msg + "\n", 'danger')
             }

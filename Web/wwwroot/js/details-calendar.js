@@ -28,13 +28,16 @@ function createCalendar() {
 
 //Отримання списку подій
 function getEvents(info, successCallback, failureCallback) {
+    var strStart = new Date(info.start - info.start.getTimezoneOffset() * 60000).toISOString()
+    var strEnd = new Date(info.end - info.end.getTimezoneOffset() * 60000).toISOString()
+
     $.ajax({
         url: "/Session/List",
         type: "GET",
         dataType: 'json',
         data: {
-            from: info.start.valueOf(),
-            to: info.end.valueOf(),
+            from: strStart,
+            to: strEnd,
             userid: $("#calendar").data('tutorid')
         },
         success: function (data) {

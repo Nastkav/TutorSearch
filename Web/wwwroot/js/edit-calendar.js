@@ -15,7 +15,7 @@ function createCalendar() {
         eventOverlap: false,
         height: "auto",
         navLinks: false,
-        editable: true,
+        editable: false,
         selectable: true,
         selectMirror: true,
         allDaySlot: false,
@@ -30,13 +30,15 @@ function createCalendar() {
 
 //Отримання списку подій
 function getEvents(info, successCallback, failureCallback) {
+    var strStart = new Date(info.start - info.start.getTimezoneOffset() * 60000).toISOString()
+    var strEnd = new Date(info.end - info.end.getTimezoneOffset() * 60000).toISOString()
     $.ajax({
         url: "/Session/List",
         type: "GET",
         dataType: 'json',
         data: {
-            from: info.startStr,
-            to: info.endStr,
+            from: strStart,
+            to: strEnd,
             userid: $("#calendar").data('tutorid'),
             TimeTypes: "Available"
         },
@@ -54,19 +56,23 @@ function getEvents(info, successCallback, failureCallback) {
 
 
 function addNewEvent(info) {
+    var endTimeDiff = 0;
+    if (info.start.getDate() !== info.end.getDate())
+        endTimeDiff = 1;
+    var endTime = new Date(info.end - endTimeDiff - info.start.getTimezoneOffset() * 60000).toISOString()
     $.ajax({
         url: "/Session/Create",
         type: "POST",
         dataType: 'json',
+        async: false,
         data: {
             Type: "Available",
             from: info.startStr,
-            to: info.endStr,
+            to: endTime.toString(),
             userid: $("#calendar").data('tutorid'),
             TimeTypes: "Available"
         },
         success: function (data) {
-            //alert("Відправлено")
             calendar.refetchEvents();
         },
         error: function (data) {
@@ -85,7 +91,6 @@ function removeEvent(info) {
             Id: info.event.id,
         },
         success: function (data) {
-            //alert("Видалено")
             calendar.refetchEvents();
         },
         error: function (data) {

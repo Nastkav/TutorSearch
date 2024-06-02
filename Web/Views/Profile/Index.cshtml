@@ -33,7 +33,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Від </span>
                         </div>
-                        <input asp-for="Filters.HourRateFrom" min="0" type="number" class="form-control" placeholder="0 грн">
+                        <input asp-for="Filters.HourRateFrom" min="0" type="number" class="form-control" placeholder="0 грн" oninvalid="this.setCustomValidity('Значення має бути більше або рівне 0')">
                         <div class="input-group-append">
                             <span class="input-group-text">грн</span>
                         </div>
@@ -42,7 +42,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">До </span>
                         </div>
-                        <input asp-for="Filters.HourRateTo" min="0" type="number" class="form-control" placeholder="0 грн">
+                        <input asp-for="Filters.HourRateTo" min="0" type="number" class="form-control" placeholder="0 грн" oninvalid="this.setCustomValidity('Значення має бути більше або рівне 0')">
                         <div class="input-group-append">
                             <span class="input-group-text">грн</span>
                         </div>

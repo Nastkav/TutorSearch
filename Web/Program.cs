@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using Web;
+using Web.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,9 @@ services.AddIdentity<UserModel, IdentityRole<int>>(o => o.SignIn.RequireConfirme
     .AddSignInManager()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
+
+services.Configure<SecurityStampValidatorOptions>(o => o.ValidationInterval = TimeSpan.FromSeconds(10));
+
 services.AddTransient<IStorageRepository, StorageRepository>();
 
 services.AddAuthentication()
@@ -53,6 +57,7 @@ services.AddRazorPages();
 
 //Запуск програми
 var app = builder.Build();
+app.UseExceptionHandler(); // Should be always in first place 
 //Оновлення бази даних
 app.UseMigrationsEndPoint();
 
@@ -71,6 +76,10 @@ app.UseAuthorization();
 
 //Routing
 app.MapControllerRoute("default", "{controller=Profile}/{action=Index}/{id?}");
-app.MapRazorPages(); //UserIdentity  
+app.MapRazorPages(); //UserIdentity // Потреба в ідентифікації користувача 
+
+//Deleted
+app.UseMiddleware<RemovedRoleMiddleware>();
+
 
 app.Run();

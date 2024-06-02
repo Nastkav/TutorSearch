@@ -48,7 +48,6 @@ public class CreateAssignmentCommand : IRequest<int>
                 });
 
 
-            //Перевірка перетинання часу    
             await DatabaseContext.Assignments.AddAsync(newAssignment);
             await DatabaseContext.SaveChangesAsync();
             return newAssignment.Id;

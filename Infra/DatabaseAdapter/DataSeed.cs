@@ -11,7 +11,7 @@ public class DataSeed
         get
         {
             var iSubject = 1;
-            var objSubject = File.ReadAllLines("Data/subjects_list.csv")
+            var objSubject = File.ReadAllLines("../Infra/Data/subjects_list.csv")
                 .Select(line => line.Split(','))
                 .Select(x => new SubjectModel
                 {
@@ -28,7 +28,7 @@ public class DataSeed
         get
         {
             var iCity = 1;
-            var objCity = File.ReadAllLines("Data/ukr_cities.csv")
+            var objCity = File.ReadAllLines("../Infra/Data/ukr_cities.csv")
                 .Select(line => line.Split(','))
                 .Select(x => new CityModel
                 {
@@ -55,6 +55,12 @@ public class DataSeed
             Id = 2,
             Name = "User",
             NormalizedName = "USER"
+        },
+        new IdentityRole<int>
+        {
+            Id = 3,
+            Name = "Removed",
+            NormalizedName = "REMOVED"
         }
     ];
 }

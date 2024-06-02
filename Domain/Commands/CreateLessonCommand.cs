@@ -35,6 +35,10 @@ public class CreateLessonCommand : IRequest<int>
                 throw new SubjectNotFoundException(
                     $"Предмету '{r.Lesson.SubjectId}:{r.Lesson.SubjectName}' не знайдено.");
 
+            // // remove seconds
+            r.Lesson.From = r.Lesson.From.Date.AddHours(r.Lesson.From.Hour).AddMinutes(r.Lesson.From.Minute);
+            r.Lesson.To = r.Lesson.To.Date.AddHours(r.Lesson.To.Hour).AddMinutes(r.Lesson.To.Minute);
+            //map
             var newLesson = Mapper.Map<LessonModel>(r.Lesson);
             newLesson.Subject = dbSubject;
 

@@ -32,7 +32,7 @@ public class Assignment
     /// string - File name
     /// string - File path
     /// </summary>
-    [DisplayName("Файли до завданню")]
+    [DisplayName("Файли до завдання")]
     public List<UserFile> FileNames { get; set; } = [];
 
 

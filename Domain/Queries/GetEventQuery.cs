@@ -64,17 +64,30 @@ public class GetEventQuery : IRequest<List<LessonSession>>
                     });
             }
 
-            events.AddRange(availableTimes.Where(x => r.From < x.From && x.To < r.To));
+            availableTimes = availableTimes.Where(x => r.From <= x.From && x.To <= r.To).ToList();
+            events.AddRange(availableTimes);
 
             events = events.OrderBy(x => x.From).ToList();
 
             //Unavailable Time
             var unavailableTimes = new List<LessonSession>();
             var prevEventEnd = r.From.Value; // Фиксування почутку дня
+
+            //коригування на початок тижня
+            if (availableTimes.Count > 0 && availableTimes[0].From != r.From)
+                unavailableTimes.Add(new LessonSession()
+                {
+                    Type = TimeType.Unavailable,
+                    From = r.From.Value,
+                    To = availableTimes[0].From
+                });
+
+
             for (var i = 0; i < availableTimes.Count; i++)
             {
-                if (i != 0 && availableTimes[i - 1].From.Day != availableTimes[i].From.Day)
+                if (i != 0 && availableTimes[i - 1].From.Day != availableTimes[i].From.Day) //Якщо дата не та
                     prevEventEnd = availableTimes[i - 1].To; // Взяти останній час з минулого дня
+
                 if ((availableTimes[i].From - prevEventEnd).TotalMinutes != 0) //Якщо події не йдуть поспіль
                     unavailableTimes.Add(new LessonSession
                     {
@@ -82,14 +95,17 @@ public class GetEventQuery : IRequest<List<LessonSession>>
                         From = prevEventEnd,
                         To = availableTimes[i].From
                     });
+
                 prevEventEnd = availableTimes[i].To;
             }
 
-            if (availableTimes.Count == 0)
+
+            //коригування на кінець тижня
+            if (availableTimes.Count == 0 || availableTimes[availableTimes.Count - 1].To != r.To)
                 unavailableTimes.Add(new LessonSession()
                 {
                     Type = TimeType.Unavailable,
-                    From = r.From.Value,
+                    From = prevEventEnd,
                     To = r.To.Value
                 });
 

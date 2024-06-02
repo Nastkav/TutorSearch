@@ -9,39 +9,67 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="Views\LessonRequest\Index.cshtml" />
+        <PackageReference Include="AutoMapper" Version="13.0.1"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="13.0.1" />
-        <PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <ProjectReference Include="..\Infra\Infra.csproj"/>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Infra\Infra.csproj" />
-        <ProjectReference Include="..\Domain\Domain.csproj" />
+        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml"/>
+        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml"/>
+        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml"/>
+        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Profile\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Profile\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Profile\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Profile\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Profile\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Course\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Course\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Course\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Course\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Course\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Solution\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Solution\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Solution\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Solution\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Solution\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="wwwroot\css\pure-css-rating-master\img\rating.png"/>
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\Index.cshtml" />
-        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
-        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
-        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
-        <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+        <UpToDateCheckInput Remove="Views\Solution\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Solution\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Solution\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Solution\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Solution\Index.cshtml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Include="Views\LessonRequest\Index.cshtml" />
+        <AdditionalFiles Include="Views\Solution\Edit.cshtml"/>
+        <AdditionalFiles Include="Views\Solution\Index.cshtml"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Files\" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,14 @@
+@{
+    ViewBag.Title = "Ваш обліковий запис деактивовано";
+    Layout = "_LayoutFormSm";
+}
+
+<span class="py-4">Здається, адміністратор заблокував ваш обліковий запис. Бажаєте видалити свої персональні дані?</span>
+<div class="w-auto">
+    <form class="pt-2" asp-action="RemoveMePersonalData" method="post">
+        <button type="submit" class="btn btn-danger btn-block"><i class="fa fa-remove"></i> Видалити мої персональні дані</button>
+    </form>
+    <form class=" pt-1" asp-action="ReactivateMe" method="post">
+        <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-save"></i> Ні, відновити обліковий запис</button>
+    </form>
+</div>

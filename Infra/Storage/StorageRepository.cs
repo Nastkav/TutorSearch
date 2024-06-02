@@ -20,9 +20,6 @@ public class StorageRepository : IStorageRepository
 
     public void CheckFolder(string filesFolder)
     {
-        string fullPath = Path.GetFullPath(filesFolder);
-        Console.WriteLine("GetFullPath('{0}') returns '{1}'",
-            filesFolder, fullPath);
         if (filesFolder == string.Empty || filesFolder.Length == 0)
             throw new ConfigurationErrorsException("The 'FilesFolder' key does not exist in appsettings.json");
         else if (!Directory.Exists(filesFolder))

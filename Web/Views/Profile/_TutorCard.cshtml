@@ -2,7 +2,7 @@
 <div class="tab-pane fade active show mb-4" role="tabpanel" aria-labelledby="pills-reviews-tab">
     <div class="bg-white rounded shadow-sm">
         <div class="container-md px-0">
-            <div class="row ">
+            <div class="row">
                 <div class="col col-auto pr-0 col-12 col-md-auto">
                     <img class="img-fluid rounded img-load-control wh-100" src="@Model.UserVm.Avatar" id="avatar" alt="..."/>
                 </div>
@@ -26,12 +26,14 @@
                             </span>
                         </div>
                     }
-                    <div class="ml-auto text-light bg-primary rounded-2 px-3 float-right">
-                        @Model.TutorVm?.HourRate грн/час
+                    <div class="">
+                        <div class="ml-auto text-light bg-primary rounded-2 px-3 float-right">
+                            @Model.TutorVm?.HourRate грн/час
+                        </div>
+                        <small class="text-muted align-bottom">
+                            <i class="fa-solid fa-location-dot"></i> @Model.UserVm.CityName
+                        </small>
                     </div>
-                    <small class="text-muted align-bottom">
-                        <i class="fa-solid fa-location-dot"></i> @Model.UserVm.CityName
-                    </small>
                 </div>
             </div>
 

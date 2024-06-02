@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Ocsp;
+using SixLabors.ImageSharp.Processing.Processors.Convolution;
 
 namespace Infra.DatabaseAdapter;
 
