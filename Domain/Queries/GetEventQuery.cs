@@ -1,5 +1,4 @@
 using AutoMapper;
-using Bogus.DataSets;
 using Domain.Helpers;
 using Domain.Models;
 using Infra.DatabaseAdapter;

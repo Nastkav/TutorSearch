@@ -13,7 +13,9 @@ public class LessonRequest
     [DisplayName("Предмет")] public string Subject { get; set; } = null!;
     [DisplayName("Учень")] public string UserName { get; set; } = string.Empty;
     [DisplayName("Вчитель")] public string TutorName { get; set; } = string.Empty;
-    [DisplayName("Коментар вчителя")] public string TutorComment { get; set; } = string.Empty;
+
+    [StringLength(254, ErrorMessage = "{0} має містити не більше {1} символів.", MinimumLength = 0)]
+    [DisplayName("Посилання на заняття")] public string TutorComment { get; set; } = string.Empty;
     [DisplayName("Коментар учня")] public string Comment { get; set; } = string.Empty;
 
 

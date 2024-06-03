@@ -72,7 +72,7 @@
             @if (!item.IsTutor)
             {
                 <td>
-                    @Html.DisplayFor(modelItem => item.TutorComment)
+                    <a href="@item.TutorComment" target="_blank">@Html.DisplayFor(modelItem => item.TutorComment)</a>
                 </td>
             }
             <td>

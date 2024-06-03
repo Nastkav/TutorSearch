@@ -52,7 +52,7 @@
         }
         else
         {
-            <textarea asp-for="TutorComment" rows="6" id="tutorComment" class="form-control" readonly>         </textarea>
+            <a href="@Model.TutorComment" target="_blank" class="form-control">@Model.TutorComment</a>
         }
         <span asp-validation-for="TutorComment" class="text-danger"></span>
     </div>
